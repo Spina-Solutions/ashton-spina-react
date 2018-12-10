@@ -7,7 +7,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -29,9 +28,9 @@ const styles = theme => ({
   },
     toolbarButtons: {
         marginLeft: 'auto',
-        marginRight: '20px',
+        marginRight: 'auto',
         "& a": {
-            color: "white"
+            color: "black"
         }
   },
   appBar: {
@@ -121,14 +120,14 @@ class PersistentDrawerLeft extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography component="a" href='/' variant="h6" color="inherit" noWrap style={{ textDecoration: 'none' }}>
-                Ashton Spina
-            </Typography>
             <div className={classes.toolbarButtons}>
+                <a href="/" style={{ textDecoration: 'none' }}> 
+                    <Button color="inherit">Home</Button>
+                </a>
                 <a href="/content/ashtonspina" style={{ textDecoration: 'none' }}> 
                     <Button color="inherit">About Me</Button>
                 </a>
-                <a href="https://github.com/a-d-spina-student" style={{ textDecoration: 'none' }}> 
+                <a href="https://github.com/spina-a-d" style={{ textDecoration: 'none' }}> 
                     <Button color="inherit">GitHub</Button>
                 </a>
                 <a href="https://www.linkedin.com/in/spinaadbusiness/" style={{ textDecoration: 'none' }}> 

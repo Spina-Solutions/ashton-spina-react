@@ -6,6 +6,10 @@ import Grid from '@material-ui/core/Grid';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import AshtonSpina from './content/AshtonSpina';
 import UniversalCloudMonitoring from './content/UniversalCloudMonitoring';
+import Laravel from './content/Laravel';
+import NodeJS from './content/NodeJS';
+import ReactJS from './content/ReactJS';
+import VueJS from './content/VueJS';
 
 const styles = theme => ({
     root: {
@@ -32,6 +36,18 @@ function FullWidthGrid(props) {
                             )}/>
                             <Route exact path='/content/universalcloudmonitoring' render={(props) => (
                                 <UniversalCloudMonitoring/>
+                            )}/>
+                            <Route exact path='/content/laravel' render={(props) => (
+                                <Laravel/>
+                            )}/>
+                            <Route exact path='/content/nodejs' render={(props) => (
+                                <NodeJS/>
+                            )}/>
+                            <Route exact path='/content/reactjs' render={(props) => (
+                                <ReactJS/>
+                            )}/>
+                            <Route exact path='/content/vuejs' render={(props) => (
+                                <VueJS/>
                             )}/>
                             <Route render={(props) => (
                                 <Redirect to="/nomatch" />

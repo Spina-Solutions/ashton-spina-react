@@ -5,16 +5,18 @@ import ContentPage from './components/ContentPage';
 import NoMatch from './components/NoMatch';
 import Grid from '@material-ui/core/Grid';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
-import amber from '@material-ui/core/colors/amber';
 import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Parallax } from 'react-parallax';
 
 const theme = createMuiTheme({
     palette: {
-        primary: blue,
-        secondary: amber,
+        primary: {
+            main: '#ffffff',
+        },
+        secondary: {
+            main: '#000000',
+        },
         success: green
     },
 });
@@ -40,15 +42,7 @@ const myItems = [
         title: 'Device Database', 
         text: "I acted as a lead, full-stack developer for this project from start to finish.  I made sure that the project had the back-end functionality needed to support the systems that would rely on it and a easy-to-use, clean front-end.", 
         url: '/content/devicedatabase', 
-        imageUrl: require('./deviceDatabase.png'),
-        githubLink: '',
-        href: ''
-    },
-    { 
-        title: 'Reprice', 
-        text: "I was drafted into this project based on my strong performance in previous projects.  Here I mostly handled front-end development and reviewing backend work.", 
-        url: '/content/reprice', 
-        imageUrl: require('./rePrice.png'),
+        imageUrl: require('./deviceDB.png'),
         githubLink: '',
         href: ''
     },
@@ -58,7 +52,7 @@ const myItems = [
         url: '/content/project_one', 
         imageUrl: require('./ashtonspina.png'),
         githubLink: '',
-        href: ''
+        href: '/'
     },
     { 
         title: 'Wander', 
@@ -72,8 +66,8 @@ const myItems = [
         title: 'University Work', 
         text: "Here I explain the collection of work that was a result of my education.", 
         url: '/content/project_one', 
-        imageUrl: require('./rug.jpg'),
-        githubLink: 'https://github.com/a-d-spina-student/Ashton-s-School-Assignment-Collection',
+        imageUrl: "https://www.hezelburcht.com/assets/uploads/sites/2/2017/05/University-of-Groningen.png",
+        githubLink: 'https://github.com/spina-a-d/Ashton-s-School-Assignment-Collection',
         href: ''
     }, 
 ];
@@ -86,26 +80,31 @@ class App extends Component {
                     <MuiThemeProvider theme={theme}>
                     <header>
                         <PersistentDrawerLeft>
-                            <Switch>
-                                <Route exact path='/' render={(props) => (
-                                    <div>
-                                        <Parallax
-                                            bgImage={'http://hdwpro.com/wp-content/uploads/2017/03/Art-Background-Image.png'}
-                                            strength={400}
-                                        >
-                                            <div style={{margin: '20px', minHeight: '100vh'}}>
-                                                <Grid item xs={12}>
-                                                    <GridLayout items={myItems}/>
-                                                </Grid>
-                                            </div>
-                                        </Parallax>
-                                    </div>
-                                )}/>
-                                <Route path='/content' render={(props) => (
-                                    <ContentPage/>
-                                )}/>
-                                <Route component={NoMatch} />
-                            </Switch>
+                            <transition
+                                name="fade"
+                                mode="out-in"
+                              >
+                                <Switch>
+                                    <Route exact path='/' render={(props) => (
+                                        <div>
+                                            <Parallax
+                                                bgImage={'https://cdn.pixabay.com/photo/2015/05/26/23/52/technology-785742_1280.jpg'}
+                                                strength={400}
+                                            >
+                                                <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
+                                                    <Grid item xs={12}>
+                                                        <GridLayout items={ myItems.sort(() => Math.random() - 0.5) }/>
+                                                    </Grid>
+                                                </div>
+                                            </Parallax>
+                                        </div>
+                                    )}/>
+                                    <Route path='/content' render={(props) => (
+                                        <ContentPage/>
+                                    )}/>
+                                    <Route component={NoMatch} />
+                                </Switch>
+                            </transition>
                         </PersistentDrawerLeft>
                     </header>
                     </MuiThemeProvider>

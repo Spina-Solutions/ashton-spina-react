@@ -38,7 +38,7 @@ function FullWidthGrid(props) {
             </div>
             <div className={classes.row}>
                 <SocialIcon url="https://www.linkedin.com/in/spinaadbusiness/"/>
-                <SocialIcon url="https://github.com/a-d-spina-student"/>
+                <SocialIcon url="https://github.com/spina-a-d"/>
                 <SocialIcon url="https://stackoverflow.com/users/10460453/ashton-spina"/>
                 <SocialIcon url="https://plus.google.com/u/0/118135112796392901012"/>
                 <SocialIcon url="https://www.facebook.com/ashton.spina"/>
