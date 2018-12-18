@@ -72,13 +72,13 @@ const myItems = [
         href: ''
     }, 
 ];
-
+ReactGA.initialize('UA-131177225-1');
 
 
 class App extends Component {
+    componentDidMount  = () => ReactGA.pageview(window.location.pathname + window.location.search);
+    componentDidUpdate = () => ReactGA.pageview(window.location.pathname + window.location.search);
     render() {
-        ReactGA.initialize('UA-131177225-1');
-        ReactGA.pageview(window.location.pathname + window.location.search);
         return (
             <BrowserRouter>
                 <div className="App">
