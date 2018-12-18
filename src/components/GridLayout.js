@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -27,18 +27,6 @@ const styles = theme => ({
         alignIitems: 'center',
         justifyContent: 'center',
     },
-    overlay: {
-      position: 'absolute',
-      top: '0',
-      bottom: '0',
-      left: '0',
-      right: '0',
-      height: '100%',
-      width: '100%',
-      opacity: '0',
-      transition: '.5s ease',
-      backgrounColor: '#008CBA'
-    },
     text: {
       color: 'white',
       fontSize: '20px',
@@ -51,14 +39,6 @@ const styles = theme => ({
       textAlign: 'center'
     }
 
-});
-
-const theme = createMuiTheme({
-    palette: {
-        primary: {
-            main: '#ffffff',
-        },
-    }
 });
 
 
@@ -80,28 +60,32 @@ function FullWidthGrid(props) {
                                         image={item.imageUrl}
                                         title={item.title}
                                      />
-                                    <div className={classes.actions}>
-                                        <CardActions>
-                                            <React.Fragment>
-                                                <MuiThemeProvider theme={theme}>
-                                                    {item.githubLink && item.githubLink.length > 0 &&
-                                                        <Button size="small" color="primary" href={item.githubLink}>
-                                                            See it on Github
-                                                        </Button>
-                                                    }
-                                                    {item.href && item.href.length > 0 &&
-                                                        <Button size="small" color="primary" href={item.href}>
-                                                            See it in Action
-                                                        </Button>
-                                                    }
-                                                    {/*<Button size="small" color="primary" href={item.url}>
+                                 </CardActionArea>  
+                                <div className={classes.actions}>
+                                    <CardActions>
+                                            {item.githubLink && item.githubLink.length > 0 &&
+                                                <a href={item.githubLink} style={{ textDecoration: 'none' }}>
+                                                    <Button size="small" color="primary">
+                                                        See it on Github
+                                                    </Button>
+                                                </a>
+                                            }
+                                            {item.href && item.href.length > 0 &&
+                                                <a href={item.href} style={{ textDecoration: 'none' }}>
+                                                    <Button size="small" color="primary">
+                                                        See it in Action
+                                                    </Button>
+                                                </a>    
+                                            }
+                                            {/*item.href && item.href.length > 0 &&
+                                                <a href={item.url} style={{ textDecoration: 'none' }}>
+                                                    <Button size="small" color="primary">
                                                         Read About It
-                                                    </Button>*/}
-                                                </MuiThemeProvider>
-                                            </React.Fragment>
-                                        </CardActions>
-                                    </div>
-                                </CardActionArea>
+                                                    </Button>
+                                                </a>
+                                            */}
+                                    </CardActions>
+                                </div>
                             </Card>
                         </Grid>
                     )

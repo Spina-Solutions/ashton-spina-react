@@ -66,7 +66,7 @@ const myItems = [
         title: 'University Work', 
         text: "Here I explain the collection of work that was a result of my education.", 
         url: '/content/project_one', 
-        imageUrl: "https://www.hezelburcht.com/assets/uploads/sites/2/2017/05/University-of-Groningen.png",
+        imageUrl: require('./school_work.png'),
         githubLink: 'https://github.com/spina-a-d/Ashton-s-School-Assignment-Collection',
         href: ''
     }, 
@@ -88,7 +88,7 @@ class App extends Component {
                                     <Route exact path='/' render={(props) => (
                                         <div>
                                             <Parallax
-                                                bgImage={'https://cdn.pixabay.com/photo/2015/05/26/23/52/technology-785742_1280.jpg'}
+                                                bgImage={require('./background.jpg')}
                                                 strength={400}
                                             >
                                                 <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>

@@ -29,7 +29,7 @@ function FullWidthGrid(props) {
     return (
         <div>
             <div className={classes.row}>
-                <Avatar alt="AS" src="https://pbs.twimg.com/profile_images/638777467193397248/h7umz7fz.jpg" className={classes.bigAvatar}/>
+                <Avatar alt="AS" src={require('./laravel.jpg')} className={classes.bigAvatar}/>
             </div>
             <div className={classes.row}>
                 <Typography variant="h5" component="h3">
