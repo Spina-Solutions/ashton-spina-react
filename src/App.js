@@ -72,17 +72,17 @@ const myItems = [
         href: ''
     }, 
 ];
-ReactGA.initialize('UA-131177225-1');
-
 
 class App extends Component {
-    
+
     componentDidMount() {
+        ReactGA.initialize('UA-131177225-1');
         ReactGA.set({ page: window.location.pathname });
         ReactGA.pageview(window.location.pathname + window.location.search);
     }
 
     componentDidUpdate() {
+        ReactGA.initialize('UA-131177225-1');
         ReactGA.set({ page: window.location.pathname });
         ReactGA.pageview(window.location.pathname + window.location.search);
     }
