@@ -76,8 +76,17 @@ ReactGA.initialize('UA-131177225-1');
 
 
 class App extends Component {
-    componentDidMount  = () => ReactGA.pageview(window.location.pathname + window.location.search);
-    componentDidUpdate = () => ReactGA.pageview(window.location.pathname + window.location.search);
+    
+    componentDidMount() {
+        ReactGA.set({ page: window.location.pathname });
+        ReactGA.pageview(window.location.pathname + window.location.search);
+    }
+
+    componentDidUpdate() {
+        ReactGA.set({ page: window.location.pathname });
+        ReactGA.pageview(window.location.pathname + window.location.search);
+    }
+
     render() {
         return (
             <BrowserRouter>
