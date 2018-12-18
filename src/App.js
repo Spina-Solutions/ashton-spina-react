@@ -8,6 +8,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Parallax } from 'react-parallax';
+import ReactGA from 'react-ga';
 
 const theme = createMuiTheme({
     palette: {
@@ -72,8 +73,12 @@ const myItems = [
     }, 
 ];
 
+
+
 class App extends Component {
     render() {
+        ReactGA.initialize('UA-131177225-1');
+        ReactGA.pageview(window.location.pathname + window.location.search);
         return (
             <BrowserRouter>
                 <div className="App">
