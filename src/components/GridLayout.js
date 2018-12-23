@@ -77,13 +77,13 @@ function FullWidthGrid(props) {
                                                     </Button>
                                                 </a>    
                                             }
-                                            {/*item.href && item.href.length > 0 &&
+                                            {item.url && item.url.length > 0 &&
                                                 <a href={item.url} style={{ textDecoration: 'none' }}>
                                                     <Button size="small" color="primary">
                                                         Read About It
                                                     </Button>
                                                 </a>
-                                            */}
+                                            }
                                     </CardActions>
                                 </div>
                             </Card>

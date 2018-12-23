@@ -10,6 +10,10 @@ import Laravel from './content/Laravel';
 import NodeJS from './content/NodeJS';
 import ReactJS from './content/ReactJS';
 import VueJS from './content/VueJS';
+import TulipAssist from './content/TulipAssist';
+import DeviceDatabase from './content/DeviceDatabase';
+import Wander from './content/Wander';
+import University from './content/University';
 
 const styles = theme => ({
     root: {
@@ -34,9 +38,6 @@ function FullWidthGrid(props) {
                             <Route exact path='/content/ashtonspina' render={(props) => (
                                 <AshtonSpina/>
                             )}/>
-                            <Route exact path='/content/universalcloudmonitoring' render={(props) => (
-                                <UniversalCloudMonitoring/>
-                            )}/>
                             <Route exact path='/content/laravel' render={(props) => (
                                 <Laravel/>
                             )}/>
@@ -48,6 +49,21 @@ function FullWidthGrid(props) {
                             )}/>
                             <Route exact path='/content/vuejs' render={(props) => (
                                 <VueJS/>
+                            )}/>
+                            <Route exact path='/content/tulipassist' render={(props) => (
+                                <TulipAssist/>
+                            )}/>
+                            <Route exact path='/content/universalcloudmonitoring' render={(props) => (
+                                <UniversalCloudMonitoring/>
+                            )}/>
+                            <Route exact path='/content/devicedatabase' render={(props) => (
+                                <DeviceDatabase/>
+                            )}/>
+                            <Route exact path='/content/wander' render={(props) => (
+                                <Wander/>
+                            )}/>
+                            <Route exact path='/content/university' render={(props) => (
+                                <University/>
                             )}/>
                             <Route render={(props) => (
                                 <Redirect to="/nomatch" />

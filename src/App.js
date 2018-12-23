@@ -22,14 +22,14 @@ const theme = createMuiTheme({
     },
 });
 
-const myItems = [
+const projects = [
     { 
         title: 'Universal Cloud Monitoring', 
         text: "The result of thesis research, this project was created with the goal of monitoring cloud-based virtual machines in a potentially hybrid network.", 
         url: '/content/universalcloudmonitoring',
         imageUrl: require('./universalCloudMonitoring.png'),
         githubLink: 'https://github.com/a-d-spina-student/waste-cloud-computing',
-        href: 'https://www.universalcloudmonitoring.com/'
+        href: 'http://www.universalcloudmonitoring.com/'
     }, 
     { 
         title: 'Tulip Assist', 
@@ -50,7 +50,7 @@ const myItems = [
     { 
         title: 'Ashton Spina Website', 
         text: "This project is a personal project, and likely the website where you're readying this text.", 
-        url: '/content/project_one', 
+        url: '/content/ashtonspina', 
         imageUrl: require('./ashtonspina.png'),
         githubLink: '',
         href: '/'
@@ -58,7 +58,7 @@ const myItems = [
     { 
         title: 'Wander', 
         text: "This project is a personal project, and likely the website where you're readying this text.", 
-        url: '/content/project_one', 
+        url: '/content/wander', 
         imageUrl: require('./wander.png'),
         githubLink: 'https://github.com/RUGSoftEng/2017-Cognitive-Sensors',
         href: 'https://play.google.com/store/apps/details?id=com.teamwan.wander&hl=en'
@@ -66,11 +66,20 @@ const myItems = [
     { 
         title: 'University Work', 
         text: "Here I explain the collection of work that was a result of my education.", 
-        url: '/content/project_one', 
+        url: '/content/university', 
         imageUrl: require('./school_work.png'),
         githubLink: 'https://github.com/spina-a-d/Ashton-s-School-Assignment-Collection',
         href: ''
     }, 
+];
+
+const blogPosts = [
+    { 
+        title: 'Laravel vs. NodeJS', 
+        text: "A comparison of major back-end frameworks for web development.", 
+        url: '/content/laravel-vs-nodejs',
+        imageUrl: require('./universalCloudMonitoring.png')
+    }
 ];
 
 class App extends Component {
@@ -107,7 +116,7 @@ class App extends Component {
                                             >
                                                 <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
                                                     <Grid item xs={12}>
-                                                        <GridLayout items={ myItems.sort(() => Math.random() - 0.5) }/>
+                                                        <GridLayout items={ projects.sort(() => Math.random() - 0.5) }/>
                                                     </Grid>
                                                 </div>
                                             </Parallax>
