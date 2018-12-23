@@ -16,6 +16,7 @@ import Wander from './content/Wander';
 import University from './content/University';
 import Android from './content/Android';
 import AboutMe from './content/AboutMe';
+import LaravelVsNodeJS from './content/LaravelVsNodeJS';
 
 const styles = theme => ({
     root: {
@@ -40,9 +41,7 @@ function FullWidthGrid(props) {
                             <Route exact path='/content/aboutme' render={(props) => (
                                 <AboutMe/>
                             )}/>
-                            <Route exact path='/content/ashtonspina' render={(props) => (
-                                <AshtonSpina/>
-                            )}/>
+                            {/* Experience Routes */}
                             <Route exact path='/content/laravel' render={(props) => (
                                 <Laravel/>
                             )}/>
@@ -58,6 +57,10 @@ function FullWidthGrid(props) {
                             <Route exact path='/content/android' render={(props) => (
                                 <Android/>
                             )}/>
+                            {/* Project Routes */}
+                            <Route exact path='/content/ashtonspina' render={(props) => (
+                                <AshtonSpina/>
+                            )}/>
                             <Route exact path='/content/tulipassist' render={(props) => (
                                 <TulipAssist/>
                             )}/>
@@ -72,6 +75,10 @@ function FullWidthGrid(props) {
                             )}/>
                             <Route exact path='/content/university' render={(props) => (
                                 <University/>
+                            )}/>
+                            {/* Blog Routes */}
+                            <Route exact path='/content/laravel-vs-nodejs' render={(props) => (
+                                <LaravelVsNodeJS/>
                             )}/>
                             <Route render={(props) => (
                                 <Redirect to="/nomatch" />

@@ -16,7 +16,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import HomeIcon from '@material-ui/icons/Home';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
@@ -120,7 +120,10 @@ class PersistentDrawerLeft extends React.Component {
             </IconButton>
             <div className={classes.toolbarButtons}>
                 <Link to="/" style={{ textDecoration: 'none', color: 'black' }}> 
-                    <Button color="inherit">Home</Button>
+                    <Button color="inherit">Blog</Button>
+                </Link>
+                <Link to="/projects" style={{ textDecoration: 'none', color: 'black' }}> 
+                    <Button color="inherit">Projects</Button>
                 </Link>
                 <Link to="/content/aboutme" style={{ textDecoration: 'none', color: 'black' }}> 
                     <Button color="inherit">About Me</Button>
@@ -152,19 +155,22 @@ class PersistentDrawerLeft extends React.Component {
             <List>
                 <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
                     <ListItem button>
-                        <ListItemIcon><HomeIcon/></ListItemIcon>
-                        <ListItemText primary="Home"/>
-                    </ListItem>
-                </Link>
-                <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
-                    <ListItem button>
                         <ListItemIcon><DeveloperBoardIcon/></ListItemIcon>
                         <ListItemText primary="Blog"/>
+                    </ListItem>
+                </Link>
+                <Link to='/projects' style={{ textDecoration: 'none', color: 'black' }}>
+                    <ListItem button>
+                        <ListItemIcon><DashboardIcon/></ListItemIcon>
+                        <ListItemText primary="Projects"/>
                     </ListItem>
                 </Link> 
             </List>
             <Divider />
             <List>
+                <ListItem>
+                    <ListItemText primary='Experience' />
+                </ListItem>
                 <Link to='/content/laravel' style={{ textDecoration: 'none', color: 'black' }}>
                     <ListItem button>
                         <ListItemIcon>

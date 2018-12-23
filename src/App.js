@@ -78,7 +78,13 @@ const blogPosts = [
         title: 'Laravel vs. NodeJS', 
         text: "A comparison of major back-end frameworks for web development.", 
         url: '/content/laravel-vs-nodejs',
-        imageUrl: require('./universalCloudMonitoring.png')
+        imageUrl: require('./comingSoon.png')
+    },
+    { 
+        title: 'Laravel vs. NodeJS', 
+        text: "A discussion of the housing and urban planning in major Ontario cities.", 
+        url: '/content/ontario-city-planning',
+        imageUrl: require('./comingSoon.png')
     }
 ];
 
@@ -109,6 +115,20 @@ class App extends Component {
                               >
                                 <Switch>
                                     <Route exact path='/' render={(props) => (
+                                        <div>
+                                            <Parallax
+                                                bgImage={require('./background.jpg')}
+                                                strength={400}
+                                            >
+                                                <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
+                                                    <Grid item xs={12}>
+                                                        <GridLayout items={ blogPosts.sort(() => Math.random() - 0.5) }/>
+                                                    </Grid>
+                                                </div>
+                                            </Parallax>
+                                        </div>
+                                    )}/>
+                                    <Route exact path='/projects' render={(props) => (
                                         <div>
                                             <Parallax
                                                 bgImage={require('./background.jpg')}
