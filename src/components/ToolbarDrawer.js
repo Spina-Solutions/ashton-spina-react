@@ -19,26 +19,24 @@ import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
-  root: {
-      display: 'flex',
-  },
+    root: {
+        display: 'flex',
+    },
     toolbarButtons: {
         marginLeft: 'auto',
-        marginRight: 'auto',
-        "& a": {
-            color: "black"
-        }
-  },
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
+        marginRight: 'auto'
+    },
+    appBar: {
+        transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
@@ -121,16 +119,16 @@ class PersistentDrawerLeft extends React.Component {
               <MenuIcon />
             </IconButton>
             <div className={classes.toolbarButtons}>
-                <a href="/" style={{ textDecoration: 'none' }}> 
+                <Link to="/" style={{ textDecoration: 'none', color: 'black' }}> 
                     <Button color="inherit">Home</Button>
-                </a>
-                <a href="/content/ashtonspina" style={{ textDecoration: 'none' }}> 
+                </Link>
+                <Link to="/content/aboutme" style={{ textDecoration: 'none', color: 'black' }}> 
                     <Button color="inherit">About Me</Button>
-                </a>
-                <a href="https://github.com/spina-a-d" style={{ textDecoration: 'none' }}> 
+                </Link>
+                <a href="https://github.com/spina-a-d" style={{ textDecoration: 'none', color: 'black' }}> 
                     <Button color="inherit">GitHub</Button>
                 </a>
-                <a href="https://www.linkedin.com/in/spinaadbusiness/" style={{ textDecoration: 'none' }}> 
+                <a href="https://www.linkedin.com/in/spinaadbusiness/" style={{ textDecoration: 'none', color: 'black' }}> 
                     <Button color="inherit">LinkedIn</Button>
                 </a>
             </div>
@@ -152,41 +150,61 @@ class PersistentDrawerLeft extends React.Component {
             </div>
             <Divider/>
             <List>
-                <ListItem button component="a" href='/'>
-                    <ListItemIcon><HomeIcon/></ListItemIcon>
-                    <ListItemText primary="Home"/>
-                </ListItem>
-                <ListItem button component="a" href='/content/ashtonspina'>
-                    <ListItemIcon><DeveloperBoardIcon/></ListItemIcon>
-                    <ListItemText primary="Blog"/>
-                </ListItem>
+                <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
+                    <ListItem button>
+                        <ListItemIcon><HomeIcon/></ListItemIcon>
+                        <ListItemText primary="Home"/>
+                    </ListItem>
+                </Link>
+                <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
+                    <ListItem button>
+                        <ListItemIcon><DeveloperBoardIcon/></ListItemIcon>
+                        <ListItemText primary="Blog"/>
+                    </ListItem>
+                </Link> 
             </List>
             <Divider />
             <List>
-                <ListItem button component="a" href='/content/laravel'>
-                    <ListItemIcon>
-                        <Avatar alt='Laravel' src={require('./Laravel.svg')}/>
-                    </ListItemIcon>
-                    <ListItemText primary='Laravel' />
-                </ListItem>
-                <ListItem button component="a" href='/content/nodejs'>
-                    <ListItemIcon>
-                        <Avatar alt='NodeJS' src={require('./NodeJS.svg')}/>
-                    </ListItemIcon>
-                    <ListItemText primary='NodeJS' />
-                </ListItem>
-                <ListItem button component="a" href='/content/reactjs'>
-                    <ListItemIcon>
-                        <Avatar alt='ReactJS' src={require('./ReactJS.png')}/>
-                    </ListItemIcon>
-                    <ListItemText primary='ReactJS' />
-                </ListItem>
-                <ListItem button component="a" href='/content/vuejs'>
-                    <ListItemIcon>
-                        <Avatar alt='VueJS' src={require('./VueJS.png')}/>
-                    </ListItemIcon>
-                    <ListItemText primary='VueJS' />
-                </ListItem>
+                <Link to='/content/laravel' style={{ textDecoration: 'none', color: 'black' }}>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <Avatar alt='Laravel' src={require('./Laravel.svg')}/>
+                        </ListItemIcon>
+                        <ListItemText primary='Laravel' />
+                    </ListItem>
+                </Link>
+                <Link to='/content/nodejs' style={{ textDecoration: 'none', color: 'black' }}>
+                  <ListItem button>
+                      <ListItemIcon>
+                          <Avatar alt='NodeJS' src={require('./NodeJS.svg')}/>
+                      </ListItemIcon>
+                      <ListItemText primary='NodeJS' />
+                  </ListItem>
+                </Link> 
+                <Link to='/content/reactjs' style={{ textDecoration: 'none', color: 'black' }}>
+                  <ListItem button>
+                      <ListItemIcon>
+                          <Avatar alt='ReactJS' src={require('./ReactJS.png')}/>
+                      </ListItemIcon>
+                      <ListItemText primary='ReactJS' />
+                  </ListItem>
+                </Link>
+                <Link to='/content/vuejs' style={{ textDecoration: 'none', color: 'black' }}>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <Avatar alt='VueJS' src={require('./VueJS.png')}/>
+                        </ListItemIcon>
+                        <ListItemText primary='VueJS' />
+                    </ListItem>
+                </Link>
+                <Link to='/content/android' style={{ textDecoration: 'none', color: 'black' }}>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <Avatar alt='Android' src={require('../android.jpg')}/>
+                        </ListItemIcon>
+                        <ListItemText primary='Android' />
+                    </ListItem>
+                </Link>
             </List>
         </Drawer>
         <main

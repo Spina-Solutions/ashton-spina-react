@@ -33,65 +33,44 @@ function FullWidthGrid(props) {
             
             </div>
             <div className={classes.row}>
+                <Avatar alt="AS" src={require('../../universalCloudMonitoring.png')} className={classes.bigAvatar}/>
+            </div>
+            <div className={classes.row}>
                 <Typography variant="h5" component="h3">
-                    Ashton Spina
+                    Monitoring and Visualizing Computational Waste in Cloud Computing Systems
                 </Typography>
             </div>
-            <Typography variant="h5" component="h3">
-                Education
+            <div className={classes.row}>
+                <SocialIcon url="https://github.com/spina-a-d/waste-cloud-computing"/>
+                <SocialIcon url="http://www.universalcloudmonitoring.com/"/>
+            </div>
+            <Typography variant="h6" component="h3">
+                Overview
             </Typography>
             <Typography component="p">
-                Although originally from Ontario, Canada, Ashton Spina studied a BSc in Computer Science at the University of Groningen
-                in the Netherlands.  He completed the 3 year programme within the allotted time period with no complications.  Although 
-                his only previous experience in computing science came in the form of a short, secondary school Java course, Ashton quickly
-                took to the challenge and mathematical nature of the subject and became a fan.  In addition to his normal coursework
-                he took a liking to web development and began his first personal projects in this field.  Within his 3 year programme for 180
-                ECTS Ashton also managed to take a semester for participating in the ERASMUS+ programme at the University of Malta.  Here he continued
-                studying computer science subjects, albeit at a sunnier locale.
+                This was my thesis project for my Bachelor's in Computing Science.  Here in cooperation with the professors Vasilios Andrikopoulos and Mircea Lungu at the University of Groningen I worked on researching and developing methods for monitoring cloud-deployed systems, particularly Virtual Machines.
             </Typography>
             <br/>
             <Divider/>
             <br/>
-            <Typography variant="h5" component="h3">
-                Employment
+            <Typography variant="h6" component="h3">
+                Research
             </Typography>
             <Typography component="p">
-                After completing the first year of studies at the University of Groningen Ashton immediately turned to his natural
-                calling, employment.  He took up a job as a Teaching Assistant for the University, helping to pay his way through school,
-                as well as providing valuable experience in a teaching position and allowing good opportunity to revisit previous subjects 
-                in more depth.  Ashton's interest in web development and position as a Teaching Assistant put him in a position to find a 
-                job at Belsimpel.  This job began as a part-time endeavour during his final semester after returning from Malta and transitioned
-                into a full-time position after graduation.  Here he learned he quickly learned the ropes of the software development process, first as 
-                a junior backend developer, but quickly transitioning into a lead full-stack developer.
+                The research for this thesis made up the majority of the work accomplished and focused on investigating other research that had been done on monitoring cloud-deployed virtual machines and how that knowledge could be integrated in an monitoring implementation.  Most existing research focused on monitoring very specific kinds of or parts of systems or under very specific circumstances.  This in mind, we integrated these experiences into our own implementation and focused on making a very generalized system of monitoring. The key to this monitoring is that it would accomplish something that other generalized monitoring solutions failed to do, give the user information on how much their deployments were costing and how much of those instances was wasted.
             </Typography>
-            <br/>
-            <Divider/>
-            <br/>
-            <Typography variant="h5" component="h3">
-                The Future
+            <Typography variant="h6" component="h3">
+                Implementation
             </Typography>
             <Typography component="p">
-                Ashton is always looking to expand his horizons.  He continues to work full-time for Belsimpel while in the evenings
-                and weekends working to expand his web development skill set.  Ashton believes that Artificial Intelligence will be the 
-                future and hopes to begin to learn and create projects using AI technologies in order to remaining at the cutting edge of 
-                his field.
+                After desigining the monitoring system based on similar systems, we decided to implement a monitoring system to prove that our solution was valid.  Our eventual system was generalized enough that it could essentially run on any Linux system because the probing system was written entirely in bash and run via a crontab.  This reported via curl post requests to a server, whose location was stored in the probe.  This server could theoretically be any server the probe was configured to send to, including a clone of the example server.  Probes could tolerate thigns like server or connection failure and was generally very durable as part of the specifications.  
             </Typography>
-            <div className={classes.row}>
-                <Avatar alt="AS" src={require('./ashtonspina.jpg')} className={classes.bigAvatar}/>
-            </div>
-            <div className={classes.row}>
-                <Typography variant="h5" component="h3">
-                    Ashton Spina
-                </Typography>
-            </div>
-            <div className={classes.row}>
-                <SocialIcon url="https://www.linkedin.com/in/spinaadbusiness/"/>
-                <SocialIcon url="https://github.com/a-d-spina-student"/>
-                <SocialIcon url="https://stackoverflow.com/users/10460453/ashton-spina"/>
-                <SocialIcon url="https://plus.google.com/u/0/118135112796392901012"/>
-                <SocialIcon url="https://www.facebook.com/ashton.spina"/>
-                <SocialIcon url="https://www.instagram.com/ashtonspina/"/>
-            </div>
+            <Typography variant="h6" component="h3">
+                Evaluation and Conclusions
+            </Typography>
+            <Typography component="p">
+                Ultimately we concluded that although the implementation definitely could benefit from optimizations, especially if it were to be deployed commercially, it fulfilled the specifications that we set out to implement and successfully monitored the system as well as the system's cost and waste.  The monitoring solution itself was very lightweight and on average consumed less than 1% of a typical system's resources, thus making the inherent waste of the monitoring solution adequately low.  This paper may be published as part of a larger paper on monitoring and cost and waste optimizations and will be made available when that situation arises.
+            </Typography>
         </div>
     );
 }

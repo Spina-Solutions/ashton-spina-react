@@ -28,7 +28,7 @@ function FullWidthGrid(props) {
     return (
         <div>
             <div className={classes.row}>
-                <Avatar alt="AS" src={require('./laravel.jpg')} className={classes.bigAvatar}/>
+                <Avatar alt="AS" src={require('../../deviceDB.png')} className={classes.bigAvatar}/>
             </div>
             <div className={classes.row}>
                 <Typography variant="h5" component="h3">
@@ -48,7 +48,7 @@ function FullWidthGrid(props) {
                 Contributions
             </Typography>
             <Typography component="p">
-                I was responsible for creating this project from the beginning. This involved taking a fresh Laravel project and designing and implementing a database for storing a massive compilation of saleable mobile devices and their properties.  This transitioned into creating VueJS components for managing users, roles, permissions, and the devices themselves.
+                I was responsible for creating this project right from the beginning. This involved taking a fresh Laravel project and designing and implementing a database for storing a massive compilation of saleable mobile devices and their properties.  This transitioned into creating VueJS UI components for managing users, roles, permissions, and the devices themselves.  I also created a robust API for accessing this database and a proper token-based authentication system to protect it.
             </Typography>
         </div>
     );

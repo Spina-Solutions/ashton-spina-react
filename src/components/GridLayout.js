@@ -7,6 +7,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     root: {
@@ -78,11 +79,11 @@ function FullWidthGrid(props) {
                                                 </a>    
                                             }
                                             {item.url && item.url.length > 0 &&
-                                                <a href={item.url} style={{ textDecoration: 'none' }}>
+                                                <Link to={item.url} style={{ textDecoration: 'none' }}>
                                                     <Button size="small" color="primary">
                                                         Read About It
                                                     </Button>
-                                                </a>
+                                                </Link>
                                             }
                                     </CardActions>
                                 </div>

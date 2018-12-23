@@ -14,6 +14,8 @@ import TulipAssist from './content/TulipAssist';
 import DeviceDatabase from './content/DeviceDatabase';
 import Wander from './content/Wander';
 import University from './content/University';
+import Android from './content/Android';
+import AboutMe from './content/AboutMe';
 
 const styles = theme => ({
     root: {
@@ -35,6 +37,9 @@ function FullWidthGrid(props) {
                 <Grid item xs={12}>
                     <Paper className={classes.paper} elevation={10}>
                         <Switch>
+                            <Route exact path='/content/aboutme' render={(props) => (
+                                <AboutMe/>
+                            )}/>
                             <Route exact path='/content/ashtonspina' render={(props) => (
                                 <AshtonSpina/>
                             )}/>
@@ -49,6 +54,9 @@ function FullWidthGrid(props) {
                             )}/>
                             <Route exact path='/content/vuejs' render={(props) => (
                                 <VueJS/>
+                            )}/>
+                            <Route exact path='/content/android' render={(props) => (
+                                <Android/>
                             )}/>
                             <Route exact path='/content/tulipassist' render={(props) => (
                                 <TulipAssist/>
