@@ -83,8 +83,8 @@ const blogPosts = [
     { 
         title: 'Laravel vs. NodeJS', 
         text: "A discussion of the housing and urban planning in major Ontario cities.", 
-        url: '/content/ontario-city-planning',
-        imageUrl: require('./comingSoon.png')
+        url: '/content/ontario-city-problem',
+        imageUrl: require('./gta_space_usage.jpg')
     }
 ];
 

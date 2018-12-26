@@ -17,6 +17,7 @@ import University from './content/University';
 import Android from './content/Android';
 import AboutMe from './content/AboutMe';
 import LaravelVsNodeJS from './content/LaravelVsNodeJS';
+import OntarioCityProblem from './content/OntarioCityProblem';
 
 const styles = theme => ({
     root: {
@@ -79,6 +80,9 @@ function FullWidthGrid(props) {
                             {/* Blog Routes */}
                             <Route exact path='/content/laravel-vs-nodejs' render={(props) => (
                                 <LaravelVsNodeJS/>
+                            )}/>
+                            <Route exact path='/content/ontario-city-problem' render={(props) => (
+                                <OntarioCityProblem/>
                             )}/>
                             <Route render={(props) => (
                                 <Redirect to="/nomatch" />
