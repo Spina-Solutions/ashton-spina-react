@@ -97,7 +97,7 @@ const styles = theme => ({
 });
 
 
-function FullWidthGrid(props) {
+function GridLayout(props) {
     const { classes } = props;
     return (
         <div className={classes.root}>
@@ -156,8 +156,8 @@ function FullWidthGrid(props) {
     );
 }
 
-FullWidthGrid.propTypes = {
+GridLayout.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FullWidthGrid);
+export default withStyles(styles)(GridLayout);

@@ -9,6 +9,8 @@ import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Parallax } from 'react-parallax';
 import ReactGA from 'react-ga';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import SwitchWithSlide from "./SwitchWithSlide";
 
 const theme = createMuiTheme({
     palette: {
@@ -86,7 +88,7 @@ const blogPosts = [
         url: '/content/ontario-city-problem',
         imageUrl: require('./gta_space_usage.jpg')
     }
-];
+];  
 
 class App extends Component {
 
@@ -109,45 +111,42 @@ class App extends Component {
                     <MuiThemeProvider theme={theme}>
                     <header>
                         <PersistentDrawerLeft>
-                            <transition
-                                name="fade"
-                                mode="out-in"
-                              >
-                                <Switch>
-                                    <Route exact path='/' render={(props) => (
-                                        <div>
-                                            <Parallax
-                                                bgImage={require('./background.jpg')}
-                                                strength={400}
-                                            >
-                                                <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
-                                                    <Grid item xs={12}>
-                                                        <GridLayout items={ blogPosts.sort(() => Math.random() - 0.5) }/>
-                                                    </Grid>
-                                                </div>
-                                            </Parallax>
-                                        </div>
-                                    )}/>
-                                    <Route exact path='/projects' render={(props) => (
-                                        <div>
-                                            <Parallax
-                                                bgImage={require('./background.jpg')}
-                                                strength={400}
-                                            >
-                                                <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
-                                                    <Grid item xs={12}>
-                                                        <GridLayout items={ projects.sort(() => Math.random() - 0.5) }/>
-                                                    </Grid>
-                                                </div>
-                                            </Parallax>
-                                        </div>
-                                    )}/>
-                                    <Route path='/content' render={(props) => (
-                                        <ContentPage/>
-                                    )}/>
-                                    <Route component={NoMatch} />
-                                </Switch>
-                            </transition>
+                           <SwitchWithSlide
+                                updateStep={(...currentStep) => this.setState({ currentStep })}
+                            >
+                                <Route exact path='/' render={(props) => (
+                                    <div>
+                                        <Parallax
+                                            bgImage={require('./background.jpg')}
+                                            strength={400}
+                                        >
+                                            <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
+                                                <Grid item xs={12}>
+                                                    <GridLayout items={ blogPosts.sort(() => Math.random() - 0.5) }/>
+                                                </Grid>
+                                            </div>
+                                        </Parallax>
+                                    </div>
+                                )}/>
+                                <Route exact path='/projects' render={(props) => (
+                                    <div>
+                                        <Parallax
+                                            bgImage={require('./background.jpg')}
+                                            strength={400}
+                                        >
+                                            <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
+                                                <Grid item xs={12}>
+                                                    <GridLayout items={ projects.sort(() => Math.random() - 0.5) }/>
+                                                </Grid>
+                                            </div>
+                                        </Parallax>
+                                    </div>
+                                )}/>
+                                <Route path='/content' render={(props) => (
+                                    <ContentPage/>
+                                )}/>
+                                <Route component={NoMatch} />
+                            </SwitchWithSlide>
                         </PersistentDrawerLeft>
                     </header>
                     </MuiThemeProvider>
