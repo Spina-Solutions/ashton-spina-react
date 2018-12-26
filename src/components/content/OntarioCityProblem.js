@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
 import { SocialIcon } from 'react-social-icons';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import ShareIcon from '@material-ui/icons/Share';
+import YouTube from 'react-youtube';
 
 const styles = theme => ({
     root: {
@@ -41,11 +40,27 @@ const styles = theme => ({
         lineHeight: '1.2',
         display: 'inline-block',
         borderRadius: '3px',
+    },
+    embeddedVideo: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        display: 'inline-block',
+        padding: '10px',
+        textAlign: 'center'
+    },
+    embeddedVideoWrapper: {
+        textAlign: 'center'
     }
 });
 
 function FullWidthGrid(props) {
     const { classes } = props;
+    const opts = {
+        width: '100%',
+        playerVars: { // https://developers.google.com/youtube/player_parameters
+            autoplay: 0
+        }
+    };
     return (
         <div>
             <CardMedia
@@ -90,8 +105,22 @@ function FullWidthGrid(props) {
                 Traffic
             </Typography>
             <Typography component="p">
-               Obviously the discussion seems to have shifted seemingly without purpose between housing and traffic.  This is because the two are inextricably linked.  One cannot address housing without first addressing the infrastructure to support it and the traffic that results otherwise.  The flow of people is critical to any good housing solution and must begin here.  If traffic was not a concern, the solution to any housing crisis, particularly in a country with as much space as Canada, becomes obvious: build more houses on more land.  But, this is not the case and this solution as currently approached simply increases commute times and traffic. Wendover Productions does a great job of explaining the fundamental problems of traffic in this video:  <a href="https://www.youtube.com/watch?v=N4PW66_g6XA">TL;DR: More cars on the road causes more traffic, regardless of road width.</a>
+               Obviously the discussion seems to have shifted seemingly without purpose between housing and traffic.  This is because the two are inextricably linked.  One cannot address housing without first addressing the infrastructure to support it and the traffic that results otherwise.  The flow of people is critical to any good housing solution and must begin here.  If traffic was not a concern, the solution to any housing crisis, particularly in a country with as much space as Canada, becomes obvious: build more houses on more land.  But, this is not the case and this solution as currently approached simply increases commute times and traffic. Wendover Productions does a great job of explaining the fundamental problems of traffic in this video:
             </Typography>
+            <br/>
+            <div className={classes.embeddedVideoWrapper}>
+                <Card className={classes.embeddedVideo}>
+                    <YouTube
+                        videoId="N4PW66_g6XA"
+                        opts={opts}
+                    />
+                    <CardContent>
+                        <Typography component="p">
+                            <strong>TL;DR:</strong> More cars on the road causes more traffic, regardless of road width.
+                        </Typography>
+                    </CardContent>    
+                </Card>
+            </div>
             <br/>
             <Typography component="p">
                Applying this logic to the GTA means more, better, public transport.  People often like to suggest that the public doesn’t like public transport.  Why would they?  It’s inconvenient. It can take 90 minutes to get from Etobicoke to Union Station without ever leaving one road: Lake Shore Boulevard.  It takes on average 32% longer to commute by public transport as by car, and that’s even with Toronto’s horrible traffic.  But, that’s because the infrastructure is not up-to-par.    Why during the day must one change trams on a direct route to Union Station?  Why is a city with 600 000 people, Brampton, whose population is dependent on the Toronto core for employment and exists essentially as a suburb of the city, only running a couple trains a day?  Why is it so difficult to get from any given home to a GO station?  If people need to maintain a car to just use public transport it's hardly desirable to use public transport.
@@ -111,8 +140,21 @@ function FullWidthGrid(props) {
             </Typography>
             <br/>
             <Typography component="p">
-               The first option is to continue with the current method of expansion.  More houses and more urban sprawl.  This is obviously the easier solution as it would mean no change to housing policy and people could continue with their current way of life.  This is not necessarily wrong, but it puts considerably more strain on the people moving infrastructure.  In the example of the GTA if this were the method that were decided upon then a reliance on cars is going to remain.  This is again manageable, but so much space will be wasted on cars.  This video about Barcelona’s attempt to pedestrianize the city has a good discussion on this issue:  <a href="https://www.youtube.com/watch?v=ZORzsubQA_M">TL;DR: Car infrastructure takes up a lot of space and limits cities.</a>
+               The first option is to continue with the current method of expansion.  More houses and more urban sprawl.  This is obviously the easier solution as it would mean no change to housing policy and people could continue with their current way of life.  This is not necessarily wrong, but it puts considerably more strain on the people moving infrastructure.  In the example of the GTA if this were the method that were decided upon then a reliance on cars is going to remain.  This is again manageable, but so much space will be wasted on cars.  This video about Barcelona’s attempt to pedestrianize the city has a good discussion on this issue:
             </Typography>
+            <br/>
+            <div className={classes.embeddedVideoWrapper}>
+                <Card className={classes.embeddedVideo}>
+                    <YouTube
+                        videoId="ZORzsubQA_M"
+                        opts={opts}
+                    />
+                    <CardContent>
+                        <Typography component="p">Car infrastructure takes up a lot of space and limits cities.
+                        </Typography>
+                    </CardContent>    
+                </Card>
+            </div>
             <br/>
             <Typography component="p">
                This in mind the only solution in this case would to be to build an absolutely phenomenal public transit system, something the GTA is nowhere near doing.  Though I would not be angry if I were proven wrong in this regard, I would hesitate to trust the current system to suddenly build one of the world’s most ambitious public transit systems.
@@ -127,7 +169,7 @@ function FullWidthGrid(props) {
             </Typography>
             <div className={classes.row}>
                 <Typography variant="h5" component="h3">
-                    About the Author
+                    Author
                 </Typography>
             </div>
             <div className={classes.row}>
