@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     root: {
@@ -52,7 +53,7 @@ const styles = theme => ({
         '-webkit-transition': 'all 0.4s ease-in-out 0s',
         '-moz-transition': 'all 0.4s ease-in-out',
         transition: 'all 0.4s ease-in-out 0s',
-        'zIndex': '10',
+        'transitionDelay': '0.1s',
         borderRadius: '20px',
         '&:hover': {
             opacity: '1',
@@ -81,10 +82,10 @@ const styles = theme => ({
         '-webkit-transition': 'all 0.3s ease-in-out 0s',
         '-moz-transition': 'all 0.3s ease-in-out 0s',
         transition: 'all 0.3s ease-in-out 0s',
-        '& h3': {
+        '& h1': {
             color: '#fff',
             fontWeight: '500',
-            letterSpacing: '0.15em',
+            letterSpacing: '0.3em',
             marginBottom: '0.5em',
             textTransform: 'uppercase'
         },
@@ -117,8 +118,8 @@ function FullWidthGrid(props) {
                                         />
                                         <div className={classes.contentOverlay}>
                                             <div className={classes.contentInner}>
-                                                <h3>{item.title}</h3>
-                                                <p>{item.subtitle}</p>
+                                                <Typography component="h1">{item.title}</Typography>
+                                                <Typography component="p">{item.subtitle}</Typography>
                                             </div>
                                         </div> 
                                     </div>
