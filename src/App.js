@@ -81,7 +81,7 @@ const blogPosts = [
         imageUrl: require('./comingSoon.png')
     },
     { 
-        title: 'Laravel vs. NodeJS', 
+        title: 'Ontario\'s City Problem', 
         text: "A discussion of the housing and urban planning in major Ontario cities.", 
         url: '/content/ontario-city-problem',
         imageUrl: require('./gta_space_usage.jpg')

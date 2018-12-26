@@ -38,8 +38,61 @@ const styles = theme => ({
       '-ms-transform': 'translate(-50%, -50%)',
       'transform': 'translate(-50%, -50%)',
       textAlign: 'center'
+    },
+    contentOverlay: {
+        position: 'absolute',
+        top: '0',
+        bottom: '0',
+        left: '0',
+        right: '0',
+        background: 'rgba(0,0,0,0.7)',
+        height: '100%',
+        width: '100%',
+        opacity: '0',
+        '-webkit-transition': 'all 0.4s ease-in-out 0s',
+        '-moz-transition': 'all 0.4s ease-in-out',
+        transition: 'all 0.4s ease-in-out 0s',
+        'zIndex': '10',
+        borderRadius: '20px',
+        '&:hover': {
+            opacity: '1',
+            '& div': {
+                top: '20%',
+                left: '50%',
+                opacity: '1'
+            }
+        }
+    },
+    content: {
+        position: 'relative'
+    },
+    contentInner: {
+        position: 'absolute',
+        textAlign: 'center',
+        paddingLeft: '1em',
+        paddingRight: '1em',
+        width: '100%',
+        top: '50%',
+        left: '50%',
+        opacity: '0',
+        '-webkit-transform': 'translate(-50%, -50%)',
+        '-moz-transform': 'translate(-50%, -50%)',
+        transform: 'translate(-50%, -50%)',
+        '-webkit-transition': 'all 0.3s ease-in-out 0s',
+        '-moz-transition': 'all 0.3s ease-in-out 0s',
+        transition: 'all 0.3s ease-in-out 0s',
+        '& h3': {
+            color: '#fff',
+            fontWeight: '500',
+            letterSpacing: '0.15em',
+            marginBottom: '0.5em',
+            textTransform: 'uppercase'
+        },
+        '& p': {
+            color: '#fff',
+            fontSize: '0.8em',
+        }
     }
-
 });
 
 
@@ -54,39 +107,45 @@ function FullWidthGrid(props) {
                             <Card 
                                 className={classes.card}
                                 raised
-                            >
-                                <CardActionArea>
-                                    <CardMedia
-                                        style={{height: 0, paddingTop: '56.25%', borderRadius: '20px'}}
-                                        image={item.imageUrl}
-                                        title={item.title}
-                                     />
-                                 </CardActionArea>  
-                                <div className={classes.actions}>
-                                    <CardActions>
-                                            {item.githubLink && item.githubLink.length > 0 &&
-                                                <a href={item.githubLink} style={{ textDecoration: 'none' }}>
-                                                    <Button size="small" color="primary">
-                                                        See it on Github
-                                                    </Button>
-                                                </a>
-                                            }
-                                            {item.href && item.href.length > 0 &&
-                                                <a href={item.href} style={{ textDecoration: 'none' }}>
-                                                    <Button size="small" color="primary">
-                                                        See it in Action
-                                                    </Button>
-                                                </a>    
-                                            }
-                                            {item.url && item.url.length > 0 &&
-                                                <Link to={item.url} style={{ textDecoration: 'none' }}>
-                                                    <Button size="small" color="primary">
-                                                        Read About It
-                                                    </Button>
-                                                </Link>
-                                            }
-                                    </CardActions>
-                                </div>
+                            >   
+                                <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}>
+                                    <div className={classes.content}>
+                                        <CardMedia
+                                            style={{height: 0, paddingTop: '56.25%', borderRadius: '20px'}}
+                                            image={item.imageUrl}
+                                            title={item.title}
+                                        />
+                                        <div className={classes.contentOverlay}>
+                                            <div className={classes.contentInner}>
+                                                <h3>{item.title}</h3>
+                                                <p>{item.subtitle}</p>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                 </Link>
+                                <CardActions className={classes.actions}>
+                                        {item.githubLink && item.githubLink.length > 0 &&
+                                            <a href={item.githubLink} style={{ textDecoration: 'none' }}>
+                                                <Button size="small" color="primary">
+                                                    See it on Github
+                                                </Button>
+                                            </a>
+                                        }
+                                        {item.href && item.href.length > 0 &&
+                                            <a href={item.href} style={{ textDecoration: 'none' }}>
+                                                <Button size="small" color="primary">
+                                                    See it in Action
+                                                </Button>
+                                            </a>    
+                                        }
+                                        {item.url && item.url.length > 0 &&
+                                            <Link to={item.url} style={{ textDecoration: 'none' }}>
+                                                <Button size="small" color="primary">
+                                                    Read About It
+                                                </Button>
+                                            </Link>
+                                        }
+                                </CardActions>
                             </Card>
                         </Grid>
                     )
