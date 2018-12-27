@@ -86,7 +86,7 @@ const blogPosts = [
     },*/
     { 
         title: 'Ontario\'s City Problem', 
-        subtitle: "A discussion of the housing and urban planning in Ontarian cities.", 
+        subtitle: "A discussion of urban planning in Ontarian cities.", 
         url: '/content/ontario-city-problem',
         imageUrl: require('./gta_space_usage.jpg')
     }

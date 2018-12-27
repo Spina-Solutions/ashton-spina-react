@@ -93,6 +93,13 @@ const styles = theme => ({
         borderColor: '#2196f3',
         width: 180,
         height: 180,
+    },
+    socialIcon: {
+        '&:hover': {
+            borderRadius: '100px',
+            backgroundClip: 'content-box',
+            backgroundColor: '#B0BEC5'
+        }
     }
 });
 
@@ -151,11 +158,12 @@ class PersistentDrawerLeft extends React.Component {
             }}
         >
             <div className={classes.drawerHeader}>
-                <SocialIcon url="https://www.linkedin.com/in/spinaadbusiness/"/>
-                <SocialIcon url="https://github.com/spina-a-d"/>
-                <SocialIcon url="https://stackoverflow.com/users/10460453/ashton-spina"/>
-                <SocialIcon url="https://www.facebook.com/ashton.spina"/>
-                <SocialIcon url="https://www.instagram.com/ashtonspina/"/>
+                {/* MR to make backgroundColor change fill in works, check on this later */}
+                <SocialIcon className={classes.socialIcon} url="https://www.linkedin.com/in/spinaadbusiness/"/>
+                <SocialIcon className={classes.socialIcon} url="https://github.com/spina-a-d"/>
+                <SocialIcon className={classes.socialIcon} url="https://stackoverflow.com/users/10460453/ashton-spina"/>
+                <SocialIcon className={classes.socialIcon} url="https://www.facebook.com/ashton.spina"/>
+                <SocialIcon className={classes.socialIcon} url="https://www.instagram.com/ashtonspina/"/>
                 <IconButton onClick={this.handleDrawerClose}>
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>

@@ -49,10 +49,17 @@ const styles = theme => ({
     },
     embeddedVideoWrapper: {
         textAlign: 'center'
+    },
+    socialIcon: {
+        '&:hover': {
+            borderRadius: '100px',
+            backgroundClip: 'content-box',
+            backgroundColor: '#B0BEC5'
+        }
     }
 });
 
-function FullWidthGrid(props) {
+function OntarioCityProblem(props) {
     const { classes } = props;
     const opts = {
         width: '100%',
@@ -242,12 +249,12 @@ function FullWidthGrid(props) {
                     </Typography>
                 </div>
                 <div className={classes.row}>
-                    <SocialIcon url="https://www.linkedin.com/in/spinaadbusiness/"/>
-                    <SocialIcon url="https://github.com/spina-a-d"/>
-                    <SocialIcon url="https://stackoverflow.com/users/10460453/ashton-spina"/>
-                    <SocialIcon url="https://plus.google.com/u/0/118135112796392901012"/>
-                    <SocialIcon url="https://www.facebook.com/ashton.spina"/>
-                    <SocialIcon url="https://www.instagram.com/ashtonspina/"/>
+                    <SocialIcon className={classes.socialIcon} url="https://www.linkedin.com/in/spinaadbusiness/"/>
+                    <SocialIcon className={classes.socialIcon} url="https://github.com/spina-a-d"/>
+                    <SocialIcon className={classes.socialIcon} url="https://stackoverflow.com/users/10460453/ashton-spina"/>
+                    <SocialIcon className={classes.socialIcon} url="https://plus.google.com/u/0/118135112796392901012"/>
+                    <SocialIcon className={classes.socialIcon} url="https://www.facebook.com/ashton.spina"/>
+                    <SocialIcon className={classes.socialIcon} url="https://www.instagram.com/ashtonspina/"/>
                 </div>
             </section>
             <section id="the-sources">
@@ -265,8 +272,8 @@ function FullWidthGrid(props) {
     );
 }
 
-FullWidthGrid.propTypes = {
+OntarioCityProblem.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FullWidthGrid);
+export default withStyles(styles)(OntarioCityProblem);

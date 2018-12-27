@@ -33,7 +33,7 @@ function NoMatch(props) {
                                 404 : This Page Doesn't Exist
                             </Typography>
                             <Grid container justify="center">
-                                <Link to={'/'}>
+                                <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
                                     <IconButton aria-label="Home" className={classes.button}>
                                         <HomeIcon style={{ fontSize: '72px' }} color="secondary"/>
                                     </IconButton>
