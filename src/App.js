@@ -6,10 +6,9 @@ import NoMatch from './components/NoMatch';
 import Grid from '@material-ui/core/Grid';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { Parallax } from 'react-parallax';
 import ReactGA from 'react-ga';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import SwitchWithSlide from "./SwitchWithSlide";
 
 const theme = createMuiTheme({

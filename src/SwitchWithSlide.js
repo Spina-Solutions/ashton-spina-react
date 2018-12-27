@@ -21,12 +21,6 @@ class SlideOut extends React.Component {
     const uniqId = this.props.uniqKey || this.props.children.type;
 
     if (prevUniqId !== uniqId) {
-      this.props.updateStep(
-        "(componentDidUpdate)",
-        "Uniq ID has changed!",
-        `It was ${prevUniqId}, but is now ${uniqId}`,
-        "Begin sliding TO_LEFT, but set `prevChild` so we keep rendering the old page!"
-      );
 
       this.setState({
         childPosition: Slider.TO_LEFT,
@@ -40,19 +34,12 @@ class SlideOut extends React.Component {
   }
 
   swapChildren = () => {
-    this.props.updateStep(
-      "(swapChildren)",
-      "TO_LEFT animation has completed!",
-      "Remove `prevChild` so our new child is rendered",
-      "Start animating FROM_RIGHT"
-    );
 
     this.setState({
       childPosition: Slider.FROM_RIGHT,
       prevChild: null,
       prevUniqId: null,
       animationCallback: () => {
-        this.props.updateStep("All done!");
         this.setState({ animationCallback: null });
       }
     });
