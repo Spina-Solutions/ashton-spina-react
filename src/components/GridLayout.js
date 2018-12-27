@@ -14,11 +14,14 @@ const styles = theme => ({
         flexGrow: 1,
     },
     card: {
+        color: 'black',
         padding: '5px',
-        background: 'linear-gradient(to right, #000000 0%, #111111 51%, #000000 100%)',
-        transition: '6s',
+        background: 'linear-gradient(to right, #ffffff 0%, #ffffff 51%, #ffffff 100%)',
+        '-webkit-transition': '0.4s',
+        '-moz-transition': '0.4s',
+        transition: '0.4s',
         '&:hover': {
-            background: 'linear-gradient(to right, #000000 0%, #444444 51%, #000000 100%)',
+            background: 'linear-gradient(to right, #2962FF 0%, #2979FF 51%, #2962FF 100%)',
         },
         borderRadius: '20px'
     },
@@ -26,7 +29,7 @@ const styles = theme => ({
         height: '100%',
         display: 'flex',
         alignIitems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     text: {
       color: 'white',
@@ -57,7 +60,7 @@ const styles = theme => ({
         '&:hover': {
             opacity: '1',
             '& div': {
-                top: '20%',
+                top: '30%',
                 left: '50%',
                 opacity: '1'
             }

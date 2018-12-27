@@ -21,12 +21,15 @@ const theme = createMuiTheme({
         },
         success: green
     },
+    typography: {
+        useNextVariants: true,
+    },
 });
 
 const projects = [
     { 
         title: 'Universal Cloud Monitoring', 
-        text: "The result of thesis research, this project was created with the goal of monitoring cloud-based virtual machines in a potentially hybrid network.", 
+        subtitle: "Research on monitoring cloud-based virtual machines.", 
         url: '/content/universalcloudmonitoring',
         imageUrl: require('./universalCloudMonitoring.png'),
         githubLink: 'https://github.com/a-d-spina-student/waste-cloud-computing',
@@ -34,7 +37,7 @@ const projects = [
     }, 
     { 
         title: 'Tulip Assist', 
-        text: "I worked almost entirely as a Backend Developer for this project which already existed before I came onboard.  Here I made sure that tools were available for workers that used the website for internal purposes, financial reporting, and customer service.  As well I was in charge of making sure the website was stable and optimized when needed.", 
+        subtitle: "A web service for mobile phone insurance.", 
         url: '/content/tulipassist', 
         imageUrl: require('./tulipAssist.png'),
         githubLink: '',
@@ -42,7 +45,7 @@ const projects = [
     },
     { 
         title: 'Device Database', 
-        text: "I acted as a lead, full-stack developer for this project from start to finish.  I made sure that the project had the back-end functionality needed to support the systems that would rely on it and a easy-to-use, clean front-end.", 
+        subtitle: "A database service for mobile devices.", 
         url: '/content/devicedatabase', 
         imageUrl: require('./deviceDB.png'),
         githubLink: '',
@@ -50,7 +53,7 @@ const projects = [
     },
     { 
         title: 'Ashton Spina Website', 
-        text: "This project is a personal project, and likely the website where you're readying this text.", 
+        subtitle: "A personal website", 
         url: '/content/ashtonspina', 
         imageUrl: require('./ashtonspina.png'),
         githubLink: '',
@@ -58,7 +61,7 @@ const projects = [
     },
     { 
         title: 'Wander', 
-        text: "This project is a personal project, and likely the website where you're readying this text.", 
+        subtitle: "An App for Psychological Testing", 
         url: '/content/wander', 
         imageUrl: require('./wander.png'),
         githubLink: 'https://github.com/RUGSoftEng/2017-Cognitive-Sensors',
@@ -66,7 +69,7 @@ const projects = [
     },
     { 
         title: 'University Work', 
-        text: "Here I explain the collection of work that was a result of my education.", 
+        subtitle: "Code snippets from university courses.", 
         url: '/content/university', 
         imageUrl: require('./school_work.png'),
         githubLink: 'https://github.com/spina-a-d/Ashton-s-School-Assignment-Collection',
@@ -77,13 +80,13 @@ const projects = [
 const blogPosts = [
     { 
         title: 'Laravel vs. NodeJS', 
-        text: "A comparison of major back-end frameworks for web development.", 
+        subtitle: "A comparison of major back-end frameworks for web development.", 
         url: '/content/laravel-vs-nodejs',
         imageUrl: require('./comingSoon.png')
     },
     { 
         title: 'Ontario\'s City Problem', 
-        text: "A discussion of the housing and urban planning in major Ontario cities.", 
+        subtitle: "A discussion of the housing and urban planning in Ontarian cities.", 
         url: '/content/ontario-city-problem',
         imageUrl: require('./gta_space_usage.jpg')
     }
