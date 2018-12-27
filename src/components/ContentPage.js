@@ -31,7 +31,7 @@ const styles = theme => ({
     }
 });
 
-function FullWidthGrid(props) {
+function ContentPage(props) {
     const { classes } = props;
     return (
         <div className={classes.root}>
@@ -95,8 +95,8 @@ function FullWidthGrid(props) {
     );
 }
 
-FullWidthGrid.propTypes = {
+ContentPage.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FullWidthGrid);
+export default withStyles(styles)(ContentPage);

@@ -52,7 +52,7 @@ const styles = theme => ({
     }
 });
 
-function FullWidthGrid(props) {
+function LaravelVsNodeJS(props) {
     const { classes } = props;
     const opts = {
         width: '100%',
@@ -76,7 +76,7 @@ function FullWidthGrid(props) {
                 <Typography className={classes.pictureLink} component="p">Photo: Marc-Olivier Jodoin</Typography>
             </a>
             <Typography variant="h2">
-                Ontario's City Problem
+                Laravel vs. NodeJS
             </Typography>
             <section id="the-issues">
                 <Typography variant="h4">
@@ -265,8 +265,8 @@ function FullWidthGrid(props) {
     );
 }
 
-FullWidthGrid.propTypes = {
+LaravelVsNodeJS.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FullWidthGrid);
+export default withStyles(styles)(LaravelVsNodeJS);

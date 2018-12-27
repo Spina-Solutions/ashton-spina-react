@@ -18,7 +18,7 @@ const styles = theme => ({
 });
 
 
-function FullWidthGrid(props) {
+function NoMatch(props) {
     const { classes } = props;
     return (
         <div className={classes.root}>
@@ -47,8 +47,8 @@ function FullWidthGrid(props) {
     );
 }
 
-FullWidthGrid.propTypes = {
+NoMatch.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FullWidthGrid);
+export default withStyles(styles)(NoMatch);

@@ -56,7 +56,7 @@ const projects = [
         subtitle: "A personal website", 
         url: '/content/ashtonspina', 
         imageUrl: require('./ashtonspina.png'),
-        githubLink: '',
+        githubLink: 'https://github.com/spina-a-d/ashton-spina-react',
         href: '/'
     },
     { 
@@ -78,12 +78,12 @@ const projects = [
 ];
 
 const blogPosts = [
-    { 
+    /*{ 
         title: 'Laravel vs. NodeJS', 
         subtitle: "A comparison of major back-end frameworks for web development.", 
         url: '/content/laravel-vs-nodejs',
         imageUrl: require('./comingSoon.png')
-    },
+    },*/
     { 
         title: 'Ontario\'s City Problem', 
         subtitle: "A discussion of the housing and urban planning in Ontarian cities.", 
