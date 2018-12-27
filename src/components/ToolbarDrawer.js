@@ -20,8 +20,10 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import { SocialIcon } from 'react-social-icons';
+import Typography from '@material-ui/core/Typography';
 
-const drawerWidth = 240;
+const drawerWidth = 330;
 
 const styles = theme => ({
     root: {
@@ -33,54 +35,65 @@ const styles = theme => ({
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
         }),
     },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 20,
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
-  },
-  content: {
-    flexGrow: 1,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  },
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    menuButton: {
+        marginLeft: 12,
+        marginRight: 20,
+    },
+    hide: {
+        display: 'none',
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+    },
+    drawerPaper: {
+        width: drawerWidth,
+     },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
+    },
+    content: {
+        flexGrow: 1,
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: -drawerWidth,
+    },
+    contentShift: {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+    },
+    row: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    bigAvatar: {
+        borderStyle: 'solid',
+        borderWidth: '3px',
+        borderColor: '#2196f3',
+        width: 180,
+        height: 180,
+    }
 });
 
 class PersistentDrawerLeft extends React.Component {
@@ -110,14 +123,14 @@ class PersistentDrawerLeft extends React.Component {
           })}
         >
           <Toolbar disableGutters={!open}>
-            <IconButton
+            <Button
               color="inherit"
               aria-label="Open drawer"
               onClick={this.handleDrawerOpen}
               className={classNames(classes.menuButton, open && classes.hide)}
             >
-              <MenuIcon />
-            </IconButton>
+              About Me
+            </Button>
             <div className={classes.toolbarButtons}>
                 <Link to="/" style={{ textDecoration: 'none', color: 'black' }}> 
                     <Button color="inherit">Blog</Button>
@@ -125,15 +138,6 @@ class PersistentDrawerLeft extends React.Component {
                 <Link to="/projects" style={{ textDecoration: 'none', color: 'black' }}> 
                     <Button color="inherit">Projects</Button>
                 </Link>
-                <Link to="/content/aboutme" style={{ textDecoration: 'none', color: 'black' }}> 
-                    <Button color="inherit">About Me</Button>
-                </Link>
-                <a href="https://github.com/spina-a-d" style={{ textDecoration: 'none', color: 'black' }}> 
-                    <Button color="inherit">GitHub</Button>
-                </a>
-                <a href="https://www.linkedin.com/in/spinaadbusiness/" style={{ textDecoration: 'none', color: 'black' }}> 
-                    <Button color="inherit">LinkedIn</Button>
-                </a>
             </div>
           </Toolbar>
         </AppBar>
@@ -147,30 +151,38 @@ class PersistentDrawerLeft extends React.Component {
             }}
         >
             <div className={classes.drawerHeader}>
+                <SocialIcon url="https://www.linkedin.com/in/spinaadbusiness/"/>
+                <SocialIcon url="https://github.com/spina-a-d"/>
+                <SocialIcon url="https://stackoverflow.com/users/10460453/ashton-spina"/>
+                <SocialIcon url="https://www.facebook.com/ashton.spina"/>
+                <SocialIcon url="https://www.instagram.com/ashtonspina/"/>
                 <IconButton onClick={this.handleDrawerClose}>
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
             </div>
             <Divider/>
+            <br/>
             <List>
-                <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
-                    <ListItem button>
-                        <ListItemIcon><DeveloperBoardIcon/></ListItemIcon>
-                        <ListItemText primary="Blog"/>
-                    </ListItem>
+                <div className={classes.row}>
+                    <Avatar alt="AS" src={require('./content/ashtonspina.jpg')} className={classes.bigAvatar}/>
+                </div>
+                <div className={classes.row}>
+                    <Typography variant="h5" component="h3">
+                        Ashton Spina
+                    </Typography>
+                </div>
+                <Link className={classes.row} to="/content/aboutme" style={{ textDecoration: 'none', color: 'black' }}> 
+                    <Button variant="outlined" color="inherit">Learn More</Button>
                 </Link>
-                <Link to='/projects' style={{ textDecoration: 'none', color: 'black' }}>
-                    <ListItem button>
-                        <ListItemIcon><DashboardIcon/></ListItemIcon>
-                        <ListItemText primary="Projects"/>
-                    </ListItem>
-                </Link> 
             </List>
-            <Divider />
             <List>
+                <Divider/>
                 <ListItem>
-                    <ListItemText primary='Experience' />
+                    <Typography variant="h6" component="h6">
+                        Experience
+                    </Typography>
                 </ListItem>
+                <Divider/>
                 <Link to='/content/laravel' style={{ textDecoration: 'none', color: 'black' }}>
                     <ListItem button>
                         <ListItemIcon>
@@ -212,6 +224,7 @@ class PersistentDrawerLeft extends React.Component {
                     </ListItem>
                 </Link>
             </List>
+            <br/>
         </Drawer>
         <main
           className={classNames(classes.content, {

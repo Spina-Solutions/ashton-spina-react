@@ -22,6 +22,12 @@ const styles = theme => ({
         width: 200,
         height: 200,
     },
+    githubBadge: {
+        border: '0',
+        height: '142px',
+        width: '200px',
+        overflow: 'hidden'
+    }
 });
 
 function FullWidthGrid(props) {
