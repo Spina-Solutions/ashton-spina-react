@@ -29,7 +29,7 @@ function FullWidthGrid(props) {
     return (
         <div>
             <div className={classes.row}>
-                <Avatar alt="AS" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png" className={classes.bigAvatar}/>
+                <Avatar alt="AS" src={require('./images/reactjs.png')} className={classes.bigAvatar}/>
             </div>
             <div className={classes.row}>
                 <Typography variant="h5" component="h3">

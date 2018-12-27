@@ -71,7 +71,7 @@ function OntarioCityProblem(props) {
         <div>
             <CardMedia
               className={classes.media}
-              image={require('../../gta_space_usage.jpg')}
+              image={require('../../images/gta_space_usage.jpg')}
               title="The Ontario Housing Crisis"
             />
             <a
@@ -241,7 +241,7 @@ function OntarioCityProblem(props) {
                     </Typography>
                 </div>
                 <div className={classes.row}>
-                    <Avatar alt="AS" src={require('./ashtonspina.jpg')} className={classes.bigAvatar}/>
+                    <Avatar alt="AS" src={require('./images/ashtonspina.jpg')} className={classes.bigAvatar}/>
                 </div>
                 <div className={classes.row}>
                     <Typography component="h3" variant="h5">

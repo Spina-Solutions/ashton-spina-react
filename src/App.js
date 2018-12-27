@@ -31,7 +31,7 @@ const projects = [
         title: 'Universal Cloud Monitoring', 
         subtitle: "Research on monitoring cloud-based virtual machines.", 
         url: '/content/universalcloudmonitoring',
-        imageUrl: require('./universalCloudMonitoring.png'),
+        imageUrl: require('./images/universalCloudMonitoring.png'),
         githubLink: 'https://github.com/a-d-spina-student/waste-cloud-computing',
         href: 'http://www.universalcloudmonitoring.com/'
     }, 
@@ -39,7 +39,7 @@ const projects = [
         title: 'Tulip Assist', 
         subtitle: "A web service for mobile phone insurance.", 
         url: '/content/tulipassist', 
-        imageUrl: require('./tulipAssist.png'),
+        imageUrl: require('./images/tulipAssist.png'),
         githubLink: '',
         href: 'https://www.tulipassist.nl/'
     },
@@ -47,7 +47,7 @@ const projects = [
         title: 'Device Database', 
         subtitle: "A database service for mobile devices.", 
         url: '/content/devicedatabase', 
-        imageUrl: require('./deviceDB.png'),
+        imageUrl: require('./images/deviceDB.png'),
         githubLink: '',
         href: ''
     },
@@ -55,7 +55,7 @@ const projects = [
         title: 'Ashton Spina Website', 
         subtitle: "A personal website", 
         url: '/content/ashtonspina', 
-        imageUrl: require('./ashtonspina.png'),
+        imageUrl: require('./images/ashtonspina.png'),
         githubLink: 'https://github.com/spina-a-d/ashton-spina-react',
         href: '/'
     },
@@ -63,7 +63,7 @@ const projects = [
         title: 'Wander', 
         subtitle: "An App for Psychological Testing", 
         url: '/content/wander', 
-        imageUrl: require('./wander.png'),
+        imageUrl: require('./images/wander.png'),
         githubLink: 'https://github.com/RUGSoftEng/2017-Cognitive-Sensors',
         href: 'https://play.google.com/store/apps/details?id=com.teamwan.wander&hl=en'
     },
@@ -71,7 +71,7 @@ const projects = [
         title: 'University Work', 
         subtitle: "Code snippets from university courses.", 
         url: '/content/university', 
-        imageUrl: require('./school_work.png'),
+        imageUrl: require('./images/school_work.png'),
         githubLink: 'https://github.com/spina-a-d/Ashton-s-School-Assignment-Collection',
         href: ''
     }, 
@@ -88,7 +88,7 @@ const blogPosts = [
         title: 'Ontario\'s City Problem', 
         subtitle: "A discussion of urban planning in Ontarian cities.", 
         url: '/content/ontario-city-problem',
-        imageUrl: require('./gta_space_usage.jpg')
+        imageUrl: require('./images/gta_space_usage.jpg')
     }
 ];  
 
@@ -119,7 +119,7 @@ class App extends Component {
                                 <Route exact path='/' render={(props) => (
                                     <div>
                                         <Parallax
-                                            bgImage={require('./background.jpg')}
+                                            bgImage={require('./images/background.jpg')}
                                             strength={400}
                                         >
                                             <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
@@ -133,7 +133,7 @@ class App extends Component {
                                 <Route exact path='/projects' render={(props) => (
                                     <div>
                                         <Parallax
-                                            bgImage={require('./background.jpg')}
+                                            bgImage={require('./images/background.jpg')}
                                             strength={400}
                                         >
                                             <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>

@@ -9,15 +9,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons';
@@ -172,7 +169,7 @@ class PersistentDrawerLeft extends React.Component {
             <br/>
             <List>
                 <div className={classes.row}>
-                    <Avatar alt="AS" src={require('./content/ashtonspina.jpg')} className={classes.bigAvatar}/>
+                    <Avatar alt="AS" src={require('./content/images/ashtonspina.jpg')} className={classes.bigAvatar}/>
                 </div>
                 <div className={classes.row}>
                     <Typography variant="h5" component="h3">
@@ -194,7 +191,7 @@ class PersistentDrawerLeft extends React.Component {
                 <Link to='/content/laravel' style={{ textDecoration: 'none', color: 'black' }}>
                     <ListItem button>
                         <ListItemIcon>
-                            <Avatar alt='Laravel' src={require('./Laravel.svg')}/>
+                            <Avatar alt='Laravel' src={require('./icons/Laravel.svg')}/>
                         </ListItemIcon>
                         <ListItemText primary='Laravel' />
                     </ListItem>
@@ -202,7 +199,7 @@ class PersistentDrawerLeft extends React.Component {
                 <Link to='/content/nodejs' style={{ textDecoration: 'none', color: 'black' }}>
                   <ListItem button>
                       <ListItemIcon>
-                          <Avatar alt='NodeJS' src={require('./NodeJS.svg')}/>
+                          <Avatar alt='NodeJS' src={require('./icons/NodeJS.svg')}/>
                       </ListItemIcon>
                       <ListItemText primary='NodeJS' />
                   </ListItem>
@@ -210,7 +207,7 @@ class PersistentDrawerLeft extends React.Component {
                 <Link to='/content/reactjs' style={{ textDecoration: 'none', color: 'black' }}>
                   <ListItem button>
                       <ListItemIcon>
-                          <Avatar alt='ReactJS' src={require('./ReactJS.png')}/>
+                          <Avatar alt='ReactJS' src={require('./icons/ReactJS.png')}/>
                       </ListItemIcon>
                       <ListItemText primary='ReactJS' />
                   </ListItem>
@@ -218,7 +215,7 @@ class PersistentDrawerLeft extends React.Component {
                 <Link to='/content/vuejs' style={{ textDecoration: 'none', color: 'black' }}>
                     <ListItem button>
                         <ListItemIcon>
-                            <Avatar alt='VueJS' src={require('./VueJS.png')}/>
+                            <Avatar alt='VueJS' src={require('./icons/VueJS.png')}/>
                         </ListItemIcon>
                         <ListItemText primary='VueJS' />
                     </ListItem>
@@ -226,7 +223,7 @@ class PersistentDrawerLeft extends React.Component {
                 <Link to='/content/android' style={{ textDecoration: 'none', color: 'black' }}>
                     <ListItem button>
                         <ListItemIcon>
-                            <Avatar alt='Android' src={require('../android.jpg')}/>
+                            <Avatar alt='Android' src={require('../images/android.jpg')}/>
                         </ListItemIcon>
                         <ListItemText primary='Android' />
                     </ListItem>

@@ -29,7 +29,7 @@ function FullWidthGrid(props) {
     return (
         <div>
             <div className={classes.row}>
-                <Avatar alt="AS" src="https://www.netgains.org/wp-content/uploads/2014/01/node_js.png" className={classes.bigAvatar}/>
+                <Avatar alt="AS" src={require('./images/nodejs.png')} className={classes.bigAvatar}/>
             </div>
             <div className={classes.row}>
                 <Typography variant="h5" component="h3">

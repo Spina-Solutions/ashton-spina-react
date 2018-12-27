@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
 import { SocialIcon } from 'react-social-icons';
 
 const styles = theme => ({
@@ -24,12 +23,12 @@ const styles = theme => ({
     },
 });
 
-function FullWidthGrid(props) {
+function University(props) {
     const { classes } = props;
     return (
         <div>
             <div className={classes.row}>
-                <Avatar alt="AS" src={require('../../school_work.png')} className={classes.bigAvatar}/>
+                <Avatar alt="AS" src={require('../../images/school_work.png')} className={classes.bigAvatar}/>
             </div>
             <div className={classes.row}>
                 <Typography variant="h5" component="h3">
@@ -49,8 +48,8 @@ function FullWidthGrid(props) {
     );
 }
 
-FullWidthGrid.propTypes = {
+University.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FullWidthGrid);
+export default withStyles(styles)(University);
