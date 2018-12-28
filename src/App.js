@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PersistentDrawerLeft from './components/ToolbarDrawer';
 import GridLayout from './components/GridLayout';
 import ContentPage from './components/ContentPage';
+import RoadTrafficSim from './components/RoadTrafficSim';
 import NoMatch from './components/NoMatch';
 import Grid from '@material-ui/core/Grid';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
@@ -143,6 +144,9 @@ class App extends Component {
                                             </div>
                                         </Parallax>
                                     </div>
+                                )}/>
+                                <Route exact path='/road-traffic-sim' render={(props) => (
+                                    <RoadTrafficSim/>
                                 )}/>
                                 <Route path='/content' render={(props) => (
                                     <ContentPage/>
