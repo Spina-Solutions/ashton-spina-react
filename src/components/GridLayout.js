@@ -11,11 +11,12 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     root: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     card: {
         color: 'black',
         padding: '5px',
+        width: '350px',
         background: 'linear-gradient(to right, #ffffff 0%, #ffffff 51%, #ffffff 100%)',
         '-webkit-transition': '0.4s',
         '-moz-transition': '0.4s',
@@ -103,10 +104,10 @@ function GridLayout(props) {
     const { classes } = props;
     return (
         <div className={classes.root}>
-            <Grid container spacing={32}>
+            <Grid container spacing={32} direction="column" align="center" justify="center">
                 {
                     props.items.map((item, key) =>
-                        <Grid key={key} item xs={12} sm={6} md={6} lg={4}>
+                        <Grid key={key} item xs={12} sm={6} lg={4}>
                             <Card 
                                 className={classes.card}
                                 raised
