@@ -33,6 +33,7 @@ class ColoredRect extends React.Component {
 class RoadTrafficSim extends Component {
 
     state = {
+        cars: [],
         nodes: [],
         edges: [],
         selectedNode: null,
@@ -53,6 +54,21 @@ class RoadTrafficSim extends Component {
             window.console.log("Creating Node");
             return;
         }
+        else if (e.target._id !== 1 && this.state.selectedNode === null && e.evt.shiftKey) { 
+            this.setState(prevState => ({
+                startNode: e.target.index,
+                selectedNode: null
+            }));
+            window.console.log("Setting Selected Node");
+            return;
+        }
+        else if (e.target._id !== 1 && this.state.selectedNode !== null && e.evt.shiftKey) { 
+            this.setState(prevState => ({
+                endNode: e.target.index,
+                selectedNode: null
+            }));
+            window.console.log("Setting Selected Node");
+        } 
         // Haven't selected a node yet
         else if (this.state.selectedNode === null && e.target._id !== 1) { 
             this.setState(prevState => ({
@@ -102,6 +118,128 @@ class RoadTrafficSim extends Component {
         window.console.log(this.state);
     }   
 
+    gameLoop = () => {
+        var self = this;
+        setInterval(function() {
+            window.console.log(self.state);
+            if (self.state.endNode !== null && self.state.startNode !== null && !self.state.cars.length) {
+                window.console.log("empty cars");
+                self.setState(prevState => ({
+                    cars: [
+                        {   
+                            x: self.state.nodes[self.state.startNode].x, 
+                            y: self.state.nodes[self.state.startNode].y, 
+                            inTransit: false,
+                            targetNode: self.state.startNode
+                        }
+                    ],
+                }));
+            }
+            var nodes = self.state.nodes;
+            let cars = self.state.cars;
+            for (const [index, car] of cars.entries()) {
+                if (car.inTransit === false) {
+                    window.console.log("Car not in transit");
+                    let shortestEdgeManhattanLength = 2147483647;
+                    var newTargetNode = null;
+                    for (var edge of self.state.edges) {
+                        if (self.state.nodes[edge.node0].x === car.x && 
+                            self.state.nodes[edge.node0].y === car.y && 
+                            shortestEdgeManhattanLength > (Math.abs(self.state.nodes[edge.node1].x - self.state.nodes[edge.node0].x) 
+                                                                + Math.abs(self.state.nodes[edge.node1].y - self.state.nodes[edge.node0].y))) {
+
+                            shortestEdgeManhattanLength = (Math.abs(self.state.nodes[edge.node1].x - self.state.nodes[edge.node0].x) 
+                                                                + Math.abs(self.state.nodes[edge.node1].y - self.state.nodes[edge.node0].y));
+                            newTargetNode = nodes.findIndex(function(e) { return e.x == nodes[edge.node1].x && e.y == nodes[edge.node1].y; });
+                            window.console.log(newTargetNode);
+                        }
+                    }
+                    window.console.log(newTargetNode);
+                    if (newTargetNode !== null) {
+                        window.console.log("Car going in transit");
+                        self.setState(state => {
+                            const cars = state.cars.map((car, i) => {
+                                if (i === index) {
+                                    return {
+                                        x: car.x, 
+                                        y: car.y,
+                                        inTransit: true,
+                                        targetNode: newTargetNode
+                                    };
+                                } else {
+                                    return car;
+                                }
+                            });
+
+                            return {
+                                cars,
+                            };
+                        });
+                    }
+                    window.console.log(self.state.cars);
+                } else {
+                    for (let node of self.state.nodes) {
+                        if (node.x === car.x && node.y === car.y) {
+                            self.setState(state => {
+                                const cars = state.cars.map((car, i) => {
+                                    if (i === index) {
+                                        return {
+                                            x: car.x, 
+                                            y: car.y,
+                                            inTransit: false,
+                                            targetNode: car.targetNode
+                                        };
+                                    } else {
+                                        return car;
+                                    }
+                                });
+
+                                return {
+                                    cars,
+                                };
+                            });
+                        } else {
+                            var distanceX = nodes[car.targetNode].x - car.x;
+                            var distanceY = nodes[car.targetNode].y - car.y;
+                            var newX = car.x;
+                            var newY = car.y;
+
+                            if (Math.abs(distanceY) > Math.abs(distanceX)) {
+                                newY = distanceY < 0 ? --newY : ++newY;
+                            } else {
+                                newX = distanceX < 0 ? --newX : ++newX;
+                            }
+
+
+                            self.setState(state => {
+                                const cars = state.cars.map((car, i) => {
+                                    if (i === index) {
+                                        return {
+                                            x: newX, 
+                                            y: newY,
+                                            inTransit: true,
+                                            targetNode: car.targetNode
+                                        };
+                                    } else {
+                                        return car;
+                                    }
+                                });
+
+                                return {
+                                    cars,
+                                };
+                            });
+                        }
+                    }
+                }
+            }
+        }, 42);
+    }
+
+    componentDidMount() {
+        this.gameLoop();
+    }
+
     render(props, context) {
         const styles = {
             root: {
@@ -149,7 +287,25 @@ class RoadTrafficSim extends Component {
                                             width={20}
                                             height={20}
                                             draggable
-                                            fill={i === this.state.selectedNode ? 'white' : 'black'}
+                                            fill={i === this.state.selectedNode ? 'white' : i === this.state.startNode ? 'blue' : i === this.state.endNode ? 'red' : 'black'}
+                                        />
+                                    ))
+                                }
+                            </Group>
+                        </Layer>
+                        <Layer>
+                            <Group>
+                                {this.state.cars.map((node, i) => (
+                                        <Rect
+                                            id={i}
+                                            key={i}
+                                            onDragEnd={this.handleDragEnd} 
+                                            x={node.x} 
+                                            y={node.y}
+                                            width={10}
+                                            height={10}
+                                            draggable
+                                            fill={'yellow'}
                                         />
                                     ))
                                 }
