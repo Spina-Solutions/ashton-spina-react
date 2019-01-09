@@ -38,7 +38,8 @@ class RoadTrafficSim extends Component {
         edges: [],
         selectedNode: null,
         startNode: null,
-        endNode: null
+        endNode: null,
+        lastCar: new Date().getTime()
     };
 
     handleClick = (e) => {
@@ -121,42 +122,44 @@ class RoadTrafficSim extends Component {
     gameLoop = () => {
         var self = this;
         setInterval(function() {
-            window.console.log(self.state);
-            if (self.state.endNode !== null && self.state.startNode !== null && !self.state.cars.length) {
-                window.console.log("empty cars");
+            if (self.state.endNode !== null && 
+                self.state.startNode !== null && self.state.cars.length < 2 && 
+                new Date().getTime() - self.state.lastCar > 1000) {
+
                 self.setState(prevState => ({
-                    cars: [
+                    cars: self.state.cars.concat([
+                        
                         {   
                             x: self.state.nodes[self.state.startNode].x, 
                             y: self.state.nodes[self.state.startNode].y, 
                             inTransit: false,
-                            targetNode: self.state.startNode
+                            sourceNode: self.state.startNode,
+                            targetNode: null
                         }
-                    ],
+                    ]),
+                    lastCar: new Date().getTime()
                 }));
+                window.console.log(self.state.cars);
             }
             var nodes = self.state.nodes;
             let cars = self.state.cars;
             for (const [index, car] of cars.entries()) {
+                if (car === null) continue;
                 if (car.inTransit === false) {
-                    window.console.log("Car not in transit");
                     let shortestEdgeManhattanLength = 2147483647;
                     var newTargetNode = null;
                     for (var edge of self.state.edges) {
-                        if (self.state.nodes[edge.node0].x === car.x && 
-                            self.state.nodes[edge.node0].y === car.y && 
+                        if (self.state.nodes[edge.node0].x === self.state.nodes[car.sourceNode].x && 
+                            self.state.nodes[edge.node0].y === self.state.nodes[car.sourceNode].y && 
                             shortestEdgeManhattanLength > (Math.abs(self.state.nodes[edge.node1].x - self.state.nodes[edge.node0].x) 
                                                                 + Math.abs(self.state.nodes[edge.node1].y - self.state.nodes[edge.node0].y))) {
 
                             shortestEdgeManhattanLength = (Math.abs(self.state.nodes[edge.node1].x - self.state.nodes[edge.node0].x) 
                                                                 + Math.abs(self.state.nodes[edge.node1].y - self.state.nodes[edge.node0].y));
                             newTargetNode = nodes.findIndex(function(e) { return e.x == nodes[edge.node1].x && e.y == nodes[edge.node1].y; });
-                            window.console.log(newTargetNode);
                         }
                     }
-                    window.console.log(newTargetNode);
                     if (newTargetNode !== null) {
-                        window.console.log("Car going in transit");
                         self.setState(state => {
                             const cars = state.cars.map((car, i) => {
                                 if (i === index) {
@@ -164,6 +167,7 @@ class RoadTrafficSim extends Component {
                                         x: car.x, 
                                         y: car.y,
                                         inTransit: true,
+                                        sourceNode: car.targetNode !== null ? car.targetNode : car.sourceNode,
                                         targetNode: newTargetNode
                                     };
                                 } else {
@@ -176,60 +180,69 @@ class RoadTrafficSim extends Component {
                             };
                         });
                     }
-                    window.console.log(self.state.cars);
                 } else {
-                    for (let node of self.state.nodes) {
-                        if (node.x === car.x && node.y === car.y) {
+                    for (const [key, node] of nodes.entries()) {
+                        // State car has arrived
+                        if (car !== null &&
+                                car.inTransit &&
+                                key !== car.sourceNode && 
+                                (Math.abs(node.x - car.x) < 1 && Math.abs(node.y - car.y) < 1)) {
                             self.setState(state => {
                                 const cars = state.cars.map((car, i) => {
+                                    if (key === state.endNode) {
+                                        return null;
+                                    }
                                     if (i === index) {
                                         return {
                                             x: car.x, 
                                             y: car.y,
                                             inTransit: false,
+                                            sourceNode: car.targetNode,
                                             targetNode: car.targetNode
                                         };
                                     } else {
                                         return car;
                                     }
                                 });
-
                                 return {
                                     cars,
                                 };
                             });
-                        } else {
-                            var distanceX = nodes[car.targetNode].x - car.x;
-                            var distanceY = nodes[car.targetNode].y - car.y;
-                            var newX = car.x;
-                            var newY = car.y;
-
-                            if (Math.abs(distanceY) > Math.abs(distanceX)) {
-                                newY = distanceY < 0 ? --newY : ++newY;
-                            } else {
-                                newX = distanceX < 0 ? --newX : ++newX;
-                            }
-
-
-                            self.setState(state => {
-                                const cars = state.cars.map((car, i) => {
-                                    if (i === index) {
-                                        return {
-                                            x: newX, 
-                                            y: newY,
-                                            inTransit: true,
-                                            targetNode: car.targetNode
-                                        };
-                                    } else {
-                                        return car;
-                                    }
-                                });
-
-                                return {
-                                    cars,
-                                };
-                            });
+                            car = null;
+                            self.setState({cars: self.state.cars.filter(car => car !== null)});
                         }
+                    }
+                    if (car !== null && car.inTransit) {
+                        var distanceX = nodes[car.targetNode].x - car.x;
+                        var distanceY = nodes[car.targetNode].y - car.y;
+                        var newX = car.x;
+                        var newY = car.y;
+
+                        // move in normalized direction vector
+                        let normalizationScalar = Math.sqrt(distanceY * distanceY + distanceX * distanceX);
+                        // TODO:: Correct for 0 normalization scalar
+                        newY = newY + distanceY / normalizationScalar;
+                        newX = newX + distanceX / normalizationScalar;
+                        
+                        self.setState(state => {
+                            const cars = state.cars.map((car, i) => {
+                                if (i === index) {
+                                    return {
+                                        x: newX, 
+                                        y: newY,
+                                        inTransit: true,
+                                        sourceNode: car.sourceNode,
+                                        targetNode: car.targetNode
+                                    };
+                                } else {
+                                    return car;
+                                }
+                            });
+
+                            return {
+                                cars,
+                            };
+                        });
                     }
                 }
             }
@@ -295,20 +308,19 @@ class RoadTrafficSim extends Component {
                         </Layer>
                         <Layer>
                             <Group>
-                                {this.state.cars.map((node, i) => (
-                                        <Rect
-                                            id={i}
-                                            key={i}
-                                            onDragEnd={this.handleDragEnd} 
-                                            x={node.x} 
-                                            y={node.y}
-                                            width={10}
-                                            height={10}
-                                            draggable
-                                            fill={'yellow'}
-                                        />
-                                    ))
-                                }
+                                {this.state.cars.filter(car => car !== null).map((car, i) => (
+                                    <Rect
+                                        id={i}
+                                        key={i}
+                                        onDragEnd={this.handleDragEnd} 
+                                        x={car.x} 
+                                        y={car.y}
+                                        width={10}
+                                        height={10}
+                                        draggable
+                                        fill={'yellow'}
+                                    />
+                                ))}
                             </Group>
                         </Layer>
                     </Stage>
