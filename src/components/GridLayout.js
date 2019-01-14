@@ -16,7 +16,8 @@ const styles = theme => ({
     card: {
         color: 'black',
         padding: '5px',
-        width: '350px',
+        width: '80vw',
+        maxWidth: '400px',
         background: 'linear-gradient(to right, #ffffff 0%, #ffffff 51%, #ffffff 100%)',
         '-webkit-transition': '0.4s',
         '-moz-transition': '0.4s',
@@ -24,7 +25,8 @@ const styles = theme => ({
         '&:hover': {
             background: 'linear-gradient(to right, #2962FF 0%, #2979FF 51%, #2962FF 100%)',
         },
-        borderRadius: '20px'
+        borderRadius: '20px',
+        margin: '24px'
     },
     actions: {
         height: '100%',
@@ -107,7 +109,7 @@ function GridLayout(props) {
             <Grid container spacing={32} direction="column" align="center" justify="center">
                 {
                     props.items.map((item, key) =>
-                        <Grid key={key} item xs={12} sm={6} lg={4}>
+                        <Grid key={key}>
                             <Card 
                                 className={classes.card}
                                 raised
