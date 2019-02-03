@@ -1,10 +1,24 @@
 import React, { Component } from 'react';
 import Background from './textures/desertGrass.jpg';
-import Square from './textures/square.png';
-import { Stage, Group, Layer, Rect, Line, Text } from 'react-konva';
+import { Stage, Group, Layer, Rect, Line } from 'react-konva';
 import Konva from 'konva';
 
 class ColoredRect extends React.Component {
+    constructor(...args) {
+        super(...args);
+        const image = new window.Image();
+      image.onload = () => {
+        this.setState({
+          fillPatternImage: image
+        });
+      }
+      image.src = require('../images/car_small.png');
+      this.state = {
+        color: 'green',
+        fillPatternImage: null
+      };
+    }
+
     handleClick = () => {
         this.setState({
             color: Konva.Util.getRandomColor()
@@ -20,10 +34,10 @@ class ColoredRect extends React.Component {
         <Rect
             x={this.props.x}
             y={this.props.y}
-            width={20}
-            height={20}
-            draggable
-            fill={this.state.color}
+            width={12}
+            height={24}
+            shadowBlur={5}  
+            fillPatternImage={this.state.fillPatternImage}
             onClick={this.handleClick}
         />
     );
@@ -34,11 +48,11 @@ class RoadTrafficSim extends Component {
 
     state = {
         cars: [],
-        nodes: [],
-        edges: [],
+        nodes: [{x: -100, y: 300}, {x: 100, y: 300}, {x: window.innerWidth - 100, y: 300}, {x: window.innerWidth + 100, y: 300}],
+        edges: [{node0: 0, node1: 1}, {node0: 2, node1: 3}],
         selectedNode: null,
-        startNode: null,
-        endNode: null,
+        startNode: 0,
+        endNode: 3,
         lastCar: new Date().getTime()
     };
 
@@ -46,13 +60,11 @@ class RoadTrafficSim extends Component {
         //console.log('native event', e.evt);
         //console.log('Konva.Circle instance', e.target);
         //console.log('mouse position on canvas', e.target.getStage());
-        
         // Clicked on the stage so create a new node
         if (e.target._id === 1 && e.evt.shiftKey) { 
             this.setState(prevState => ({
                 nodes: [...prevState.nodes, {x: e.target.getStage().getPointerPosition().x, y: e.target.getStage().getPointerPosition().y}]
             }));
-            window.console.log("Creating Node");
             return;
         }
         else if (e.target._id !== 1 && this.state.selectedNode === null && e.evt.shiftKey) { 
@@ -60,7 +72,6 @@ class RoadTrafficSim extends Component {
                 startNode: e.target.index,
                 selectedNode: null
             }));
-            window.console.log("Setting Selected Node");
             return;
         }
         else if (e.target._id !== 1 && this.state.selectedNode !== null && e.evt.shiftKey) { 
@@ -68,14 +79,12 @@ class RoadTrafficSim extends Component {
                 endNode: e.target.index,
                 selectedNode: null
             }));
-            window.console.log("Setting Selected Node");
         } 
         // Haven't selected a node yet
         else if (this.state.selectedNode === null && e.target._id !== 1) { 
             this.setState(prevState => ({
                 selectedNode: e.target.index
             }));
-            window.console.log("Setting Selected Node");
             return;
         }
         // Add an edge because a node is already selected and we've clicked on one
@@ -86,15 +95,13 @@ class RoadTrafficSim extends Component {
                     edges: [...prevState.edges, {node0: this.state.selectedNode, node1: e.target.index}],
                     selectedNode: null
                 }));
-            }   
-            window.console.log("Adding Edge");
+            }
             return;
         }
         else {
             this.setState(prevState => ({
                 selectedNode: null
             }));
-            window.console.log("Resetting Selected Node");
             return;
         }
         //window.console.log(e.target._id);
@@ -116,38 +123,40 @@ class RoadTrafficSim extends Component {
                 nodes,
             };
         });
-        window.console.log(this.state);
-    }   
+    } 
 
     gameLoop = () => {
         var self = this;
         setInterval(function() {
             if (self.state.endNode !== null && 
-                self.state.startNode !== null && self.state.cars.length < 2 && 
-                new Date().getTime() - self.state.lastCar > 1000) {
+                self.state.startNode !== null && 
+                self.state.cars.length < 25 && 
+                new Date().getTime() - self.state.lastCar > ((Math.random() * 2000) + 1000)) {
 
                 self.setState(prevState => ({
                     cars: self.state.cars.concat([
-                        
                         {   
-                            x: self.state.nodes[self.state.startNode].x, 
-                            y: self.state.nodes[self.state.startNode].y, 
+                            x: self.state.nodes[self.state.startNode].x + 10, 
+                            y: self.state.nodes[self.state.startNode].y + 10, 
                             inTransit: false,
                             sourceNode: self.state.startNode,
-                            targetNode: null
+                            targetNode: null,
+                            speedScalar: 1
                         }
                     ]),
                     lastCar: new Date().getTime()
                 }));
-                window.console.log(self.state.cars);
             }
+            self.setState({cars: self.state.cars.filter(car => car !== null)});
             var nodes = self.state.nodes;
             let cars = self.state.cars;
             for (const [index, car] of cars.entries()) {
                 if (car === null) continue;
+                // Car not moving so find a place to go
                 if (car.inTransit === false) {
-                    let shortestEdgeManhattanLength = 2147483647;
+                    let shortestEdgeManhattanLength = Number.MAX_SAFE_INTEGER;
                     var newTargetNode = null;
+                    // Find new target node
                     for (var edge of self.state.edges) {
                         if (self.state.nodes[edge.node0].x === self.state.nodes[car.sourceNode].x && 
                             self.state.nodes[edge.node0].y === self.state.nodes[car.sourceNode].y && 
@@ -159,6 +168,7 @@ class RoadTrafficSim extends Component {
                             newTargetNode = nodes.findIndex(function(e) { return e.x == nodes[edge.node1].x && e.y == nodes[edge.node1].y; });
                         }
                     }
+                    // Set new target node
                     if (newTargetNode !== null) {
                         self.setState(state => {
                             const cars = state.cars.map((car, i) => {
@@ -168,7 +178,8 @@ class RoadTrafficSim extends Component {
                                         y: car.y,
                                         inTransit: true,
                                         sourceNode: car.targetNode !== null ? car.targetNode : car.sourceNode,
-                                        targetNode: newTargetNode
+                                        targetNode: newTargetNode,
+                                        speedScalar: 1
                                     };
                                 } else {
                                     return car;
@@ -180,16 +191,18 @@ class RoadTrafficSim extends Component {
                             };
                         });
                     }
+                // Car is moving so continue its path
                 } else {
                     for (const [key, node] of nodes.entries()) {
-                        // State car has arrived
+                        // Check if car has arrived at a node
                         if (car !== null &&
                                 car.inTransit &&
                                 key !== car.sourceNode && 
-                                (Math.abs(node.x - car.x) < 1 && Math.abs(node.y - car.y) < 1)) {
+                                (Math.abs(node.x + 10 - car.x) < 1 && Math.abs(node.y + 10 - car.y) < 1)) {
                             self.setState(state => {
                                 const cars = state.cars.map((car, i) => {
-                                    if (key === state.endNode) {
+                                    // If car has arrived at end node remove it
+                                    if (key === state.endNode && index === i) {
                                         return null;
                                     }
                                     if (i === index) {
@@ -198,7 +211,8 @@ class RoadTrafficSim extends Component {
                                             y: car.y,
                                             inTransit: false,
                                             sourceNode: car.targetNode,
-                                            targetNode: car.targetNode
+                                            targetNode: car.targetNode,
+                                            speedScalar: 1
                                         };
                                     } else {
                                         return car;
@@ -209,20 +223,46 @@ class RoadTrafficSim extends Component {
                                 };
                             });
                             car = null;
-                            self.setState({cars: self.state.cars.filter(car => car !== null)});
                         }
                     }
+                    // If car has not been removed and it is currently in transit
                     if (car !== null && car.inTransit) {
-                        var distanceX = nodes[car.targetNode].x - car.x;
-                        var distanceY = nodes[car.targetNode].y - car.y;
+                        var distanceX = nodes[car.targetNode].x + 10 - car.x;
+                        var distanceY = nodes[car.targetNode].y + 10 - car.y;
                         var newX = car.x;
                         var newY = car.y;
 
                         // move in normalized direction vector
                         let normalizationScalar = Math.sqrt(distanceY * distanceY + distanceX * distanceX);
-                        // TODO:: Correct for 0 normalization scalar
-                        newY = newY + distanceY / normalizationScalar;
-                        newX = newX + distanceX / normalizationScalar;
+
+                        let speedScalar = 1;
+                        let minScalar = 1;
+                        // Calculate car speed
+                        for (const [key, obstructingCar] of cars.entries()) {
+                            if (key === index || obstructingCar === null) {
+                                continue;
+                            }
+                            let diffX = car.x - obstructingCar.x;
+                            let diffY = car.y - obstructingCar.y;
+                            let innerNormalizer = Math.sqrt(diffY * diffY + diffX * diffX);
+                            let travelX = distanceX / normalizationScalar;
+                            let travelY = distanceY / normalizationScalar;
+                            let toCarX = diffX / innerNormalizer;
+                            let toCarY = diffY / innerNormalizer;
+                            let dotProductDiff = (travelX * toCarX) + (travelY * toCarY);
+
+                            if (!isNaN(dotProductDiff) && dotProductDiff < 0 && dotProductDiff < -0.8) {
+
+                                let euclidianDistance =  Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+                                speedScalar = euclidianDistance / 60;
+                                minScalar = euclidianDistance < 30 ? 0 : speedScalar < minScalar ? speedScalar : minScalar;
+                            }
+                        }
+
+                        // Set new position
+                        normalizationScalar = normalizationScalar === 0 ? 0.000001 : normalizationScalar;
+                        newY = newY + ((distanceY / normalizationScalar) * minScalar);
+                        newX = newX + ((distanceX / normalizationScalar) * minScalar);
                         
                         self.setState(state => {
                             const cars = state.cars.map((car, i) => {
@@ -232,7 +272,8 @@ class RoadTrafficSim extends Component {
                                         y: newY,
                                         inTransit: true,
                                         sourceNode: car.sourceNode,
-                                        targetNode: car.targetNode
+                                        targetNode: car.targetNode,
+                                        speedScalar: 1
                                     };
                                 } else {
                                     return car;
@@ -243,10 +284,20 @@ class RoadTrafficSim extends Component {
                                 cars,
                             };
                         });
+
+                        // Set rotation by getting angle from direction vector
+                        if (self.stage.children[2].children[0].children[index] !== undefined) {
+                            let radians = Math.atan2(distanceY / normalizationScalar, distanceX / normalizationScalar); //radians
+                            // you need to divide by PI, and MULTIPLY by 180:
+                            let degrees = 180 * radians / Math.PI;  //degrees
+                            let angle = 90 + (360 + Math.round(degrees)) % 360; //round number, avoid decimal fragments
+                            self.stage.children[2].children[0].children[index].setRotation(angle);
+                            self.stage.children[2].children[0].children[index].setOffset({x: 6, y: 12});
+                        }
                     }
                 }
             }
-        }, 42);
+        }, 16.6666666666667);
     }
 
     componentDidMount() {
@@ -273,6 +324,9 @@ class RoadTrafficSim extends Component {
                         height={window.innerHeight}
                         listening
                         onClick={this.handleClick}
+                        ref={stage => {
+                            this.stage = stage;
+                        }}
                     >
                         <Layer>
                             <Group>
@@ -309,16 +363,11 @@ class RoadTrafficSim extends Component {
                         <Layer>
                             <Group>
                                 {this.state.cars.filter(car => car !== null).map((car, i) => (
-                                    <Rect
+                                    <ColoredRect
                                         id={i}
                                         key={i}
-                                        onDragEnd={this.handleDragEnd} 
                                         x={car.x} 
                                         y={car.y}
-                                        width={10}
-                                        height={10}
-                                        draggable
-                                        fill={'yellow'}
                                     />
                                 ))}
                             </Group>
