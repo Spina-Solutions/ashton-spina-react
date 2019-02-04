@@ -19,12 +19,6 @@ class ColoredRect extends React.Component {
       };
     }
 
-    handleClick = () => {
-        this.setState({
-            color: Konva.Util.getRandomColor()
-        });
-    };
-
     state = {
         color: Konva.Util.getRandomColor()
     };
@@ -137,7 +131,9 @@ class RoadTrafficSim extends Component {
                     cars: self.state.cars.concat([
                         {   
                             x: self.state.nodes[self.state.startNode].x + 10, 
-                            y: self.state.nodes[self.state.startNode].y + 10, 
+                            y: self.state.nodes[self.state.startNode].y + 10,
+                            dX: 0,
+                            dY: 0,
                             inTransit: false,
                             sourceNode: self.state.startNode,
                             targetNode: null,
@@ -150,7 +146,7 @@ class RoadTrafficSim extends Component {
             self.setState({cars: self.state.cars.filter(car => car !== null)});
             var nodes = self.state.nodes;
             let cars = self.state.cars;
-            for (const [index, car] of cars.entries()) {
+            for (let [index, car] of cars.entries()) {
                 if (car === null) continue;
                 // Car not moving so find a place to go
                 if (car.inTransit === false) {
@@ -165,7 +161,7 @@ class RoadTrafficSim extends Component {
 
                             shortestEdgeManhattanLength = (Math.abs(self.state.nodes[edge.node1].x - self.state.nodes[edge.node0].x) 
                                                                 + Math.abs(self.state.nodes[edge.node1].y - self.state.nodes[edge.node0].y));
-                            newTargetNode = nodes.findIndex(function(e) { return e.x == nodes[edge.node1].x && e.y == nodes[edge.node1].y; });
+                            newTargetNode = nodes.findIndex(function(e) { return e.x === nodes[edge.node1].x && e.y === nodes[edge.node1].y; });
                         }
                     }
                     // Set new target node
@@ -176,6 +172,8 @@ class RoadTrafficSim extends Component {
                                     return {
                                         x: car.x, 
                                         y: car.y,
+                                        dX: car.dX,
+                                        dY: car.dY,
                                         inTransit: true,
                                         sourceNode: car.targetNode !== null ? car.targetNode : car.sourceNode,
                                         targetNode: newTargetNode,
@@ -198,7 +196,7 @@ class RoadTrafficSim extends Component {
                         if (car !== null &&
                                 car.inTransit &&
                                 key !== car.sourceNode && 
-                                (Math.abs(node.x + 10 - car.x) < 1 && Math.abs(node.y + 10 - car.y) < 1)) {
+                                (Math.abs(node.x + 10 - car.x) < 22 && Math.abs(node.y + 10 - car.y) < 22)) {
                             self.setState(state => {
                                 const cars = state.cars.map((car, i) => {
                                     // If car has arrived at end node remove it
@@ -209,6 +207,8 @@ class RoadTrafficSim extends Component {
                                         return {
                                             x: car.x, 
                                             y: car.y,
+                                            dX: car.dX,
+                                            dY: car.dY,
                                             inTransit: false,
                                             sourceNode: car.targetNode,
                                             targetNode: car.targetNode,
@@ -235,8 +235,12 @@ class RoadTrafficSim extends Component {
                         // move in normalized direction vector
                         let normalizationScalar = Math.sqrt(distanceY * distanceY + distanceX * distanceX);
 
+                        let dX = distanceX / normalizationScalar;
+                        let dY = distanceY / normalizationScalar;
+
+
                         let speedScalar = 1;
-                        let minScalar = 1;
+                        let maxScalar = 1;
                         // Calculate car speed
                         for (const [key, obstructingCar] of cars.entries()) {
                             if (key === index || obstructingCar === null) {
@@ -245,24 +249,31 @@ class RoadTrafficSim extends Component {
                             let diffX = car.x - obstructingCar.x;
                             let diffY = car.y - obstructingCar.y;
                             let innerNormalizer = Math.sqrt(diffY * diffY + diffX * diffX);
-                            let travelX = distanceX / normalizationScalar;
-                            let travelY = distanceY / normalizationScalar;
                             let toCarX = diffX / innerNormalizer;
                             let toCarY = diffY / innerNormalizer;
-                            let dotProductDiff = (travelX * toCarX) + (travelY * toCarY);
+                            let dotProductDiff = (dX * toCarX) + (dY * toCarY);
 
                             if (!isNaN(dotProductDiff) && dotProductDiff < 0 && dotProductDiff < -0.8) {
-
                                 let euclidianDistance =  Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
                                 speedScalar = euclidianDistance / 60;
-                                minScalar = euclidianDistance < 30 ? 0 : speedScalar < minScalar ? speedScalar : minScalar;
+                                maxScalar = euclidianDistance < 30 ? 0 : speedScalar < maxScalar ? speedScalar : maxScalar;
                             }
                         }
+                        // Change direction by limited amount
+                        normalizationScalar = normalizationScalar === 0 ? 0.000001 : normalizationScalar;
+                        let XNormalizer = Math.abs(car.dX - dX);
+                        XNormalizer = XNormalizer === 0 ? 0.000001 : XNormalizer;
+                        let YNormalizer = Math.abs(car.dY - dY);
+                        YNormalizer = YNormalizer === 0 ? 0.000001 : YNormalizer;
 
                         // Set new position
-                        normalizationScalar = normalizationScalar === 0 ? 0.000001 : normalizationScalar;
-                        newY = newY + ((distanceY / normalizationScalar) * minScalar);
-                        newX = newX + ((distanceX / normalizationScalar) * minScalar);
+                        XNormalizer = 1 - XNormalizer / 2;
+                        YNormalizer = 1 - YNormalizer / 2;
+
+                        dX = ((car.dX * (0.97)) + (dX * 0.03)) * maxScalar;
+                        dY = ((car.dY * (0.97)) + (dY * 0.03)) * maxScalar;
+                        newX += dX;
+                        newY += dY;
                         
                         self.setState(state => {
                             const cars = state.cars.map((car, i) => {
@@ -270,6 +281,8 @@ class RoadTrafficSim extends Component {
                                     return {
                                         x: newX, 
                                         y: newY,
+                                        dX: dX,
+                                        dY: dY,
                                         inTransit: true,
                                         sourceNode: car.sourceNode,
                                         targetNode: car.targetNode,
@@ -286,8 +299,8 @@ class RoadTrafficSim extends Component {
                         });
 
                         // Set rotation by getting angle from direction vector
-                        if (self.stage.children[2].children[0].children[index] !== undefined) {
-                            let radians = Math.atan2(distanceY / normalizationScalar, distanceX / normalizationScalar); //radians
+                        if (self.stage.children[2].children[0] && self.stage.children[2].children[0].children[index] !== undefined) {
+                            let radians = Math.atan2(dY, dX); //radians
                             // you need to divide by PI, and MULTIPLY by 180:
                             let degrees = 180 * radians / Math.PI;  //degrees
                             let angle = 90 + (360 + Math.round(degrees)) % 360; //round number, avoid decimal fragments
@@ -297,7 +310,7 @@ class RoadTrafficSim extends Component {
                     }
                 }
             }
-        }, 16.6666666666667);
+        }, 16.6666667);
     }
 
     componentDidMount() {
@@ -335,8 +348,7 @@ class RoadTrafficSim extends Component {
                                         id={i}
                                         key={i} 
                                         strokeWidth = {20}
-                                        stroke = 'black'
-                                        opacity = {0.7}
+                                        stroke = 'grey'
                                         points ={[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
                                     />
                                 ))}
