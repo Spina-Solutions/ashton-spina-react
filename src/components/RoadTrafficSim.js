@@ -28,11 +28,12 @@ class ColoredRect extends React.Component {
         <Rect
             x={this.props.x}
             y={this.props.y}
+            offset={this.props.offset}
+            rotation={this.props.rotation}
             width={12}
             height={24}
             shadowBlur={5}  
             fillPatternImage={this.state.fillPatternImage}
-            onClick={this.handleClick}
         />
     );
   }
@@ -82,46 +83,49 @@ class RoadTrafficSim extends Component {
     };
 
     handleClick = (e) => {
-        //console.log('native event', e.evt);
-        //console.log('Konva.Circle instance', e.target);
-        //console.log('mouse position on canvas', e.target.getStage());
-        // Clicked on the stage so create a new node
-        if (e.target._id === 1 && e.evt.shiftKey) { 
+        // Handle possible click scenarios
+        if (e.target.nodeType === 'Stage' && e.evt.shiftKey) { 
+            window.console.log("Made Node");
             this.setState(prevState => ({
                 nodes: [...prevState.nodes, {x: e.target.getStage().getPointerPosition().x - 10, y: e.target.getStage().getPointerPosition().y - 10}]
             }));
             return;
         }
-        else if (e.target._id !== 1 && this.state.selectedNode === null && e.evt.shiftKey) { 
-            this.setState(prevState => ({
-                startNode: e.target.index,
-                selectedNode: null
-            }));
-            return;
-        }
-        else if (e.target._id !== 1 && this.state.selectedNode !== null && e.evt.shiftKey) { 
-            this.setState(prevState => ({
-                endNode: e.target.index,
-                selectedNode: null
-            }));
-        } 
-        // Haven't selected a node yet
-        else if (this.state.selectedNode === null && e.target._id !== 1) { 
-            this.setState(prevState => ({
-                selectedNode: e.target.index
-            }));
-            return;
-        }
-        // Add an edge because a node is already selected and we've clicked on one
-        else if(this.state.selectedNode !== null && e.target._id !== 1 && this.state.selectedNode !== e.target.index) {
-            // TODO:: Check if the edge already exists
-            if(true) {
+        else if (e.target.attrs.id !== undefined) {
+            if (e.target.nodeType !== 'Stage' && this.state.selectedNode === null && e.evt.shiftKey) { 
+                window.console.log("Made start node");
                 this.setState(prevState => ({
-                    edges: [...prevState.edges, {node0: this.state.selectedNode, node1: e.target.index}],
+                    startNode: e.target.attrs.id,
                     selectedNode: null
                 }));
+                return;
             }
-            return;
+            else if (e.target.nodeType !== 'Stage' && this.state.selectedNode !== null && e.evt.shiftKey) { 
+                window.console.log("Made end node");
+                this.setState(prevState => ({
+                    endNode: e.target.attrs.id,
+                    selectedNode: null
+                }));
+            } 
+            // Haven't selected a node yet
+            else if (this.state.selectedNode === null && e.target.nodeType !== 'Stage') { 
+                window.console.log("Clicked unselected node");
+                this.setState(prevState => ({
+                    selectedNode: e.target.attrs.id
+                }));
+                return;
+            }
+            // Add an edge because a node is already selected and we've clicked on one
+            else if(this.state.selectedNode !== null && e.target.nodeType !== 'Stage' && this.state.selectedNode !== e.target.attrs.id) {
+                window.console.log("Added edge");
+                if(true) {
+                    this.setState(prevState => ({
+                        edges: [...prevState.edges, {node0: this.state.selectedNode, node1: e.target.attrs.id}],
+                        selectedNode: null
+                    }));
+                }
+                return;
+            }
         }
         else {
             this.setState(prevState => ({
@@ -129,16 +133,13 @@ class RoadTrafficSim extends Component {
             }));
             return;
         }
-        //window.console.log(e.target._id);
-        //window.console.log(e.target.index);
-        //window.console.log(this.state);
     }
 
-    handleDragEnd = (e) => {
+    handleDragEndNode = (e) => {
         this.setState(state => {
             const nodes = state.nodes.map((node, i) => {
-                if (e.target.index === i) {
-                    return {x: e.target.getStage().getPointerPosition().x, y: e.target.getStage().getPointerPosition().y};
+                if (e.target.attrs.id === i) {
+                    return {x: e.evt.layerX, y: e.evt.layerY};
                 } else {
                     return node;
                 }
@@ -301,8 +302,8 @@ class RoadTrafficSim extends Component {
                         XNormalizer = 1 - XNormalizer / 2;
                         YNormalizer = 1 - YNormalizer / 2;
 
-                        dX = ((car.dX * (0.97)) + (dX * 0.03)) * maxScalar;
-                        dY = ((car.dY * (0.97)) + (dY * 0.03)) * maxScalar;
+                        dX = ((car.dX * (0.96)) + (dX * 0.04)) * maxScalar;
+                        dY = ((car.dY * (0.96)) + (dY * 0.04)) * maxScalar;
                         newX += dX;
                         newY += dY;
                         
@@ -329,15 +330,16 @@ class RoadTrafficSim extends Component {
                             };
                         });
 
-                        // Set rotation by getting angle from direction vector
-                        if (self.stage.children[2].children[0] && self.stage.children[2].children[0].children[index] !== undefined) {
-                            let radians = Math.atan2(dY, dX); //radians
-                            // you need to divide by PI, and MULTIPLY by 180:
-                            let degrees = 180 * radians / Math.PI;  //degrees
-                            let angle = 90 + (360 + Math.round(degrees)) % 360; //round number, avoid decimal fragments
-                            self.stage.children[2].children[0].children[index].setRotation(angle);
-                            self.stage.children[2].children[0].children[index].setOffset({x: 6, y: 12});
-                        }
+                        // // Set rotation by getting angle from direction vector
+                        // if (self.stage.children[2].children[0] && self.stage.children[2].children[0].children[index] !== undefined) {
+                        //     let radians = Math.atan2(dY, dX); //radians
+                        //     // you need to divide by PI, and MULTIPLY by 180:
+                        //     let degrees = 180 * radians / Math.PI;  //degrees
+                        //     let angle = 90 + (360 + Math.round(degrees)) % 360; //round number, avoid decimal fragments
+                        //     let rotation = 90 + (360 + Math.round(180 * Math.atan2(dY, dX) / Math.PI)) % 360;
+                        //     self.stage.children[2].children[0].children[index].setRotation(rotation);
+                        //     self.stage.children[2].children[0].children[index].setOffset({x: 6, y: 12});
+                        // }
                     }
                 }
             }
@@ -373,52 +375,73 @@ class RoadTrafficSim extends Component {
                         }}
                     >
                         <Layer>
-                            <Group>
-                                {this.state.edges.map((edge, i) => (
+                            {this.state.edges.map((edge, i) => (
+                                <Group
+                                    id={i}
+                                    key={i} 
+                                >
                                     <Line 
-                                        id={i * this.state.edges.length}
-                                        key={i * this.state.edges.length} 
                                         strokeWidth = {24}
                                         stroke = 'white'
                                         shadowBlur = {5}
                                         points = {[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
                                     />
-                                ))}
-                                {this.state.edges.map((edge, i) => (
-                                    <Line 
+                                </Group>
+                            ))}
+                            {this.state.nodes.map((node, i) => (
+                                <Group
+                                    id={i}
+                                    key={i}
+                                    x={node.x} 
+                                    y={node.y}
+                                    onDragEnd={this.handleDragEndNode}
+                                    draggable
+                                >
+                                    <Circle
                                         id={i}
-                                        key={i} 
+                                        radius={12}
+                                        offset={{x: -10, y: -10}}
+                                        draggable
+                                        fill={'white'}
+                                    />
+                                </Group>
+                            ))}
+                            {this.state.edges.map((edge, i) => (
+                                <Group
+                                    id={i}
+                                    key={i} 
+                                >
+                                    <Line 
                                         strokeWidth = {20}
                                         stroke = 'grey'
                                         points ={[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
                                     />
-                                ))}
-                                {/*this.state.edges.map((edge, i) => (
-                                    <ColoredLine 
-                                        id={i * 2 * this.state.edges.length}
-                                        key={i * 2 * this.state.edges.length}
-                                        points = {[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
-                                    />
-                                ))*/}
-                            </Group>
-                        </Layer>
-                        <Layer>
-                            <Group>
-                                {this.state.nodes.map((node, i) => (
+                                    {/*this.state.edges.map((edge, i) => (
+                                        <ColoredLine 
+                                            id={i * 2 * this.state.edges.length}
+                                            key={i * 2 * this.state.edges.length}
+                                            points = {[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
+                                        />
+                                    ))*/}
+                                </Group>
+                            ))}
+                            {this.state.nodes.map((node, i) => (
+                                <Group
+                                    id={i}
+                                    key={i}
+                                    x={node.x} 
+                                    y={node.y}
+                                    onDragEnd={this.handleDragEndNode}
+                                    draggable
+                                >
                                     <Circle
                                         id={i}
-                                        key={i}
-                                        onDragEnd={this.handleDragEnd} 
-                                        x={node.x} 
-                                        y={node.y}
-                                        width={10}
-                                        height={20}
+                                        radius={10}
                                         offset={{x: -10, y: -10}}
-                                        draggable
                                         fill={i === this.state.selectedNode ? 'white' : i === this.state.startNode ? 'blue' : i === this.state.endNode ? 'red' : 'grey'}
                                     />
-                                ))}
-                            </Group>
+                                </Group>
+                            ))}
                         </Layer>
                         <Layer>
                             <Group>
@@ -428,85 +451,85 @@ class RoadTrafficSim extends Component {
                                         key={i}
                                         x={car.x} 
                                         y={car.y}
+                                        rotation={90 + (360 + Math.round(180 * Math.atan2(car.dY, car.dX) / Math.PI)) % 360}
+                                        offset={{x: 6, y: 12}}
                                     />
                                 ))}
                             </Group>
                         </Layer>
                         <Layer>
-                            <Group>
-                                <Label x={20} y={20}>
-                                    <Tag
-                                        fill='green'
-                                        pointerDirection= 'left'
-                                        pointerWidth={10}
-                                        pointerHeight={10}
-                                        lineJoin= 'round'
-                                        shadowColor= 'black'
-                                        cornerRadius = {8}
-                                    />
-                                    <Text
-                                        text='Shift + Click To Create Road Node'
-                                        fontFamily='Roboto'
-                                        fontSize={18}
-                                        padding={8}
-                                        fill='white'
-                                    />
-                                </Label>
-                                <Label x={20} y={55}>
-                                    <Tag
-                                        fill='purple'
-                                        pointerDirection= 'left'
-                                        pointerWidth={10}
-                                        pointerHeight={10}
-                                        lineJoin= 'round'
-                                        shadowColor= 'black'
-                                        cornerRadius = {8}
-                                    />
-                                    <Text
-                                        text='Select a node by clicking on it and then click another node to draw a road'
-                                        fontFamily='Roboto'
-                                        fontSize={18}
-                                        padding={8}
-                                        fill='white'
-                                    />
-                                </Label>
-                                <Label x={20} y={90}>
-                                    <Tag
-                                        fill='Blue'
-                                        pointerDirection= 'left'
-                                        pointerWidth={10}
-                                        pointerHeight={10}
-                                        lineJoin= 'round'
-                                        shadowColor= 'black'
-                                        cornerRadius = {8}
-                                    />
-                                    <Text
-                                        text='Shift + Click a node to Make it a Starting Node'
-                                        fontFamily='Roboto'
-                                        fontSize={18}
-                                        padding={8}
-                                        fill='white'
-                                    />
-                                </Label>
-                                <Label x={20} y={125}>
-                                    <Tag
-                                        fill='Red'
-                                        pointerDirection= 'left'
-                                        pointerWidth={10}
-                                        pointerHeight={10}
-                                        lineJoin= 'round'
-                                        shadowColor= 'black'
-                                        cornerRadius = {8}
-                                    />
-                                    <Text
-                                        text='Click then Shift + Click a Node to make it an ending node.'
-                                        fontFamily='Roboto'
-                                        fontSize={18}
-                                        padding={8}
-                                        fill='white'
-                                    />
-                                </Label>
-                            </Group>
+                            <Label x={20} y={20}>
+                                <Tag
+                                    fill='green'
+                                    pointerDirection= 'left'
+                                    pointerWidth={10}
+                                    pointerHeight={10}
+                                    lineJoin= 'round'
+                                    shadowColor= 'black'
+                                    cornerRadius = {8}
+                                />
+                                <Text
+                                    text='Shift + Click To Create Road Node'
+                                    fontFamily='Roboto'
+                                    fontSize={18}
+                                    padding={8}
+                                    fill='white'
+                                />
+                            </Label>
+                            <Label x={20} y={55}>
+                                <Tag
+                                    fill='purple'
+                                    pointerDirection= 'left'
+                                    pointerWidth={10}
+                                    pointerHeight={10}
+                                    lineJoin= 'round'
+                                    shadowColor= 'black'
+                                    cornerRadius = {8}
+                                />
+                                <Text
+                                    text='Select a node by clicking on it and then click another node to draw a road'
+                                    fontFamily='Roboto'
+                                    fontSize={18}
+                                    padding={8}
+                                    fill='white'
+                                />
+                            </Label>
+                            <Label x={20} y={90}>
+                                <Tag
+                                    fill='Blue'
+                                    pointerDirection= 'left'
+                                    pointerWidth={10}
+                                    pointerHeight={10}
+                                    lineJoin= 'round'
+                                    shadowColor= 'black'
+                                    cornerRadius = {8}
+                                />
+                                <Text
+                                    text='Shift + Click a node to Make it a Starting Node'
+                                    fontFamily='Roboto'
+                                    fontSize={18}
+                                    padding={8}
+                                    fill='white'
+                                />
+                            </Label>
+                            <Label x={20} y={125}>
+                                <Tag
+                                    fill='Red'
+                                    pointerDirection= 'left'
+                                    pointerWidth={10}
+                                    pointerHeight={10}
+                                    lineJoin= 'round'
+                                    shadowColor= 'black'
+                                    cornerRadius = {8}
+                                />
+                                <Text
+                                    text='Click then Shift + Click a Node to make it an ending node.'
+                                    fontFamily='Roboto'
+                                    fontSize={18}
+                                    padding={8}
+                                    fill='white'
+                                />
+                            </Label>
                         </Layer>
                     </Stage>
                 </div>
