@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Background from './textures/desertGrass.jpg';
-import { Stage, Group, Layer, Rect, Line } from 'react-konva';
+import Background from './textures/grassTest.jpg';
+import { Stage, Group, Layer, Rect, Line, Circle, Tag, Text, Label } from 'react-konva';
 import Konva from 'konva';
 
 class ColoredRect extends React.Component {
@@ -14,7 +14,7 @@ class ColoredRect extends React.Component {
       }
       image.src = require('../images/car_small.png');
       this.state = {
-        color: 'green',
+        color: 'yellow',
         fillPatternImage: null
       };
     }
@@ -38,6 +38,37 @@ class ColoredRect extends React.Component {
   }
 }
 
+class ColoredLine extends React.Component {
+    constructor(...args) {
+        super(...args);
+        const image = new window.Image();
+        image.onload = () => {
+            this.setState({
+                fillPatternImage: image
+            });
+        }
+        image.src = require('./textures/grassTest.jpg');
+        this.state = {
+            color: 'grey',
+            fillPatternImage: null
+        };
+    }
+
+    render() {
+        return (
+            <Line
+                strokeWidth = {24}
+                fillPatternImage = {this.state.fillPatternImage}
+                opacity = {1}
+                points = {this.props.points}
+                fillPatternRepeat = {'repeat'}
+                fillPriority = {'pattern'}
+                lineCap = {'round'}
+            />
+        );
+    }
+}
+
 class RoadTrafficSim extends Component {
 
     state = {
@@ -57,7 +88,7 @@ class RoadTrafficSim extends Component {
         // Clicked on the stage so create a new node
         if (e.target._id === 1 && e.evt.shiftKey) { 
             this.setState(prevState => ({
-                nodes: [...prevState.nodes, {x: e.target.getStage().getPointerPosition().x, y: e.target.getStage().getPointerPosition().y}]
+                nodes: [...prevState.nodes, {x: e.target.getStage().getPointerPosition().x - 10, y: e.target.getStage().getPointerPosition().y - 10}]
             }));
             return;
         }
@@ -345,6 +376,16 @@ class RoadTrafficSim extends Component {
                             <Group>
                                 {this.state.edges.map((edge, i) => (
                                     <Line 
+                                        id={i * this.state.edges.length}
+                                        key={i * this.state.edges.length} 
+                                        strokeWidth = {24}
+                                        stroke = 'white'
+                                        shadowBlur = {5}
+                                        points = {[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
+                                    />
+                                ))}
+                                {this.state.edges.map((edge, i) => (
+                                    <Line 
                                         id={i}
                                         key={i} 
                                         strokeWidth = {20}
@@ -352,24 +393,31 @@ class RoadTrafficSim extends Component {
                                         points ={[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
                                     />
                                 ))}
+                                {/*this.state.edges.map((edge, i) => (
+                                    <ColoredLine 
+                                        id={i * 2 * this.state.edges.length}
+                                        key={i * 2 * this.state.edges.length}
+                                        points = {[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
+                                    />
+                                ))*/}
                             </Group>
                         </Layer>
                         <Layer>
                             <Group>
                                 {this.state.nodes.map((node, i) => (
-                                        <Rect
-                                            id={i}
-                                            key={i}
-                                            onDragEnd={this.handleDragEnd} 
-                                            x={node.x} 
-                                            y={node.y}
-                                            width={20}
-                                            height={20}
-                                            draggable
-                                            fill={i === this.state.selectedNode ? 'white' : i === this.state.startNode ? 'blue' : i === this.state.endNode ? 'red' : 'black'}
-                                        />
-                                    ))
-                                }
+                                    <Circle
+                                        id={i}
+                                        key={i}
+                                        onDragEnd={this.handleDragEnd} 
+                                        x={node.x} 
+                                        y={node.y}
+                                        width={10}
+                                        height={20}
+                                        offset={{x: -10, y: -10}}
+                                        draggable
+                                        fill={i === this.state.selectedNode ? 'white' : i === this.state.startNode ? 'blue' : i === this.state.endNode ? 'red' : 'grey'}
+                                    />
+                                ))}
                             </Group>
                         </Layer>
                         <Layer>
@@ -384,12 +432,87 @@ class RoadTrafficSim extends Component {
                                 ))}
                             </Group>
                         </Layer>
+                        <Layer>
+                            <Group>
+                                <Label x={20} y={20}>
+                                    <Tag
+                                        fill='green'
+                                        pointerDirection= 'left'
+                                        pointerWidth={10}
+                                        pointerHeight={10}
+                                        lineJoin= 'round'
+                                        shadowColor= 'black'
+                                        cornerRadius = {8}
+                                    />
+                                    <Text
+                                        text='Shift + Click To Create Road Node'
+                                        fontFamily='Roboto'
+                                        fontSize={18}
+                                        padding={8}
+                                        fill='white'
+                                    />
+                                </Label>
+                                <Label x={20} y={55}>
+                                    <Tag
+                                        fill='purple'
+                                        pointerDirection= 'left'
+                                        pointerWidth={10}
+                                        pointerHeight={10}
+                                        lineJoin= 'round'
+                                        shadowColor= 'black'
+                                        cornerRadius = {8}
+                                    />
+                                    <Text
+                                        text='Select a node by clicking on it and then click another node to draw a road'
+                                        fontFamily='Roboto'
+                                        fontSize={18}
+                                        padding={8}
+                                        fill='white'
+                                    />
+                                </Label>
+                                <Label x={20} y={90}>
+                                    <Tag
+                                        fill='Blue'
+                                        pointerDirection= 'left'
+                                        pointerWidth={10}
+                                        pointerHeight={10}
+                                        lineJoin= 'round'
+                                        shadowColor= 'black'
+                                        cornerRadius = {8}
+                                    />
+                                    <Text
+                                        text='Shift + Click a node to Make it a Starting Node'
+                                        fontFamily='Roboto'
+                                        fontSize={18}
+                                        padding={8}
+                                        fill='white'
+                                    />
+                                </Label>
+                                <Label x={20} y={125}>
+                                    <Tag
+                                        fill='Red'
+                                        pointerDirection= 'left'
+                                        pointerWidth={10}
+                                        pointerHeight={10}
+                                        lineJoin= 'round'
+                                        shadowColor= 'black'
+                                        cornerRadius = {8}
+                                    />
+                                    <Text
+                                        text='Click then Shift + Click a Node to make it an ending node.'
+                                        fontFamily='Roboto'
+                                        fontSize={18}
+                                        padding={8}
+                                        fill='white'
+                                    />
+                                </Label>
+                            </Group>
+                        </Layer>
                     </Stage>
                 </div>
             </div>
         );
     }
-    
 }
 
 export default RoadTrafficSim;
