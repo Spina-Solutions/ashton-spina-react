@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { Parallax } from 'react-parallax';
+import Particles from 'react-particles-js';
 import ReactGA from 'react-ga';
 import SwitchWithSlide from "./SwitchWithSlide";
 
@@ -118,31 +118,147 @@ class App extends Component {
                             >
                                 <Route exact path='/' render={(props) => (
                                     <div>
-                                        <Parallax
-                                            bgImage={require('./images/background.jpg')}
-                                            strength={400}
-                                        >
-                                            <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
-                                                <Grid item xs={12}>
-                                                    <GridLayout items={ blogPosts.sort(() => Math.random() - 0.5) }/>
-                                                </Grid>
-                                            </div>
-                                        </Parallax>
+                                        
+                                        <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
+                                            <Grid item xs={12}>
+                                                <GridLayout items={ blogPosts.sort(() => Math.random() - 0.5) }/>
+                                            </Grid>
+                                        </div>
                                     </div>
                                 )}/>
                                 <Route exact path='/projects' render={(props) => (
                                     <div>
-                                        <Parallax
-                                            bgImage={require('./images/background.jpg')}
-                                            strength={400}
-                                        >
-                                            <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
-                                                <Grid item xs={12}>
-                                                    <GridLayout items={ projects.sort(() => Math.random() - 0.5) }/>
-                                                </Grid>
-                                            </div>
-                                        </Parallax>
-                                    </div>
+                                        <Particles
+                                            params={{
+                                                "particles": {
+                                                    "number": {
+                                                        "value": 250,
+                                                        "density": {
+                                                            "enable": true,
+                                                            "value_area": 800
+                                                        }
+                                                    },
+                                                    "size": {
+                                                        "value": 5,
+                                                        "random": true,
+                                                        "anim": {
+                                                            "enable": false,
+                                                            "speed": 100,
+                                                            "size_min": 0.1,
+                                                            "sync": false
+                                                        }
+                                                    },
+                                                    "color": {
+                                                        "value": "random"
+                                                    },
+                                                    "shape": {
+                                                      "type": "polygon",
+                                                      "stroke": {
+                                                        "width": 1,
+                                                        "color": "random"
+                                                      },
+                                                      "polygon": {
+                                                        "nb_sides": 6
+                                                      }, 
+                                                    },
+                                                    "opacity": {
+                                                        "value": 0.5,
+                                                        "anim": {
+                                                            "enable": false,
+                                                            "speed": 1,
+                                                            "opacity_min": 0.4,
+                                                            "sync": false
+                                                        } 
+                                                    },
+                                                    "line_linked": {
+                                                      "enable": true,
+                                                      "distance": 100,
+                                                      "color": "#ff0000",
+                                                      "opacity": 0.4,
+                                                      "width": 2
+                                                    },
+                                                    "move": {
+                                                      "enable": true,
+                                                      "speed": 1,
+                                                      "direction": "none",
+                                                      "random": false,
+                                                      "straight": false,
+                                                      "out_mode": "out",
+                                                      "bounce": false,
+                                                      "attract": {
+                                                        "enable": false,
+                                                        "rotateX": 600,
+                                                        "rotateY": 1200
+                                                      }
+                                                    }
+                                                },
+                                                "interactivity": {
+                                                    "events": {
+                                                        "onhover": {
+                                                            "enable": true,
+                                                            "mode": "grab"
+                                                        },
+                                                        "onclick": {
+                                                            "enable": true,
+                                                            "mode": "push"
+                                                          },
+                                                        "resize": true
+                                                    },
+                                                    "modes": {
+                                                      "grab": {
+                                                        "distance": 100,
+                                                        "line_linked": {
+                                                          "color": "#ff0000",
+                                                        },
+                                                        "shape": {
+                                                          "type": "polygon",
+                                                          "stroke": {
+                                                                "width": 2,
+                                                                "color": "#ff0000"
+                                                          },
+                                                          "polygon": {
+                                                                "nb_sides": 6
+                                                        }, 
+                                                    },
+                                                      },
+                                                      "bubble": {
+                                                        "distance": 400,
+                                                        "size": 10,
+                                                        "duration": 2,
+                                                        "opacity": 0.6,
+                                                        "speed": 0.2
+                                                      },
+                                                      "repulse": {
+                                                        "distance": 100,
+                                                        "duration": 2
+                                                      },
+                                                      "push": {
+                                                        "particles_nb": 4
+                                                      },
+                                                      "remove": {
+                                                        "particles_nb": 2
+                                                      }
+                                                    }
+                                                },
+                                                "retina_detect": true
+                                            }}
+                                            style={{
+                                                position: "absolute",
+                                                left: 0,
+                                                right: 0,
+                                                bottom: 0,
+                                                top: -5,
+                                                width: "100%",
+                                                height: "100%",
+                                                background: '#ffffff'
+                                            }}
+                                        />
+                                        <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
+                                            <Grid item xs={12}>
+                                                <GridLayout items={ projects.sort(() => Math.random() - 0.5) }/>
+                                            </Grid>
+                                        </div>
+                                    </div>  
                                 )}/>
                                 <Route path='/content' render={(props) => (
                                     <ContentPage/>

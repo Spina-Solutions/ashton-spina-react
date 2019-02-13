@@ -14,36 +14,21 @@ const styles = theme => ({
         flexGrow: 1
     },
     card: {
-        color: 'black',
+        zIndex: 10,
         padding: '5px',
         width: '80vw',
         maxWidth: '400px',
-        background: 'linear-gradient(to right, #ffffff 0%, #ffffff 51%, #ffffff 100%)',
         '-webkit-transition': '0.4s',
         '-moz-transition': '0.4s',
         transition: '0.4s',
-        '&:hover': {
-            background: 'linear-gradient(to right, #2962FF 0%, #2979FF 51%, #2962FF 100%)',
-        },
-        borderRadius: '20px',
-        margin: '24px'
+        margin: '12px',
+        borderRadius: '20px'
     },
     actions: {
         height: '100%',
         display: 'flex',
         alignIitems: 'center',
-        justifyContent: 'center'
-    },
-    text: {
-      color: 'white',
-      fontSize: '20px',
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      '-webkit-transform': 'translate(-50%, -50%)',
-      '-ms-transform': 'translate(-50%, -50%)',
-      'transform': 'translate(-50%, -50%)',
-      textAlign: 'center'
+        justifyContent: 'center',
     },
     contentOverlay: {
         position: 'absolute',
@@ -110,10 +95,7 @@ function GridLayout(props) {
                 {
                     props.items.map((item, key) =>
                         <Grid key={key}>
-                            <Card 
-                                className={classes.card}
-                                raised
-                            >   
+                            <div className={classes.card}>   
                                 <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}>
                                     <div className={classes.content}>
                                         <CardMedia
@@ -129,30 +111,7 @@ function GridLayout(props) {
                                         </div> 
                                     </div>
                                  </Link>
-                                <CardActions className={classes.actions}>
-                                        {item.githubLink && item.githubLink.length > 0 &&
-                                            <a href={item.githubLink} style={{ textDecoration: 'none' }}>
-                                                <Button size="small" color="primary">
-                                                    See it on Github
-                                                </Button>
-                                            </a>
-                                        }
-                                        {item.href && item.href.length > 0 &&
-                                            <a href={item.href} style={{ textDecoration: 'none' }}>
-                                                <Button size="small" color="primary">
-                                                    See it in Action
-                                                </Button>
-                                            </a>    
-                                        }
-                                        {item.url && item.url.length > 0 &&
-                                            <Link to={item.url} style={{ textDecoration: 'none' }}>
-                                                <Button size="small" color="primary">
-                                                    Read About It
-                                                </Button>
-                                            </Link>
-                                        }
-                                </CardActions>
-                            </Card>
+                            </div>
                         </Grid>
                     )
                 }
