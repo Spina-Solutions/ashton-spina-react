@@ -74,7 +74,7 @@ class RoadTrafficSim extends Component {
 
     state = {
         cars: [],
-        nodes: [{x: -100, y: 300}, {x: 100, y: 300}, {x: window.innerWidth - 100, y: 300}, {x: window.innerWidth + 100, y: 300}],
+        nodes: [{x: -100, y: 300, size: 1}, {x: 100, y: 300, size: 1}, {x: window.innerWidth - 100, y: 300, size: 1}, {x: window.innerWidth + 100, y: 300, size: 1}],
         edges: [{node0: 0, node1: 1}, {node0: 2, node1: 3}],
         selectedNode: null,
         startNode: 0,
@@ -88,7 +88,7 @@ class RoadTrafficSim extends Component {
         if (e.target.nodeType === 'Stage' && e.evt.shiftKey) { 
             window.console.log("Made Node");
             this.setState(prevState => ({
-                nodes: [...prevState.nodes, {x: e.target.getStage().getPointerPosition().x - 10, y: e.target.getStage().getPointerPosition().y - 10}]
+                nodes: [...prevState.nodes, {x: e.target.getStage().getPointerPosition().x - 10, y: e.target.getStage().getPointerPosition().y - 10, size: 1}]
             }));
             return;
         }
@@ -119,11 +119,30 @@ class RoadTrafficSim extends Component {
             // Add an edge because a node is already selected and we've clicked on one
             else if(this.state.selectedNode !== null && e.target.nodeType !== 'Stage' && this.state.selectedNode !== e.target.attrs.id) {
                 window.console.log("Added edge");
-                if(true) {
+                if (true) {
                     this.setState(prevState => ({
                         edges: [...prevState.edges, {node0: this.state.selectedNode, node1: e.target.attrs.id}],
                         selectedNode: null
                     }));
+                    let edges = this.state.edges;
+                    let edgeSize = [];
+                    // TODO:: Get Intersection size based on max number of roads running between it and a given other node
+                    for (let edge of edges) {
+                        //edgeSize[edge.node0].push(edge.node1);
+                        //edgeSize[edge.node1].push(edge.node0);
+                    }
+                    this.setState(state => {
+                        const nodes = state.nodes.map((node, i) => {
+                            return {
+                                x: node.x, 
+                                y: node.y
+                                //size: this.findMax(edgeSize[i])
+                            };
+                        });
+                        return {
+                            nodes,
+                        };
+                    });
                 }
                 return;
             }
@@ -134,6 +153,27 @@ class RoadTrafficSim extends Component {
             }));
             return;
         }
+    }
+
+    findMax = (numbers) => {
+        let max = 0;
+        let mode = null;
+        let counted = numbers.reduce((acc, curr) => { 
+            if (curr in acc) {
+                acc[curr]++;
+            } else {
+                acc[curr] = 1;
+            }
+
+            if (max < acc[curr]) {
+                max = acc[curr];
+                mode = curr;
+            }
+
+            return acc;
+        }, {});
+
+        return max;
     }
 
     handleDragEndNode = (e) => {
