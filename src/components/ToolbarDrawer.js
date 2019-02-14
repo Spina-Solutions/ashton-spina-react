@@ -177,7 +177,7 @@ class PersistentDrawerLeft extends React.Component {
                     </Typography>
                 </div>
                 <Link className={classes.row} to="/content/aboutme" style={{ textDecoration: 'none', color: 'black' }}> 
-                    <Button variant="outlined" color="inherit">Learn More</Button>
+                    <Button variant="outlined">Learn More</Button>
                 </Link>
             </List>
             <List>

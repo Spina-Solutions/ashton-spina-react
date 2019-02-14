@@ -3,13 +3,13 @@ import PersistentDrawerLeft from './components/ToolbarDrawer';
 import GridLayout from './components/GridLayout';
 import ContentPage from './components/ContentPage';
 import NoMatch from './components/NoMatch';
-import Grid from '@material-ui/core/Grid';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { Parallax } from 'react-parallax';
+import Particles from 'react-particles-js';
 import ReactGA from 'react-ga';
 import SwitchWithSlide from "./SwitchWithSlide";
+import Typography from '@material-ui/core/Typography';
 
 const theme = createMuiTheme({
     palette: {
@@ -78,21 +78,35 @@ const projects = [
 ];
 
 const blogPosts = [
-    /*{ 
-        title: 'Laravel vs. NodeJS', 
-        subtitle: "A comparison of major back-end frameworks for web development.", 
-        url: '/content/laravel-vs-nodejs',
-        imageUrl: require('./comingSoon.png')
-    },*/
     { 
         title: 'Ontario\'s City Problem', 
         subtitle: "A discussion of urban planning in Ontarian cities.", 
         url: '/content/ontario-city-problem',
         imageUrl: require('./images/gta_space_usage.jpg')
-    }
+    },
+    { 
+        title: 'Placeholder', 
+        subtitle: "Future content", 
+        url: '#',
+        imageUrl: require('./futureContent.jpg')
+    },
+    { 
+        title: 'Placeholder', 
+        subtitle: "Future content", 
+        url: '#',
+        imageUrl: require('./futureContent.jpg')
+    },
 ];  
 
 class App extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            backgroundBlog: "url("+require('./blog.jpg')+")",
+            backgroundProjects: "url("+require('./projects.jpg')+")",
+        };
+    }
 
     componentDidMount() {
         ReactGA.initialize('UA-131177225-1');
@@ -118,30 +132,302 @@ class App extends Component {
                             >
                                 <Route exact path='/' render={(props) => (
                                     <div>
-                                        <Parallax
-                                            bgImage={require('./images/background.jpg')}
-                                            strength={400}
+                                        <div 
+                                            style={{
+                                                position: "absolute",
+                                                top: 0,
+                                                left: 0,
+                                                right: 0,
+                                                height: "60vh",
+                                                width: "100%",
+                                                background: '#000036',
+                                                backgroundImage: this.state.backgroundBlog,
+                                                backgroundPosition: "center"
+                                            }}
                                         >
-                                            <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
-                                                <Grid item xs={12}>
-                                                    <GridLayout items={ blogPosts.sort(() => Math.random() - 0.5) }/>
-                                                </Grid>
+                                            <Particles
+                                                params={{
+                                                    "particles": {
+                                                        "number": {
+                                                            "value": 160,
+                                                            "density": {
+                                                                "enable": false
+                                                            }
+                                                        },
+                                                        "size": {
+                                                            "value": 20,
+                                                            "random": true
+                                                        },
+                                                        "move": {
+                                                            "direction": "bottom",
+                                                            "out_mode": "out"
+                                                        },
+                                                        "line_linked": {
+                                                            "enable": false
+                                                        }
+                                                    },
+                                                    "interactivity": {
+                                                        "events": {
+                                                            "onhover": {
+                                                                "enable": true,
+                                                                "mode": "bubble"
+                                                            },
+                                                            "onclick": {
+                                                                "enable": true,
+                                                                "mode": "remove"
+                                                            }
+                                                        },
+                                                        "modes": {
+                                                            "remove": {
+                                                                "particles_nb": 10
+                                                            }
+                                                        }
+                                                    },
+                                                    "retina_detect": true
+                                                }}
+                                                style={{
+                                                    position: "absolute",
+                                                    top: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    height: "60vh",
+                                                    width: "100%",
+                                                }}
+                                            />
+                                        </div>
+                                        <div style={{
+                                                position: 'absolute',
+                                                zIndex: 5,
+                                                top: '25vh',
+                                                left: '50vw',
+                                                color: '#ffffff',
+                                                transform: 'translate(-50%, -50%)',
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            <Typography component="h2" variant="h2" gutterBottom color="primary" style={{textShadow: '2px 4px 3px rgba(0,0,0,0.3)'}}>
+                                                I am
+                                            </Typography>
+                                            <div 
+                                                style={{
+                                                    height: '150px',
+                                                    width: '400px',
+                                                    overflow: 'hidden',
+                                                    margin: 'auto'
+                                                }}
+                                            >
+                                                <img 
+                                                    src={require('./components/icons/AshtonSpina.svg')}
+                                                    style={{
+                                                        height: '500px',
+                                                        width: '500px',
+                                                        margin: '-200px 0 -300px -50px'
+                                                    }}
+                                                    alt=""
+                                                />
                                             </div>
-                                        </Parallax>
+                                             <Typography variant="subtitle1" gutterBottom color="primary" style={{textShadow: '2px 4px 3px rgba(0,0,0,0.3)'}}>
+                                                Read what I wrote
+                                            </Typography>
+                                        </div>
+                                        <div 
+                                            style={{
+                                                position: "absolute",
+                                                top: "60vh",
+                                                left: 0,
+                                                right: 0,
+                                                height: "40vh",
+                                                background: '#ffffff'
+                                            }}
+                                        >
+                                            <GridLayout items={ blogPosts }/>
+                                        </div>
                                     </div>
                                 )}/>
                                 <Route exact path='/projects' render={(props) => (
                                     <div>
-                                        <Parallax
-                                            bgImage={require('./images/background.jpg')}
-                                            strength={400}
+                                        <div 
+                                            style={{
+                                                position: "absolute",
+                                                top: 0,
+                                                left: 0,
+                                                height: "60vh",
+                                                width: "100%",
+                                                backgroundImage: this.state.backgroundProjects,
+                                                backgroundPosition: '45% 50%'
+                                            }}
                                         >
-                                            <div style={{margin: '20px', minHeight: 'calc(100vh - 72px)'}}>
-                                                <Grid item xs={12}>
-                                                    <GridLayout items={ projects.sort(() => Math.random() - 0.5) }/>
-                                                </Grid>
+                                            <Particles
+                                                params={{
+                                                    "particles": {
+                                                        "number": {
+                                                            "value": 250,
+                                                            "density": {
+                                                                "enable": true,
+                                                                "value_area": 800
+                                                            }
+                                                        },
+                                                        "size": {
+                                                            "value": 5,
+                                                            "random": true,
+                                                            "anim": {
+                                                                "enable": false,
+                                                                "speed": 100,
+                                                                "size_min": 0.1,
+                                                                "sync": false
+                                                            }
+                                                        },
+                                                        "color": {
+                                                            "value": "#FFA500"
+                                                        },
+                                                        "shape": {
+                                                          "type": "circle",
+                                                          "stroke": {
+                                                            "width": 1,
+                                                            "color": "random"
+                                                          },
+                                                          "polygon": {
+                                                            "nb_sides": 6
+                                                          }, 
+                                                        },
+                                                        "opacity": {
+                                                            "value": 0.5,
+                                                            "anim": {
+                                                                "enable": false,
+                                                                "speed": 1,
+                                                                "opacity_min": 0.4,
+                                                                "sync": false
+                                                            } 
+                                                        },
+                                                        "line_linked": {
+                                                          "enable": true,
+                                                          "distance": 100,
+                                                          "color": "#FFA500",
+                                                          "opacity": 0.4,
+                                                          "width": 2
+                                                        },
+                                                        "move": {
+                                                          "enable": true,
+                                                          "speed": 5,
+                                                          "direction": "none",
+                                                          "random": false,
+                                                          "straight": false,
+                                                          "out_mode": "out",
+                                                          "bounce": false,
+                                                          "attract": {
+                                                            "enable": false,
+                                                            "rotateX": 600,
+                                                            "rotateY": 1200
+                                                          }
+                                                        }
+                                                    },
+                                                    "interactivity": {
+                                                        "events": {
+                                                            "onhover": {
+                                                                "enable": true,
+                                                                "mode": "grab"
+                                                            },
+                                                            "onclick": {
+                                                                "enable": true,
+                                                                "mode": "push"
+                                                              },
+                                                            "resize": true
+                                                        },
+                                                        "modes": {
+                                                          "grab": {
+                                                            "distance": 100,
+                                                            "line_linked": {
+                                                              "color": "#ff0000",
+                                                            },
+                                                            "shape": {
+                                                              "type": "polygon",
+                                                              "stroke": {
+                                                                    "width": 2,
+                                                                    "color": "#ff0000"
+                                                              },
+                                                              "polygon": {
+                                                                    "nb_sides": 6
+                                                            }, 
+                                                        },
+                                                          },
+                                                          "bubble": {
+                                                            "distance": 400,
+                                                            "size": 10,
+                                                            "duration": 2,
+                                                            "opacity": 0.6,
+                                                            "speed": 0.2
+                                                          },
+                                                          "repulse": {
+                                                            "distance": 100,
+                                                            "duration": 2
+                                                          },
+                                                          "push": {
+                                                            "particles_nb": 4
+                                                          },
+                                                          "remove": {
+                                                            "particles_nb": 2
+                                                          }
+                                                        }
+                                                    },
+                                                    "retina_detect": true
+                                                }}
+                                                style={{
+                                                    position: "absolute",
+                                                    top: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    height: "60vh",
+                                                    width: "100%",
+                                                }}
+                                            />
+                                        </div>
+                                        <div style={{
+                                                position: 'absolute',
+                                                zIndex: 5,
+                                                top: '25vh',
+                                                left: '50vw',
+                                                color: '#ffffff',
+                                                transform: 'translate(-50%, -50%)',
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            <Typography component="h2" variant="h2" gutterBottom color="primary" style={{textShadow: '2px 4px 3px rgba(0,0,0,0.3)'}}>
+                                                I am
+                                            </Typography>
+                                            <div 
+                                                style={{
+                                                    height: '150px',
+                                                    width: '400px',
+                                                    overflow: 'hidden',
+                                                    margin: 'auto'
+                                                }}
+                                            >
+                                                <img 
+                                                    src={require('./components/icons/AshtonSpina.svg')}
+                                                    style={{
+                                                        height: '500px',
+                                                        width: '500px',
+                                                        margin: '-200px 0 -300px -50px'
+                                                    }}
+                                                    alt=""
+                                                />
                                             </div>
-                                        </Parallax>
+                                             <Typography variant="subtitle1" gutterBottom color="primary" style={{textShadow: '2px 4px 3px rgba(0,0,0,0.3)'}}>
+                                                Look what I made
+                                            </Typography>
+                                        </div>
+                                        <div 
+                                            style={{
+                                                position: "absolute",
+                                                top: "60vh",
+                                                left: 0,
+                                                right: 0,
+                                                height: "40vh",
+                                                background: '#ffffff'
+                                            }}
+                                        >
+                                            <GridLayout items={ projects.sort(() => Math.random() - 0.5) }/>
+                                        </div>
                                     </div>
                                 )}/>
                                 <Route path='/content' render={(props) => (
