@@ -1,35 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
+import StackGrid from "react-stack-grid";
 import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
-    root: {
-        flexGrow: 1
-    },
-    card: {
-        zIndex: 10,
-        padding: '5px',
-        width: '80vw',
-        maxWidth: '400px',
-        '-webkit-transition': '0.4s',
-        '-moz-transition': '0.4s',
-        transition: '0.4s',
-        margin: '12px',
-        borderRadius: '20px'
-    },
-    actions: {
-        height: '100%',
-        display: 'flex',
-        alignIitems: 'center',
-        justifyContent: 'center',
-    },
     contentOverlay: {
         position: 'absolute',
         top: '0',
@@ -44,7 +21,6 @@ const styles = theme => ({
         '-moz-transition': 'all 0.4s ease-in-out',
         transition: 'all 0.4s ease-in-out 0s',
         'transitionDelay': '0.1s',
-        borderRadius: '20px',
         '&:hover': {
             opacity: '1',
             '& div': {
@@ -89,34 +65,35 @@ const styles = theme => ({
 
 function GridLayout(props) {
     const { classes } = props;
+
     return (
-        <div className={classes.root}>
-            <Grid container spacing={32} direction="column" align="center" justify="center">
-                {
-                    props.items.map((item, key) =>
-                        <Grid key={key}>
-                            <div className={classes.card}>   
-                                <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}>
-                                    <div className={classes.content}>
-                                        <CardMedia
-                                            style={{height: 0, paddingTop: '56.25%', borderRadius: '20px'}}
-                                            image={item.imageUrl}
-                                            title={item.title}
-                                        />
-                                        <div className={classes.contentOverlay}>
-                                            <div className={classes.contentInner}>
-                                                <Typography component="h1">{item.title}</Typography>
-                                                <Typography component="p">{item.subtitle}</Typography>
-                                            </div>
-                                        </div> 
+        <StackGrid
+            columnWidth={
+                window.innerWidth > 768 ? '33%' : '100%'
+            }
+        >
+            {
+                props.items.map((item, key) =>
+                    <div key={key} className={classes.card}>   
+                        <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}>
+                            <div className={classes.content}>
+                                <CardMedia
+                                    style={{height: 0, paddingTop: '56.25%'}}
+                                    image={item.imageUrl}
+                                    title={item.title}
+                                />
+                                <div className={classes.contentOverlay}>
+                                    <div className={classes.contentInner}>
+                                        <Typography component="h1">{item.title}</Typography>
+                                        <Typography component="p">{item.subtitle}</Typography>
                                     </div>
-                                 </Link>
+                                </div> 
                             </div>
-                        </Grid>
-                    )
-                }
-            </Grid>
-        </div>
+                         </Link>
+                    </div>
+                )
+            }
+        </StackGrid>
     );
 }
 
