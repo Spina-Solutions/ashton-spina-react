@@ -1,47 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
+import StackGrid from "react-stack-grid";
 import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
-    root: {
-        flexGrow: 1,
-    },
-    card: {
-        color: 'black',
-        padding: '5px',
-        background: 'linear-gradient(to right, #ffffff 0%, #ffffff 51%, #ffffff 100%)',
-        '-webkit-transition': '0.4s',
-        '-moz-transition': '0.4s',
-        transition: '0.4s',
-        '&:hover': {
-            background: 'linear-gradient(to right, #2962FF 0%, #2979FF 51%, #2962FF 100%)',
-        },
-        borderRadius: '20px'
-    },
-    actions: {
-        height: '100%',
-        display: 'flex',
-        alignIitems: 'center',
-        justifyContent: 'center'
-    },
-    text: {
-      color: 'white',
-      fontSize: '20px',
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      '-webkit-transform': 'translate(-50%, -50%)',
-      '-ms-transform': 'translate(-50%, -50%)',
-      'transform': 'translate(-50%, -50%)',
-      textAlign: 'center'
-    },
     contentOverlay: {
         position: 'absolute',
         top: '0',
@@ -56,7 +21,6 @@ const styles = theme => ({
         '-moz-transition': 'all 0.4s ease-in-out',
         transition: 'all 0.4s ease-in-out 0s',
         'transitionDelay': '0.1s',
-        borderRadius: '20px',
         '&:hover': {
             opacity: '1',
             '& div': {
@@ -101,60 +65,35 @@ const styles = theme => ({
 
 function GridLayout(props) {
     const { classes } = props;
+
     return (
-        <div className={classes.root}>
-            <Grid container spacing={32}>
-                {
-                    props.items.map((item, key) =>
-                        <Grid key={key} item xs={12} sm={6} md={6} lg={4}>
-                            <Card 
-                                className={classes.card}
-                                raised
-                            >   
-                                <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}>
-                                    <div className={classes.content}>
-                                        <CardMedia
-                                            style={{height: 0, paddingTop: '56.25%', borderRadius: '20px'}}
-                                            image={item.imageUrl}
-                                            title={item.title}
-                                        />
-                                        <div className={classes.contentOverlay}>
-                                            <div className={classes.contentInner}>
-                                                <Typography component="h1">{item.title}</Typography>
-                                                <Typography component="p">{item.subtitle}</Typography>
-                                            </div>
-                                        </div> 
+        <StackGrid
+            columnWidth={
+                window.innerWidth > 768 ? '33%' : '100%'
+            }
+        >
+            {
+                props.items.map((item, key) =>
+                    <div key={key} className={classes.card}>   
+                        <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}>
+                            <div className={classes.content}>
+                                <CardMedia
+                                    style={{height: 0, paddingTop: '56.25%'}}
+                                    image={item.imageUrl}
+                                    title={item.title}
+                                />
+                                <div className={classes.contentOverlay}>
+                                    <div className={classes.contentInner}>
+                                        <Typography component="h1">{item.title}</Typography>
+                                        <Typography component="p">{item.subtitle}</Typography>
                                     </div>
-                                 </Link>
-                                <CardActions className={classes.actions}>
-                                        {item.githubLink && item.githubLink.length > 0 &&
-                                            <a href={item.githubLink} style={{ textDecoration: 'none' }}>
-                                                <Button size="small" color="primary">
-                                                    See it on Github
-                                                </Button>
-                                            </a>
-                                        }
-                                        {item.href && item.href.length > 0 &&
-                                            <a href={item.href} style={{ textDecoration: 'none' }}>
-                                                <Button size="small" color="primary">
-                                                    See it in Action
-                                                </Button>
-                                            </a>    
-                                        }
-                                        {item.url && item.url.length > 0 &&
-                                            <Link to={item.url} style={{ textDecoration: 'none' }}>
-                                                <Button size="small" color="primary">
-                                                    Read About It
-                                                </Button>
-                                            </Link>
-                                        }
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                    )
-                }
-            </Grid>
-        </div>
+                                </div> 
+                            </div>
+                         </Link>
+                    </div>
+                )
+            }
+        </StackGrid>
     );
 }
 
