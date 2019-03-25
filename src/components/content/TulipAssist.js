@@ -39,7 +39,7 @@ function FullWidthGrid(props) {
                 Background
             </Typography>
             <Typography component="p">
-                Working on TulipAssist was my first software development job.  TulipAssist is the website for the TulipAssist insurance company which insures primarily mobile phones.  Although the customer-facing pages don't necessarily convey as much, the customer service-facing pages and the systems that support them can be quite complex.  I started here at this job.  Particularly in the back-end.   TulipAssist seeks to ultimately handle the job of insurances and the work that goes with running an insurance company in an automated-as-possible manner.  This means many systems working on managing insurance policies, claims, damages, repairs, and finances with as little human intervention as can be managed.
+                Working on TulipAssist was my first software development job.  TulipAssist is the website for the TulipAssist insurance company which insures primarily mobile devices.  Although the customer-facing pages don't necessarily convey as much, the customer service-facing pages and the systems that support them can be quite complex.  I started here as a back-end developer.   TulipAssist seeks to ultimately handle the job of insurances and the work that goes with running an insurance company in an automated-as-possible manner.  This means many systems working on managing insurance policies, claims, damages, repairs, and finances with as little human intervention as can be managed.
             </Typography>
             <br/>
             <Divider/>
@@ -64,18 +64,6 @@ function FullWidthGrid(props) {
             </Typography>
             <Typography component="p">
                 My first real strong foray into front-end devlopment on the TulipAssist project involved making portals for other companies to interact with our system.  By crafting these out of pure CSS (with CSS-Grid) and not relying on external libraries for styling I ensured a lightweight front-end that could be loaded with ease on a variety of connection / hardware qualities, including tablets.  I also deftly used Javascript to avoid full-page reloads with all the front-end - back-end communication.  This is functionality that would normally be much easier achieved with a front-end javascript framework like VueJS, ReactJS, or AngularJS, but I manually created this functionality because including those would be too much for such a small feature and would've required signicant changes to the system.  These portals allowed other companies to resell our insurances in their own shops and our repair contracters to handle their own repair recording in our system, respectively.
-            </Typography>
-            <Typography variant="h6" component="h6">
-                Reseller / Repair Portals
-            </Typography>
-            <Typography component="p">
-                My first real strong foray into front-end devlopment on the TulipAssist project involved making portals for other companies to interact with our system.  By crafting these out of pure CSS (with CSS-Grid) and not relying on external libraries for styling I ensured a lightweight front-end that could be loaded with ease on a variety of connection / hardware qualities, including tablets.  I also deftly used Javascript to avoid full-page reloads with all the front-end - back-end communication.  This is functionality that would normally be much easier achieved with a front-end javascript framework like VueJS, ReactJS, or AngularJS, but I manually created this functionality because including those would be too much for such a small feature and would've required signicant changes to the system.  These portals allowed other companies to resell our insurances in their own shops and our repair contracters to handle their own repair recording in our system, respectively.
-            </Typography>
-            <Typography variant="h6" component="h6">
-                Repair Drop Shipping
-            </Typography>
-            <Typography component="p">
-                I also used the repair portal I built as part of a system of quasi-drop-shipping for phone repairs.  In order to speed up customer claims and improve customer satisfaction we built a system that would directly route phones with claimed damages to our repair contractors and then back to customers, effectively cutting out our own logistics system in a large amount of claim cases.  This significantly improved claim turnover time, reduced the load on our logistics department, and thus improved profits.
             </Typography>
             <Typography variant="h6" component="h6">
                 Internationalization
