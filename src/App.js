@@ -138,7 +138,7 @@ class App extends Component {
                                                 top: 0,
                                                 left: 0,
                                                 right: 0,
-                                                height: "60vh",
+                                                height: "100vh",
                                                 width: "100%",
                                                 background: '#000036',
                                                 backgroundImage: this.state.backgroundBlog,
@@ -190,7 +190,7 @@ class App extends Component {
                                                     top: 0,
                                                     left: 0,
                                                     right: 0,
-                                                    height: "60vh",
+                                                    height: "100vh",
                                                     width: "100%",
                                                 }}
                                             />
@@ -240,7 +240,7 @@ class App extends Component {
                                                 background: '#ffffff'
                                             }}
                                         >
-                                            <GridLayout items={ blogPosts }/>
+                                            <GridLayout style={{ background: '#ffddda' }} items={ blogPosts }/>
                                         </div>
                                     </div>
                                 )}/>
@@ -251,7 +251,7 @@ class App extends Component {
                                                 position: "absolute",
                                                 top: 0,
                                                 left: 0,
-                                                height: "60vh",
+                                                height: "100vh",
                                                 width: "100%",
                                                 backgroundImage: this.state.backgroundProjects,
                                                 backgroundPosition: '45% 50%'
