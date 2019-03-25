@@ -119,31 +119,35 @@ class RoadTrafficSim extends Component {
             // Add an edge because a node is already selected and we've clicked on one
             else if(this.state.selectedNode !== null && e.target.nodeType !== 'Stage' && this.state.selectedNode !== e.target.attrs.id) {
                 window.console.log("Added edge");
-                if (true) {
-                    this.setState(prevState => ({
-                        edges: [...prevState.edges, {node0: this.state.selectedNode, node1: e.target.attrs.id}],
-                        selectedNode: null
-                    }));
-                    let edges = this.state.edges;
-                    let edgeSize = [];
-                    // TODO:: Get Intersection size based on max number of roads running between it and a given other node
-                    for (let edge of edges) {
-                        //edgeSize[edge.node0].push(edge.node1);
-                        //edgeSize[edge.node1].push(edge.node0);
-                    }
-                    this.setState(state => {
-                        const nodes = state.nodes.map((node, i) => {
-                            return {
-                                x: node.x, 
-                                y: node.y
-                                //size: this.findMax(edgeSize[i])
-                            };
-                        });
+                this.setState(prevState => ({
+                    edges: [...prevState.edges, {node0: this.state.selectedNode, node1: e.target.attrs.id}],
+                    selectedNode: null
+                }));
+                let edges = this.state.edges;
+                let nodes = this.state.nodes;
+                let edgeSize = [];
+                // TODO:: Get Intersection size based on max number of roads running between it and a given other node
+
+                for (const [key, node] of nodes.entries()) {
+                    edgeSize[key] = [];
+                }
+                for (let edge of edges) {
+                    edgeSize[edge.node0].push(edge.node1);
+                    edgeSize[edge.node1].push(edge.node0);
+                }
+                window.console.log(edgeSize);
+                this.setState(state => {
+                    const nodes = state.nodes.map((node, i) => {
                         return {
-                            nodes,
+                            x: node.x, 
+                            y: node.y,
+                            size: this.findMax(edgeSize[i]) > 0 ? this.findMax(edgeSize[i]) : 1
                         };
                     });
-                }
+                    return {
+                        nodes,
+                    };
+                });
                 return;
             }
         }
@@ -180,7 +184,7 @@ class RoadTrafficSim extends Component {
         this.setState(state => {
             const nodes = state.nodes.map((node, i) => {
                 if (e.target.attrs.id === i) {
-                    return {x: e.evt.layerX, y: e.evt.layerY};
+                    return {x: e.evt.layerX - 10, y: e.evt.layerY - 10};
                 } else {
                     return node;
                 }
@@ -203,7 +207,7 @@ class RoadTrafficSim extends Component {
         var self = this;
         if (self.state.endNode !== null && 
             self.state.startNode !== null && 
-            self.state.cars.length < 25 && 
+            self.state.cars.length < 10 && 
             new Date().getTime() - self.state.lastCar > ((Math.random() * 2000) + 1000)) {
 
             self.setState(prevState => ({
@@ -376,17 +380,6 @@ class RoadTrafficSim extends Component {
                             cars,
                         };
                     });
-
-                    // // Set rotation by getting angle from direction vector
-                    // if (self.stage.children[2].children[0] && self.stage.children[2].children[0].children[index] !== undefined) {
-                    //     let radians = Math.atan2(dY, dX); //radians
-                    //     // you need to divide by PI, and MULTIPLY by 180:
-                    //     let degrees = 180 * radians / Math.PI;  //degrees
-                    //     let angle = 90 + (360 + Math.round(degrees)) % 360; //round number, avoid decimal fragments
-                    //     let rotation = 90 + (360 + Math.round(180 * Math.atan2(dY, dX) / Math.PI)) % 360;
-                    //     self.stage.children[2].children[0].children[index].setRotation(rotation);
-                    //     self.stage.children[2].children[0].children[index].setOffset({x: 6, y: 12});
-                    // }
                 }
             }
         }
@@ -394,6 +387,15 @@ class RoadTrafficSim extends Component {
 
     componentDidMount() {
         this.triggerGameLoop();
+    }
+
+    calculateLineOffset(edge) {
+        return [
+                this.state.nodes[edge.node0].x + 10 + (this.state.nodes[edge.node0].x > this.state.nodes[edge.node1].x ? 10 : -10), 
+                this.state.nodes[edge.node0].y + 10 + (this.state.nodes[edge.node0].y > this.state.nodes[edge.node1].y ? 10 : -10), 
+                this.state.nodes[edge.node1].x + 10 + (this.state.nodes[edge.node0].x > this.state.nodes[edge.node1].x ? 10 : -10), 
+                this.state.nodes[edge.node1].y + 10 + (this.state.nodes[edge.node0].y > this.state.nodes[edge.node1].y ? 10 : -10)
+            ];
     }
 
     render(props, context) {
@@ -430,7 +432,7 @@ class RoadTrafficSim extends Component {
                                         strokeWidth = {24}
                                         stroke = 'white'
                                         shadowBlur = {5}
-                                        points = {[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
+                                        points = {[...this.calculateLineOffset(edge)]}
                                     />
                                 </Group>
                             ))}
@@ -445,7 +447,7 @@ class RoadTrafficSim extends Component {
                                 >
                                     <Circle
                                         id={i}
-                                        radius={12}
+                                        radius={(10 * node.size) + 2}
                                         offset={{x: -10, y: -10}}
                                         draggable
                                         fill={'white'}
@@ -460,15 +462,8 @@ class RoadTrafficSim extends Component {
                                     <Line 
                                         strokeWidth = {20}
                                         stroke = 'grey'
-                                        points ={[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
+                                        points = {[...this.calculateLineOffset(edge)]}
                                     />
-                                    {/*this.state.edges.map((edge, i) => (
-                                        <ColoredLine 
-                                            id={i * 2 * this.state.edges.length}
-                                            key={i * 2 * this.state.edges.length}
-                                            points = {[this.state.nodes[edge.node0].x + 10, this.state.nodes[edge.node0].y + 10, this.state.nodes[edge.node1].x + 10, this.state.nodes[edge.node1].y + 10]}
-                                        />
-                                    ))*/}
                                 </Group>
                             ))}
                             {this.state.nodes.map((node, i) => (
@@ -482,7 +477,7 @@ class RoadTrafficSim extends Component {
                                 >
                                     <Circle
                                         id={i}
-                                        radius={10}
+                                        radius={10 * node.size}
                                         offset={{x: -10, y: -10}}
                                         fill={i === this.state.selectedNode ? 'white' : i === this.state.startNode ? 'blue' : i === this.state.endNode ? 'red' : 'grey'}
                                     />
