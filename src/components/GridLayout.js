@@ -3,10 +3,15 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CardMedia from '@material-ui/core/CardMedia';
 import { Link } from 'react-router-dom';
-import StackGrid from "react-stack-grid";
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
+    root: {
+        padding: '24px',
+        width: '100vw'
+    },
     contentOverlay: {
         position: 'absolute',
         top: '0',
@@ -67,33 +72,27 @@ function GridLayout(props) {
     const { classes } = props;
 
     return (
-        <StackGrid
-            columnWidth={
-                window.innerWidth > 768 ? '33%' : '100%'
-            }
-        >
-            {
-                props.items.map((item, key) =>
-                    <div key={key} className={classes.card}>   
-                        <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}>
-                            <div className={classes.content}>
-                                <CardMedia
-                                    style={{height: 0, paddingTop: '56.25%'}}
-                                    image={item.imageUrl}
-                                    title={item.title}
-                                />
-                                <div className={classes.contentOverlay}>
-                                    <div className={classes.contentInner}>
-                                        <Typography component="h1">{item.title}</Typography>
-                                        <Typography component="p">{item.subtitle}</Typography>
-                                    </div>
-                                </div> 
-                            </div>
-                         </Link>
-                    </div>
-                )
-            }
-        </StackGrid>
+        <Grid className={classes.root} container spacing={32} justify="center" alignItems="center"> 
+            {props.items.map((item, key) =>
+                <Grid key={key} className={classes.card} item xs={12} sm={6} md={4} lg={3}>   
+                    <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}>
+                        <Paper className={classes.content}>
+                            <CardMedia
+                                style={{height: 0, paddingTop: '56.25%'}}
+                                image={item.imageUrl}
+                                title={item.title}
+                            />
+                            <div className={classes.contentOverlay}>
+                                <div className={classes.contentInner}>
+                                    <Typography component="h1">{item.title}</Typography>
+                                    <Typography component="p">{item.subtitle}</Typography>
+                                </div>
+                            </div> 
+                        </Paper>
+                     </Link>
+                </Grid>
+            )}
+      </Grid>
     );
 }
 

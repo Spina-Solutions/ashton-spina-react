@@ -55,7 +55,7 @@ function AboutMe(props) {
                 Overview
             </Typography>
             <Typography component="p">
-                I'm currently a Web Developer, working on or leading a variety of development projects with the goal of improving business performance. Although my current work stack involves PHP (Laravel), Javascript (VueJS), DHTML, and SQL (MariaDB), I do have significant experience at a university level in Java, C/C++, Android Development, and other web frameworks as well. My university experiences also led me to some experience in Computer Graphics, Cryptography, Software Design, and Algorithms and Data Structures.
+                I'm currently a Web Developer, working on or leading a variety of software development projects.  Although my current work stack involves PHP (Laravel), Javascript (VueJS), DHTML, and SQL  (MariaDB), I do have experience at verying levels in Java, C/C++, Android Development, ReactJS, NodeJS, MongoDB, and others as well.  Though I love web technologies, I'm passionate about success more than any one technology and am always looking to expand into n
             </Typography>
             <br/>
             <Divider/>
@@ -64,11 +64,11 @@ function AboutMe(props) {
                 Personal
             </Typography>
             <Typography component="p">
-                On a more personal level, I'm a Canadian living in the Netherlands with EU citizenship. I love learning new things and for this reason I try to surround myself with people I can learn from. I am always at home in a new place with fresh experiences. I have a few years of non-computing science related work experience and have developed a passion for work where I can make things and solve problems. These traits are what led me to not only the field I work in, but also far from home.
+                On a personal level, I'm a Canadian living in the Netherlands with EU citizenship.  I love learning new things and for this reason I try to surround myself with people I can learn from.  I am always at home in a new place with fresh experiences.  I have a few years of non-computing science related work experience from before university and have developed a passion for work where I can make things and solve problems, as well as a strong work ethic as any of my previous employers will testify.   A combination of these traits is what led me to not only the field I study, but also far from home.
             </Typography>
             <br/>
             <Typography component="p">
-                I spend most of my free time reading about subjects such as history, politics, economics, and languages. I'm hoping to recreationally start writing opinion pieces about these topics as well.  I'm also always happy to play pretty much any sport and have played many recreationally in the past, once even getting involved with a casual Australian Football team. 
+                I spend most of my free time reading about subjects such as history, politics, economics, and languages.  I also enjoy playing sports recreationally such as soccer (football) and volleyball.
             </Typography>
             <br/>
             <Divider/>
