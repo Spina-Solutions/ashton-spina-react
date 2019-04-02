@@ -39,6 +39,12 @@ function University(props) {
                 <SocialIcon url="https://github.com/spina-a-d/Ashton-s-School-Assignment-Collection"/>
             </div>
             <Typography variant="h5" component="h3">
+                Notice
+            </Typography>
+            <Typography component="p">
+                In order to protect the academic integrity of new Computing Science students at the University of Groninge. I've decided to make this repository private.  If you're not a student at the University of Groningen and would like access to this repository please contact me.
+            </Typography>
+            <Typography variant="h5" component="h3">
                 Overview
             </Typography>
             <Typography component="p">
