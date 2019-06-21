@@ -29,17 +29,17 @@ const projects = [
     { 
         title: 'Universal Cloud Monitoring',
         url: '/content/universalcloudmonitoring',
-        imageUrl: require('./images/universalCloudMonitoring.png'),
+        imageUrl: require('./images/thumbs/universalCloudMonitoring_tn.jpg'),
     }, 
     { 
         title: 'Tulip Assist',
         url: '/content/tulipassist', 
-        imageUrl: require('./images/tulipAssist.png'),
+        imageUrl: require('./images/thumbs/tulipAssist_tn.jpg'),
     },
     { 
         title: 'Device Database',
         url: '/content/devicedatabase', 
-        imageUrl: require('./images/deviceDB.png'),
+        imageUrl: require('./images/thumbs/deviceDB_tn.jpg'),
     },
     { 
         title: 'Ashton Spina Website',
@@ -49,18 +49,18 @@ const projects = [
     { 
         title: 'Wander',
         url: '/content/wander', 
-        imageUrl: require('./images/wander.png'),
+        imageUrl: require('./images/thumbs/wander_tn.jpg'),
     },
     { 
         title: 'University Work',
         url: '/content/university', 
-        imageUrl: require('./images/school_work.png'),
+        imageUrl: require('./images/thumbs/school_work_tn.jpg'),
         href: ''
     },
     {
         title: 'Travel-Atlas',
         url: '/content/travel-atlas',
-        imageUrl: require('./images/travel-atlas.svg'),
+        imageUrl: require('./images/thumbs/travel-atlas_tn.jpg'),
     },
 ];
 
@@ -68,17 +68,7 @@ const blogPosts = [
     { 
         title: 'Ontario\'s City Problem',
         url: '/content/ontario-city-problem',
-        imageUrl: require('./images/gta_space_usage.jpg')
-    },
-    { 
-        title: 'Placeholder',
-        url: '#',
-        imageUrl: require('./futureContent.jpg')
-    },
-    { 
-        title: 'Placeholder',
-        url: '#',
-        imageUrl: require('./futureContent.jpg')
+        imageUrl: require('./images/thumbs/gta_space_usage_tn.jpg')
     },
 ];  
 

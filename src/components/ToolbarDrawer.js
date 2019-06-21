@@ -333,7 +333,7 @@ class PersistentDrawerLeft extends React.Component {
                 <Link to='/content/android' style={{ textDecoration: 'none', color: 'black' }}>
                     <ListItem button>
                         <ListItemIcon>
-                            <Avatar alt='Android' src={require('../images/android.jpg')}/>
+                            <Avatar alt='Android' src={require('../images/thumbs/android_tn.jpg')}/>
                         </ListItemIcon>
                         <ListItemText primary='Android' />
                     </ListItem>

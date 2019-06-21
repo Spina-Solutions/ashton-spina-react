@@ -16,8 +16,8 @@ import Wander from './content/Wander';
 import University from './content/University';
 import Android from './content/Android';
 import AboutMe from './content/AboutMe';
-import LaravelVsNodeJS from './content/LaravelVsNodeJS';
 import OntarioCityProblem from './content/OntarioCityProblem';
+import TravelAtlas from './content/TravelAtlas';
 
 const styles = theme => ({
     root: {
@@ -77,10 +77,10 @@ function ContentPage(props) {
                             <Route exact path='/content/university' render={(props) => (
                                 <University/>
                             )}/>
-                            {/* Blog Routes */}
-                            <Route exact path='/content/laravel-vs-nodejs' render={(props) => (
-                                <LaravelVsNodeJS/>
+                            <Route exact path='/content/travel-atlas' render={(props) => (
+                                <TravelAtlas/>
                             )}/>
+                            {/* Blog Routes */}
                             <Route exact path='/content/ontario-city-problem' render={(props) => (
                                 <OntarioCityProblem/>
                             )}/>

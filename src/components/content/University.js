@@ -28,7 +28,7 @@ function University(props) {
     return (
         <div>
             <div className={classes.row}>
-                <Avatar alt="AS" src={require('../../images/school_work.png')} className={classes.bigAvatar}/>
+                <Avatar alt="AS" src={require('../../images/thumbs/school_work_tn.jpg')} className={classes.bigAvatar}/>
             </div>
             <div className={classes.row}>
                 <Typography variant="h5" component="h3">

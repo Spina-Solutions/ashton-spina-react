@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
+import {SocialIcon} from "react-social-icons";
 
 const styles = theme => ({
     root: {
@@ -28,12 +29,15 @@ function FullWidthGrid(props) {
     return (
         <div>
             <div className={classes.row}>
-                <Avatar alt="AS" src={require('../../images/tulipAssist.png')} className={classes.bigAvatar}/>
+                <Avatar alt="AS" src={require('../../images/thumbs/tulipAssist_tn.jpg')} className={classes.bigAvatar}/>
             </div>
             <div className={classes.row}>
                 <Typography variant="h5" component="h3">
                     TulipAssist
                 </Typography>
+            </div>
+            <div className={classes.row}>
+                <SocialIcon url="https://www.tulipassist.nl"/>
             </div>
             <Typography variant="h5" component="h3">
                 Background
