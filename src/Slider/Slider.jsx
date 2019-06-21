@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import "./styles.css";
-
+// eslint-disable-next-line
 export default class Slider extends React.Component {
   constructor(props) {
     super(props);
@@ -95,18 +95,23 @@ export default class Slider extends React.Component {
       <div
         ref={node => (this.node = node)}
         className={classNames("animatable", {
+          // eslint-disable-next-line
           ["to"]: [Slider.TO_LEFT, Slider.TO_RIGHT].includes(
             this.state.position
           ),
+          // eslint-disable-next-line
           ["from"]: [Slider.FROM_LEFT, Slider.FROM_RIGHT].includes(
             this.state.position
           ),
+          // eslint-disable-next-line
           ["right"]: [Slider.TO_RIGHT, Slider.FROM_RIGHT].includes(
             this.state.position
           ),
+          // eslint-disable-next-line
           ["left"]: [Slider.TO_LEFT, Slider.FROM_LEFT].includes(
             this.state.position
           ),
+          // eslint-disable-next-line
           ["prepare"]: this.state.animatePrepare
         })}
         data-qa-loading={Boolean(

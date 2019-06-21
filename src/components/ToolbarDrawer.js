@@ -19,6 +19,7 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons';
 import Typography from '@material-ui/core/Typography';
+import {withRouter} from 'react-router-dom';
 
 const drawerWidth = 330;
 
@@ -26,9 +27,13 @@ const styles = theme => ({
     root: {
         display: 'flex',
     },
+    icon: {
+        img: {
+            margin: 'auto',
+        }
+    },
     toolbarButtons: {
         marginLeft: 'auto',
-        marginRight: 'auto'
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -44,9 +49,15 @@ const styles = theme => ({
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
-    menuButton: {
+    leftButton: {
         marginLeft: 12,
         marginRight: 20,
+        zIndex: 10,
+    },
+    rightButton: {
+        marginLeft: 12,
+        marginRight: 20,
+        zIndex: 10,
     },
     hide: {
         display: 'none',
@@ -57,7 +68,7 @@ const styles = theme => ({
     },
     drawerPaper: {
         width: drawerWidth,
-     },
+    },
     drawerHeader: {
         display: 'flex',
         alignItems: 'center',
@@ -72,6 +83,7 @@ const styles = theme => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
         marginLeft: -drawerWidth,
+        overflowX: 'hidden'
     },
     contentShift: {
         transition: theme.transitions.create('margin', {
@@ -88,8 +100,8 @@ const styles = theme => ({
         borderStyle: 'solid',
         borderWidth: '3px',
         borderColor: '#2196f3',
-        width: 180,
-        height: 180,
+        width: 50,
+        height: 50,
     },
     socialIcon: {
         '&:hover': {
@@ -97,13 +109,42 @@ const styles = theme => ({
             backgroundClip: 'content-box',
             backgroundColor: '#B0BEC5'
         }
-    }
+    },
 });
 
 class PersistentDrawerLeft extends React.Component {
-  state = {
-    open: false,
-  };
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            scrollY: 0,
+            width: window.innerWidth,
+            top: false,
+            dialogOpen: false,
+            searchName: ''
+        };
+    }
+
+    /**
+     * For now I call the same function in both lifecycle hooks because the state won't always be set otherwise because of the order of the components mounting
+     */
+    componentDidMount () {
+        window.addEventListener('scroll', this.updateScrollPosition.bind(this));
+        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.updateScrollPosition.bind(this));
+        window.removeEventListener('resize', this.updateWindowDimensions.bind(this));
+    }
+
+    updateScrollPosition() {
+        this.setState({ scrollY: window.scrollY });
+    }
+
+    updateWindowDimensions() {
+        this.setState({ width: window.innerWidth });
+    }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -114,31 +155,100 @@ class PersistentDrawerLeft extends React.Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, location } = this.props;
     const { open } = this.state;
 
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
+          <AppBar
+              style={{
+                  background: 'white',
+                  boxShadow: 'none',
+                  opacity: this.state.scrollY > 0 ? 0.8 : 1,
+                  WebkitTransition: 'opacity 1s ease, margin 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,width 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
+                  transition: 'opacity 1s ease, margin 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,width 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
+                  transitionDelay: 'opacity 0.3s',
+              }}
+              position="fixed"
+              className={classNames(classes.appBar, {
+                  [classes.appBarShift]: open,
+              })}
+          >
           <Toolbar disableGutters={!open}>
             <Button
               color="inherit"
               aria-label="Open drawer"
               onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, open && classes.hide)}
+              className={classNames(classes.leftButton, open && classes.hide)}
             >
-              About Me
+                About Me
             </Button>
-            <div className={classes.toolbarButtons}>
-                <Link to="/" style={{ textDecoration: 'none', color: 'black' }}> 
-                    <Button color="inherit">Blog</Button>
-                </Link>
+              <div
+                  style={{
+                      margin: 'auto',
+                      textAlign: 'center',
+                      maxWidth: '10%',
+                      maxHeight: '10%'
+                  }}
+              >
+                  <div
+                      style={{
+                          opacity: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? 0 : 1,
+                          left: '50%',
+                          top: '10%',
+                          transform: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -100%)' : 'translate(-50%, -68%)',
+                          position: 'absolute',
+                          width: window.innerWidth < 500 ? '320px' : '400px',
+                          height: window.innerWidth < 500 ? '320px' : '400px',
+                          background: 'rgba(255, 255, 255, 1)',
+                          borderRadius: '300px',
+                          WebkitTransition: '1s', /* Safari prior 6.1 */
+                          transition: '1s',
+                      }}
+                  />
+                  <div
+                      style={{
+                          height: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? '120px' : window.innerWidth < 500 ? '180px' : '300px',
+                          position: 'absolute',
+                          left: '50%',
+                          top: !['/', '/projects'].includes(location.pathname) ||  this.state.scrollY > 0 ? '50%' : '80%',
+                          transform: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -78%)': window.innerWidth < 500 ? 'translate(-50%, -65%)' : 'translate(-50%, -50%)',
+                          borderRadius: '300px',
+                          overflow: 'hidden',
+                          WebkitTransition: '1s', /* Safari prior 6.1 */
+                          transition: '1s',
+                      }}
+                  >
+                      <img
+                          style={{
+                              height: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? '180px' : window.innerWidth < 500 ? '240px' : '300px',
+                              WebkitTransition: '1s', /* Safari prior 6.1 */
+                              transition: '1s',
+                          }}
+                          alt="ashtonspina"
+                          src="/logo.svg"
+                      />
+                  </div>
+                  <Link to="/">
+                      <div
+                          style={{
+                              opacity: 0,
+                              left: '50%',
+                              top: '10%',
+                              transform: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -85%)' : 'translate(-50%, -68%)',
+                              position: 'absolute',
+                              width: window.innerWidth < 500 ? '320px' : '400px',
+                              height: window.innerWidth < 500 ? '320px' : '400px',
+                              background: 'rgba(255, 255, 255, 1)',
+                              borderRadius: '300px',
+                              WebkitTransition: '1s', /* Safari prior 6.1 */
+                              transition: '1s',
+                          }}
+                      />
+                  </Link>
+              </div>
+            <div className={classes.rightButton}>
                 <Link to="/projects" style={{ textDecoration: 'none', color: 'black' }}> 
                     <Button color="inherit">Projects</Button>
                 </Link>
@@ -249,4 +359,4 @@ PersistentDrawerLeft.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(PersistentDrawerLeft);
+export default withRouter(withStyles(styles, { withTheme: true })(props => <PersistentDrawerLeft {...props}/>));
