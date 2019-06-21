@@ -6,10 +6,15 @@
       "src": "favicon.ico",
       "sizes": "128x128",
       "type": "image/x-icon"
+    },
+    {
+      "src": "logo.svg",
+      "sizes": "16x16"
     }
   ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#ffffff",
-  "background_color": "#000000"
+  "background_color": "#ffffff"
+
 }
