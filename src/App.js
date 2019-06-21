@@ -76,7 +76,7 @@ const blogPosts = [
         imageUrl: require('./futureContent.jpg')
     },
     { 
-        title: 'Placeholder', 
+        title: 'Placeholder',
         url: '#',
         imageUrl: require('./futureContent.jpg')
     },
