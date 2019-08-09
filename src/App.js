@@ -86,7 +86,7 @@ const projects = [
 const blogPosts = [
     {
         title: 'Who Am I?',
-        hook: 'Who is the mysterious man who made this site and how can you find him?',
+        hook: 'Who am I and how can you find me?  What do I like to develop?  What do I like?',
         url: '/content/aboutme',
         iconUrl: '/icons/man.svg',
         paperBackground: '#b71c1c',
