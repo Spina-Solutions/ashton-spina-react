@@ -194,10 +194,10 @@ class PersistentDrawerLeft extends React.Component {
               >
                   <div
                       style={{
-                          opacity: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? 0 : 1,
+                          opacity: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? 0 : 1,
                           left: '50%',
                           top: '10%',
-                          transform: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -100%)' : 'translate(-50%, -68%)',
+                          transform: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -100%)' : 'translate(-50%, -68%)',
                           position: 'absolute',
                           width: window.innerWidth < 500 ? '320px' : '400px',
                           height: window.innerWidth < 500 ? '320px' : '400px',
@@ -209,11 +209,11 @@ class PersistentDrawerLeft extends React.Component {
                   />
                   <div
                       style={{
-                          height: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? '120px' : window.innerWidth < 500 ? '180px' : '300px',
+                          height: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? '120px' : window.innerWidth < 500 ? '180px' : '300px',
                           position: 'absolute',
                           left: '50%',
-                          top: !['/', '/projects'].includes(location.pathname) ||  this.state.scrollY > 0 ? '50%' : '80%',
-                          transform: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -78%)': window.innerWidth < 500 ? 'translate(-50%, -65%)' : 'translate(-50%, -50%)',
+                          top: !['/'].includes(location.pathname) ||  this.state.scrollY > 0 ? '50%' : '80%',
+                          transform: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -78%)': window.innerWidth < 500 ? 'translate(-50%, -65%)' : 'translate(-50%, -50%)',
                           borderRadius: '300px',
                           overflow: 'hidden',
                           WebkitTransition: '1s', /* Safari prior 6.1 */
@@ -222,7 +222,7 @@ class PersistentDrawerLeft extends React.Component {
                   >
                       <img
                           style={{
-                              height: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? '180px' : window.innerWidth < 500 ? '240px' : '300px',
+                              height: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? '180px' : window.innerWidth < 500 ? '240px' : '300px',
                               WebkitTransition: '1s', /* Safari prior 6.1 */
                               transition: '1s',
                           }}
@@ -236,7 +236,7 @@ class PersistentDrawerLeft extends React.Component {
                               opacity: 0,
                               left: '50%',
                               top: '10%',
-                              transform: !['/', '/projects'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -85%)' : 'translate(-50%, -68%)',
+                              transform: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -85%)' : 'translate(-50%, -68%)',
                               position: 'absolute',
                               width: window.innerWidth < 500 ? '320px' : '400px',
                               height: window.innerWidth < 500 ? '320px' : '400px',

@@ -39,17 +39,17 @@ function AboutMe(props) {
                 <Avatar alt="AS" src={require('./images/ashtonspina.jpg')} className={classes.bigAvatar}/>
             </div>
             <div className={classes.row}>
-                <Typography variant="h5" component="h3">
-                    Ashton Spina
-                </Typography>
-            </div>
-            <div className={classes.row}>
                 <SocialIcon className={classes.socialIcon} url="https://www.linkedin.com/in/spinaadbusiness/"/>
                 <SocialIcon className={classes.socialIcon} url="https://github.com/spina-a-d"/>
                 <SocialIcon className={classes.socialIcon} url="https://stackoverflow.com/users/10460453/ashton-spina"/>
                 <SocialIcon className={classes.socialIcon} url="https://plus.google.com/u/0/118135112796392901012"/>
                 <SocialIcon className={classes.socialIcon} url="https://www.facebook.com/ashton.spina"/>
                 <SocialIcon className={classes.socialIcon} url="https://www.instagram.com/ashtonspina/"/>
+            </div>
+            <div className={classes.row}>
+                <Typography variant="h3">
+                    Ashton Spina
+                </Typography>
             </div>
             <Typography variant="h5" component="h3">
                 Overview
