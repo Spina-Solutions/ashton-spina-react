@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PersistentDrawerLeft from './components/ToolbarDrawer';
-import GridLayout from './components/GridLayout';
 import ContentPage from './components/ContentPage';
 import NoMatch from './components/NoMatch';
+import BlogLayout from './components/BlogLayout';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Route } from 'react-router-dom';
-import Particles from 'react-particles-js';
 import ReactGA from 'react-ga';
 import SwitchWithSlide from "./SwitchWithSlide";
 
@@ -28,47 +27,87 @@ const theme = createMuiTheme({
 const projects = [
     { 
         title: 'Universal Cloud Monitoring',
+        hook: 'The project I did for my Bachelor Thesis which focused on providing a universal solution to monitoring Virtual Machines and visualizing and analyzing their cost and specifically waste.',
+        iconUrl: '/icons/clouds.svg',
+        paperBackground: '#00796b',
         url: '/content/universalcloudmonitoring',
         imageUrl: require('./images/thumbs/universalCloudMonitoring_tn.jpg'),
     }, 
     { 
         title: 'Tulip Assist',
-        url: '/content/tulipassist', 
+        hook: 'The insurance company for which I worked and the details of my efforts to automate and improve the company.',
+        iconUrl: '/icons/tulips.svg',
+        paperBackground: '#2e7d32',
+        url: '/content/tulipassist',
         imageUrl: require('./images/thumbs/tulipAssist_tn.jpg'),
     },
     { 
         title: 'Device Database',
+        hook: 'A SaaS source of truth data base for more accurate API communication in a microservice system architecture.',
+        iconUrl: '/icons/smartphone.svg',
+        paperBackground: '#bf360c',
         url: '/content/devicedatabase', 
         imageUrl: require('./images/thumbs/deviceDB_tn.jpg'),
     },
     { 
         title: 'Ashton Spina Website',
+        hook: 'My personal showcase website and blog.',
+        iconUrl: '/icons/freelance.svg',
+        paperBackground: '#00838f',
         url: '/content/ashtonspina', 
         imageUrl: '/logo.svg',
     },
     { 
         title: 'Wander',
+        hook: 'An android application which allows the psychology department at the University of Groningen and other universities to run a specific test on study participants in a variety of conditions from their smartphones.',
+        iconUrl: '/icons/brain.svg',
+        paperBackground: '#d81b60',
         url: '/content/wander', 
         imageUrl: require('./images/thumbs/wander_tn.jpg'),
     },
     { 
         title: 'University Work',
+        hook: 'Available on request, a collection of my code that I wrote for university projects.',
+        iconUrl: '/icons/student.svg',
+        paperBackground: '#b71c1c',
         url: '/content/university', 
         imageUrl: require('./images/thumbs/school_work_tn.jpg'),
-        href: ''
     },
     {
         title: 'Travel-Atlas',
+        hook: 'A website dedicated to matching users with a destination that suits their needs.',
+        iconUrl: '/icons/suitcase.svg',
+        paperBackground: '#4a148c',
         url: '/content/travel-atlas',
         imageUrl: require('./images/thumbs/travel-atlas_tn.jpg'),
     },
 ];
 
 const blogPosts = [
+    {
+        title: 'Who Am I?',
+        hook: 'Who is the mysterious man who made this site and how can you find him?',
+        url: '/content/aboutme',
+        iconUrl: '/icons/man.svg',
+        paperBackground: '#b71c1c',
+        imageUrl: require('./images/thumbs/gta_space_usage_tn.jpg')
+    },
+    {
+        title: 'What I\'ve Done',
+        hook: 'I\'ve worked on some interesting stuff in my relatively short time as a Software Engineer.  Read about stuff I\'ve made and maybe even stuff I\'m planning to make!',
+        url: '/projects',
+        iconUrl: '/icons/cash-flow.svg',
+        paperBackground: '#4a148c',
+        imageUrl: require('./images/thumbs/gta_space_usage_tn.jpg')
+    },
     { 
         title: 'Ontario\'s City Problem',
+        hook: 'Ontario has a problem with how it handles urbanization and cities. Read my opinion on what that problem is and how to change it.',
         url: '/content/ontario-city-problem',
-        imageUrl: require('./images/thumbs/gta_space_usage_tn.jpg')
+        iconUrl: '/icons/cityscape.svg',
+        paperBackground: '#0277bd',
+        imageUrl: require('./images/thumbs/gta_space_usage_tn.jpg'),
+        category: 'Blog',
     },
 ];  
 
@@ -105,300 +144,10 @@ class App extends Component {
                                 updateStep={(...currentStep) => this.setState({ currentStep })}
                             >
                                 <Route exact path='/' render={(props) => (
-                                    <div>
-                                        <div
-                                            style={{
-                                                position: "absolute",
-                                                top: 0,
-                                                left: 0,
-                                                height: 'calc(100vh - 64px)',
-                                                width: "100vw",
-                                                background: 'white',
-                                                zIndex: 0
-                                            }}
-                                        >
-                                            <Particles
-                                                params={{
-                                                    "particles": {
-                                                        "number": {
-                                                            "value": 100,
-                                                            "density": {
-                                                                "enable": true,
-                                                                "value_area": 800
-                                                            }
-                                                        },
-                                                        "size": {
-                                                            "value": 5,
-                                                            "random": true,
-                                                            "anim": {
-                                                                "enable": false,
-                                                                "speed": 50,
-                                                                "size_min": 0.1,
-                                                                "sync": false
-                                                            }
-                                                        },
-                                                        "color": {
-                                                            "value": "#000000"
-                                                        },
-                                                        "shape": {
-                                                            "type": "circle",
-                                                            "stroke": {
-                                                                "width": 1,
-                                                                "color": "random"
-                                                            },
-                                                            "polygon": {
-                                                                "nb_sides": 6
-                                                            },
-                                                        },
-                                                        "opacity": {
-                                                            "value": 0.5,
-                                                            "anim": {
-                                                                "enable": false,
-                                                                "speed": 1,
-                                                                "opacity_min": 0.4,
-                                                                "sync": false
-                                                            }
-                                                        },
-                                                        "line_linked": {
-                                                            "enable": true,
-                                                            "distance": 100,
-                                                            "color": "#000000",
-                                                            "opacity": 0.4,
-                                                            "width": 2
-                                                        },
-                                                        "move": {
-                                                            "enable": true,
-                                                            "speed": 5,
-                                                            "direction": "none",
-                                                            "random": false,
-                                                            "straight": false,
-                                                            "out_mode": "out",
-                                                            "bounce": false,
-                                                            "attract": {
-                                                                "enable": false,
-                                                                "rotateX": 600,
-                                                                "rotateY": 1200
-                                                            }
-                                                        }
-                                                    },
-                                                    "interactivity": {
-                                                        "events": {
-                                                            "onhover": {
-                                                                "enable": true,
-                                                                "mode": "grab"
-                                                            },
-                                                            "onclick": {
-                                                                "enable": true,
-                                                                "mode": "push"
-                                                            },
-                                                            "resize": true
-                                                        },
-                                                        "modes": {
-                                                            "grab": {
-                                                                "distance": 100,
-                                                                "line_linked": {
-                                                                    "color": "#000000",
-                                                                },
-                                                                "shape": {
-                                                                    "type": "polygon",
-                                                                    "stroke": {
-                                                                        "width": 2,
-                                                                        "color": "#000000"
-                                                                    },
-                                                                    "polygon": {
-                                                                        "nb_sides": 6
-                                                                    },
-                                                                },
-                                                            },
-                                                            "bubble": {
-                                                                "distance": 400,
-                                                                "size": 10,
-                                                                "duration": 2,
-                                                                "opacity": 0.6,
-                                                                "speed": 0.2
-                                                            },
-                                                            "repulse": {
-                                                                "distance": 100,
-                                                                "duration": 2
-                                                            },
-                                                            "push": {
-                                                                "particles_nb": 4
-                                                            },
-                                                            "remove": {
-                                                                "particles_nb": 2
-                                                            }
-                                                        }
-                                                    },
-                                                    "retina_detect": true
-                                                }}
-                                                style={{
-                                                    position: "absolute",
-                                                    top: 0,
-                                                    left: 0,
-                                                    right: 0,
-                                                    height: "60vh",
-                                                    width: "100%",
-                                                }}
-                                            />
-                                        </div>
-                                        <div
-                                            style={{
-                                                height: 'calc(100vh - 64px)',
-                                                width: "100vw",
-                                                zIndex: 1
-                                            }}
-                                        >
-
-                                            <GridLayout style={{ background: '#ffddda' }} items={ blogPosts }/>
-                                        </div>
-                                    </div>
+                                    <BlogLayout style={{ background: '#ffddda' }} items={ blogPosts }/>
                                 )}/>
                                 <Route exact path='/projects' render={(props) => (
-                                    <div>
-                                        <div
-                                            style={{
-                                                position: "absolute",
-                                                top: 0,
-                                                left: 0,
-                                                height: 'calc(100vh - 64px)',
-                                                width: "100vw",
-                                                background: 'white',
-                                            }}
-                                        >
-                                            <Particles
-                                                params={{
-                                                    "particles": {
-                                                        "number": {
-                                                            "value": 100,
-                                                            "density": {
-                                                                "enable": true,
-                                                                "value_area": 800
-                                                            }
-                                                        },
-                                                        "size": {
-                                                            "value": 5,
-                                                            "random": true,
-                                                            "anim": {
-                                                                "enable": false,
-                                                                "speed": 50,
-                                                                "size_min": 0.1,
-                                                                "sync": false
-                                                            }
-                                                        },
-                                                        "color": {
-                                                            "value": "#000000"
-                                                        },
-                                                        "shape": {
-                                                          "type": "circle",
-                                                          "stroke": {
-                                                            "width": 1,
-                                                            "color": "random"
-                                                          },
-                                                          "polygon": {
-                                                            "nb_sides": 6
-                                                          },
-                                                        },
-                                                        "opacity": {
-                                                            "value": 0.5,
-                                                            "anim": {
-                                                                "enable": false,
-                                                                "speed": 1,
-                                                                "opacity_min": 0.4,
-                                                                "sync": false
-                                                            }
-                                                        },
-                                                        "line_linked": {
-                                                          "enable": true,
-                                                          "distance": 100,
-                                                          "color": "#000000",
-                                                          "opacity": 0.4,
-                                                          "width": 2
-                                                        },
-                                                        "move": {
-                                                          "enable": true,
-                                                          "speed": 5,
-                                                          "direction": "none",
-                                                          "random": false,
-                                                          "straight": false,
-                                                          "out_mode": "out",
-                                                          "bounce": false,
-                                                          "attract": {
-                                                            "enable": false,
-                                                            "rotateX": 600,
-                                                            "rotateY": 1200
-                                                          }
-                                                        }
-                                                    },
-                                                    "interactivity": {
-                                                        "events": {
-                                                            "onhover": {
-                                                                "enable": true,
-                                                                "mode": "grab"
-                                                            },
-                                                            "onclick": {
-                                                                "enable": true,
-                                                                "mode": "push"
-                                                              },
-                                                            "resize": true
-                                                        },
-                                                        "modes": {
-                                                          "grab": {
-                                                            "distance": 100,
-                                                            "line_linked": {
-                                                              "color": "#000000",
-                                                            },
-                                                            "shape": {
-                                                              "type": "polygon",
-                                                              "stroke": {
-                                                                    "width": 2,
-                                                                    "color": "#000000"
-                                                              },
-                                                              "polygon": {
-                                                                    "nb_sides": 6
-                                                            },
-                                                        },
-                                                          },
-                                                          "bubble": {
-                                                            "distance": 400,
-                                                            "size": 10,
-                                                            "duration": 2,
-                                                            "opacity": 0.6,
-                                                            "speed": 0.2
-                                                          },
-                                                          "repulse": {
-                                                            "distance": 100,
-                                                            "duration": 2
-                                                          },
-                                                          "push": {
-                                                            "particles_nb": 4
-                                                          },
-                                                          "remove": {
-                                                            "particles_nb": 2
-                                                          }
-                                                        }
-                                                    },
-                                                    "retina_detect": true
-                                                }}
-                                                style={{
-                                                    position: "absolute",
-                                                    top: 0,
-                                                    left: 0,
-                                                    right: 0,
-                                                    height: "60vh",
-                                                    width: "100%",
-                                                }}
-                                            />
-                                        </div>
-                                        <div
-                                            style={{
-                                                height: 'calc(100vh - 64px)',
-                                                width: "100vw",
-                                                zIndex: 1
-                                            }}
-                                        >
-                                            <GridLayout items={ projects.sort(() => Math.random() - 0.5) }/>
-                                        </div>
-                                    </div>
+                                    <BlogLayout items={ projects.sort(() => Math.random() - 0.5) }/>
                                 )}/>
                                 <Route path='/content' render={(props) => (
                                     <ContentPage/>

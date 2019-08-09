@@ -10,6 +10,10 @@ const styles = theme => ({
         flexGrow: 1,
         margin: '3vw'
     },
+    media: {
+        height: 0,
+        paddingTop: '38.5%', // 16:9 = 56.25, should switch to this for real image or similar
+    },
     row: {
         display: 'flex',
         justifyContent: 'center',
