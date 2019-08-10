@@ -100,8 +100,8 @@ const styles = theme => ({
         borderStyle: 'solid',
         borderWidth: '3px',
         borderColor: '#2196f3',
-        width: 50,
-        height: 50,
+        width: 100,
+        height: 100,
     },
     socialIcon: {
         '&:hover': {
@@ -164,7 +164,6 @@ class PersistentDrawerLeft extends React.Component {
           <AppBar
               style={{
                   background: 'white',
-                  boxShadow: 'none',
                   opacity: this.state.scrollY > 0 ? 0.8 : 1,
                   WebkitTransition: 'opacity 1s ease, margin 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,width 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
                   transition: 'opacity 1s ease, margin 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,width 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
@@ -203,7 +202,7 @@ class PersistentDrawerLeft extends React.Component {
                           height: window.innerWidth < 500 ? '320px' : '400px',
                           background: 'rgba(255, 255, 255, 1)',
                           borderRadius: '300px',
-                          WebkitTransition: '1s', /* Safari prior 6.1 */
+                          WebkitTransition: '1s',
                           transition: '1s',
                       }}
                   />
@@ -216,14 +215,14 @@ class PersistentDrawerLeft extends React.Component {
                           transform: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -78%)': window.innerWidth < 500 ? 'translate(-50%, -65%)' : 'translate(-50%, -50%)',
                           borderRadius: '300px',
                           overflow: 'hidden',
-                          WebkitTransition: '1s', /* Safari prior 6.1 */
+                          WebkitTransition: '1s',
                           transition: '1s',
                       }}
                   >
                       <img
                           style={{
                               height: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? '180px' : window.innerWidth < 500 ? '240px' : '300px',
-                              WebkitTransition: '1s', /* Safari prior 6.1 */
+                              WebkitTransition: '1s',
                               transition: '1s',
                           }}
                           alt="ashtonspina"
@@ -242,7 +241,7 @@ class PersistentDrawerLeft extends React.Component {
                               height: window.innerWidth < 500 ? '320px' : '400px',
                               background: 'rgba(255, 255, 255, 1)',
                               borderRadius: '300px',
-                              WebkitTransition: '1s', /* Safari prior 6.1 */
+                              WebkitTransition: '1s',
                               transition: '1s',
                           }}
                       />
@@ -348,6 +347,22 @@ class PersistentDrawerLeft extends React.Component {
         >
           <div className={classes.drawerHeader} />
             {this.props.children}
+            {/* This is the back white circle that makes the shadow */}
+            <div
+                style={{
+                    opacity: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? 0 : 1,
+                    left: this.state.open ? 'calc(330px + ((100vw - 330px)/2))' : '50%',
+                    top: '0%',
+                    transform: !['/'].includes(location.pathname) || this.state.scrollY > 0 ? 'translate(-50%, -100%)' : 'translate(-50%, -68%)',
+                    position: 'absolute',
+                    width: window.innerWidth < 500 ? '320px' : '400px',
+                    height: window.innerWidth < 500 ? '320px' : '400px',
+                    background: 'rgba(255, 255, 255, 1)',
+                    borderRadius: '300px',
+                    transition: '1s, left 0.2s',
+                    boxShadow: '0 9px 12px rgba(0, 0, 0, 0.3)',
+                }}
+            />
         </main>
       </div>
     );
