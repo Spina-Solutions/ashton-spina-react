@@ -23,7 +23,7 @@ const styles = theme => ({
         },
     },
     image: {
-        padding: '12px'
+        padding: '12px',
     },
     text: {
         padding: '12px',
@@ -37,7 +37,29 @@ const styles = theme => ({
 /**
  * This class acts as a grid to contain all the cities and display them to users
  */
-class GridLayout extends React.Component {
+class BlogLayout extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            width: window.innerWidth,
+        };
+    }
+
+    /**
+     * For now I call the same function in both lifecycle hooks because the state won't always be set otherwise because of the order of the components mounting
+     */
+    componentDidMount () {
+        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions.bind(this));
+    }
+
+    updateWindowDimensions() {
+        this.setState({ width: window.innerWidth });
+    }
+
     render() {
         const { classes, items} = this.props;
 
@@ -60,7 +82,7 @@ class GridLayout extends React.Component {
                                             <Grid
                                                 container
                                                 justify="center"
-                                                alignItems="center"
+                                                alignItems="stretch"
                                             >
                                                 <Grid
                                                     item
@@ -75,7 +97,10 @@ class GridLayout extends React.Component {
                                                 >
                                                     <Link
                                                         to={items[key].url}
-                                                        style={{ textDecoration: 'none', color: 'black' }}
+                                                        style={{
+                                                            textDecoration: 'none',
+                                                            color: 'black',
+                                                        }}
                                                     >
                                                         <Grid
                                                             className={classes.image}
@@ -97,7 +122,7 @@ class GridLayout extends React.Component {
                                                                     <img
                                                                         src={items[key].iconUrl}
                                                                         alt={items[key].name}
-                                                                        style={{height: '180px', width: '180px'}}
+                                                                        style={{height: this.state.width < 600 ? '100px' : '180px', width: this.state.width < 600 ? '100px' : '180px'}}
                                                                     />
                                                                 </Tooltip>
                                                             </Grid>
@@ -107,7 +132,7 @@ class GridLayout extends React.Component {
                                                                 md={6}
                                                                 align="center"
                                                             >
-                                                                <Typography variant="h3" className={classes.text}>{items[key].title}</Typography>
+                                                                <Typography variant={this.state.width < 600 ? 'h6' : 'h3'} className={classes.text}>{items[key].title}</Typography>
                                                             </Grid>
                                                         </Grid>
                                                     </Link>
@@ -116,7 +141,9 @@ class GridLayout extends React.Component {
                                                     item
                                                     xs={6}
                                                     className={classes.hookSide}
-                                                    alignContent="space-between"
+                                                    container
+                                                    justify="center"
+                                                    alignItems="center"
                                                 >
                                                     {items[key].category !== undefined &&
                                                         <div>
@@ -124,7 +151,7 @@ class GridLayout extends React.Component {
                                                         </div>
                                                     }
                                                     <div>
-                                                        <Typography variant="h6">{items[key].hook}</Typography>
+                                                        <Typography variant={this.state.width < 600 ? 'body2' : 'h6'}>{items[key].hook}</Typography>
                                                     </div>
                                                 </Grid>
                                             </Grid>
@@ -135,15 +162,18 @@ class GridLayout extends React.Component {
                                             <Grid
                                                 container
                                                 justify="center"
-                                                alignItems="center"
+                                                alignItems="stretch"
                                             >
                                                 <Grid
                                                     item
                                                     xs={6}
                                                     className={classes.hookSide}
+                                                    container
+                                                    justify="center"
+                                                    alignItems="center"
                                                 >
                                                     <div>
-                                                        <Typography variant="h6">{items[key].hook}</Typography>
+                                                        <Typography variant={this.state.width < 600 ? 'body2' : 'h6'}>{items[key].hook}</Typography>
                                                     </div>
                                                 </Grid>
                                                 <Grid
@@ -159,7 +189,10 @@ class GridLayout extends React.Component {
                                                 >
                                                     <Link
                                                         to={items[key].url}
-                                                        style={{ textDecoration: 'none', color: 'black' }}
+                                                        style={{
+                                                            textDecoration: 'none',
+                                                            color: 'black',
+                                                        }}
                                                     >
                                                         <Grid
                                                             className={classes.image}
@@ -173,7 +206,7 @@ class GridLayout extends React.Component {
                                                                 md={6}
                                                                 align="center"
                                                             >
-                                                                <Typography variant="h3" className={classes.text}>{items[key].title}</Typography>
+                                                                <Typography variant={this.state.width < 600 ? 'h6' : 'h3'} className={classes.text}>{items[key].title}</Typography>
                                                             </Grid>
                                                             <Grid
                                                                 item
@@ -189,7 +222,7 @@ class GridLayout extends React.Component {
                                                                     <img
                                                                         src={items[key].iconUrl}
                                                                         alt={items[key].name}
-                                                                        style={{height: '180px', width: '180px'}}
+                                                                        style={{height: this.state.width < 600 ? '100px' : '180px', width: this.state.width < 600 ? '100px' : '180px'}}
                                                                     />
                                                                 </Tooltip>
                                                             </Grid>
@@ -209,9 +242,9 @@ class GridLayout extends React.Component {
     }
 }
 
-GridLayout.propTypes = {
+BlogLayout.propTypes = {
     classes: PropTypes.object.isRequired,
     items: PropTypes.array.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(GridLayout);
+export default withStyles(styles, { withTheme: true })(BlogLayout);
