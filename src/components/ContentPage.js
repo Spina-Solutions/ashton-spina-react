@@ -19,84 +19,110 @@ import AboutMe from './content/AboutMe';
 import OntarioCityProblem from './content/OntarioCityProblem';
 import TravelAtlas from './content/TravelAtlas';
 
-const styles = theme => ({
-    root: {
-        flexGrow: 1,
-        margin: '3vw'
-    },
-    paper: {
-        ...theme.mixins.gutters(),
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
-    }
+const styles = (theme) => ({
+  root: {
+    flexGrow: 1,
+    margin: '3vw',
+  },
+  paper: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
 });
 
 function ContentPage(props) {
-    const { classes } = props;
-    return (
-        <div className={classes.root}>
-            <Grid container>
-                <Grid item xs={12}>
-                    <Paper className={classes.paper} elevation={10}>
-                        <Switch>
-                            <Route exact path='/content/aboutme' render={(props) => (
-                                <AboutMe/>
-                            )}/>
-                            {/* Experience Routes */}
-                            <Route exact path='/content/laravel' render={(props) => (
-                                <Laravel/>
-                            )}/>
-                            <Route exact path='/content/nodejs' render={(props) => (
-                                <NodeJS/>
-                            )}/>
-                            <Route exact path='/content/reactjs' render={(props) => (
-                                <ReactJS/>
-                            )}/>
-                            <Route exact path='/content/vuejs' render={(props) => (
-                                <VueJS/>
-                            )}/>
-                            <Route exact path='/content/android' render={(props) => (
-                                <Android/>
-                            )}/>
-                            {/* Project Routes */}
-                            <Route exact path='/content/ashtonspina' render={(props) => (
-                                <AshtonSpina/>
-                            )}/>
-                            <Route exact path='/content/tulipassist' render={(props) => (
-                                <TulipAssist/>
-                            )}/>
-                            <Route exact path='/content/universalcloudmonitoring' render={(props) => (
-                                <UniversalCloudMonitoring/>
-                            )}/>
-                            <Route exact path='/content/devicedatabase' render={(props) => (
-                                <DeviceDatabase/>
-                            )}/>
-                            <Route exact path='/content/wander' render={(props) => (
-                                <Wander/>
-                            )}/>
-                            <Route exact path='/content/university' render={(props) => (
-                                <University/>
-                            )}/>
-                            <Route exact path='/content/travel-atlas' render={(props) => (
-                                <TravelAtlas/>
-                            )}/>
-                            {/* Blog Routes */}
-                            <Route exact path='/content/ontario-city-problem' render={(props) => (
-                                <OntarioCityProblem/>
-                            )}/>
-                            <Route render={(props) => (
-                                <Redirect to="/nomatch" />
-                            )}/>
-                        </Switch>
-                    </Paper>
-                </Grid>
-            </Grid>
-        </div>
-    );
+  const { classes } = props;
+  return (
+    <div className={classes.root}>
+      <Grid container>
+        <Grid item xs={12}>
+          <Paper className={classes.paper} elevation={10}>
+            <Switch>
+              <Route
+                exact
+                path="/content/aboutme"
+                render={(props) => <AboutMe />}
+              />
+              {/* Experience Routes */}
+              <Route
+                exact
+                path="/content/laravel"
+                render={(props) => <Laravel />}
+              />
+              <Route
+                exact
+                path="/content/nodejs"
+                render={(props) => <NodeJS />}
+              />
+              <Route
+                exact
+                path="/content/reactjs"
+                render={(props) => <ReactJS />}
+              />
+              <Route
+                exact
+                path="/content/vuejs"
+                render={(props) => <VueJS />}
+              />
+              <Route
+                exact
+                path="/content/android"
+                render={(props) => <Android />}
+              />
+              {/* Project Routes */}
+              <Route
+                exact
+                path="/content/ashtonspina"
+                render={(props) => <AshtonSpina />}
+              />
+              <Route
+                exact
+                path="/content/tulipassist"
+                render={(props) => <TulipAssist />}
+              />
+              <Route
+                exact
+                path="/content/universalcloudmonitoring"
+                render={(props) => <UniversalCloudMonitoring />}
+              />
+              <Route
+                exact
+                path="/content/devicedatabase"
+                render={(props) => <DeviceDatabase />}
+              />
+              <Route
+                exact
+                path="/content/wander"
+                render={(props) => <Wander />}
+              />
+              <Route
+                exact
+                path="/content/university"
+                render={(props) => <University />}
+              />
+              <Route
+                exact
+                path="/content/travel-atlas"
+                render={(props) => <TravelAtlas />}
+              />
+              {/* Blog Routes */}
+              <Route
+                exact
+                path="/content/ontario-city-problem"
+                render={(props) => <OntarioCityProblem />}
+              />
+              <Route render={(props) => <Redirect to="/nomatch" />} />
+            </Switch>
+          </Paper>
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
 
 ContentPage.propTypes = {
-    classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(ContentPage);

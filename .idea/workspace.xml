@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c357f96a-221d-46ae-ae00-cc1f0387f451" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/.prettierrc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/SteamFriendFinder.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/getSteamGames.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/getSteamGames.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/SteamFriendFinder.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/SteamFriendFinder.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,20 +33,22 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/src/images" />
-      <recent name="$PROJECT_DIR$/public/.well-known/pki-validation" />
-      <recent name="$PROJECT_DIR$/src/components" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/pages" />
       <recent name="$PROJECT_DIR$/scripts" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/content" />
       <recent name="$PROJECT_DIR$/public" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/layers" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/images" />
+      <recent name="$PROJECT_DIR$/public/.well-known/pki-validation" />
+      <recent name="$PROJECT_DIR$/src/components" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -113,9 +112,14 @@
       <screen x="1920" y="0" width="2560" height="1440" />
     </state>
     <state x="2020" y="117" width="2360" height="1218" key="DiffContextDialog/1920.0.2560.1440/4480.171.1920.1080/0.193.1920.1080@1920.0.2560.1440" timestamp="1586964689420" />
-    <state x="2986" y="492" width="424" height="496" key="FileChooserDialogImpl" timestamp="1586965088053">
+    <state x="2986" y="487" width="424" height="496" key="FileChooserDialogImpl" timestamp="1586970948778">
       <screen x="1920" y="0" width="2560" height="1440" />
     </state>
+    <state x="2986" y="487" key="FileChooserDialogImpl/1920.0.2560.1440/4480.167.1920.1080/0.176.1920.1080@1920.0.2560.1440" timestamp="1586970948778" />
     <state x="2986" y="492" width="424" height="496" key="FileChooserDialogImpl/1920.0.2560.1440/4480.171.1920.1080/0.193.1920.1080@1920.0.2560.1440" timestamp="1586965088053" />
+    <state x="2908" y="461" width="584" height="540" key="find.popup" timestamp="1586980213307">
+      <screen x="1920" y="0" width="2560" height="1440" />
+    </state>
+    <state x="2908" y="461" width="584" height="540" key="find.popup/1920.0.2560.1440/4480.167.1920.1080/0.176.1920.1080@1920.0.2560.1440" timestamp="1586980213307" />
   </component>
 </project>
