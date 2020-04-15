@@ -7,7 +7,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "sync": "yarn build && aws s3 sync build/ s3://ashtonspina.com",
+    "analyze": "source-map-explorer build/static/js/main.*",
+    "lint:prettier": "prettier \"**/*.{ts,js,json,css,scss,vue,html,md}\" \"!{/coverage/**/*,*/dist/**/*,*/build/**/*, /documentation/**/*}\" --check",
+    "lint:prettier:fix": "yarn lint:prettier --write"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -21,8 +25,10 @@
   "devDependencies": {
     "@material-ui/core": "4.9.10",
     "@material-ui/icons": "4.9.1",
+    "axios": "^0.19.2",
     "classnames": "2.2.6",
     "material-ui-dots": "2.0.1",
+    "prettier": "^2.0.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-ga": "2.7.0",

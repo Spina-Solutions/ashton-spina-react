@@ -8,6 +8,7 @@ import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Route } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import SwitchWithSlide from "./SwitchWithSlide";
+import SteamFriendFinder from "./pages/SteamFriendFinder";
 
 const theme = createMuiTheme({
     palette: {
@@ -148,6 +149,9 @@ class App extends Component {
                                 )}/>
                                 <Route exact path='/projects' render={(props) => (
                                     <BlogLayout items={ projects.sort(() => Math.random() - 0.5) }/>
+                                )}/>
+                                <Route exact path='/steam-game-group' render={(props) => (
+                                    <SteamFriendFinder />
                                 )}/>
                                 <Route path='/content' render={(props) => (
                                     <ContentPage/>
