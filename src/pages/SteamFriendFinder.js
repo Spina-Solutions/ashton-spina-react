@@ -9,6 +9,9 @@ import Avatar from '@material-ui/core/Avatar';
 import axios from 'axios';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const friends = [
   {
@@ -90,12 +93,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 function SteamFriendFinder(props) {
   const classes = useStyles();
   const [allFriends, setAllFriends] = React.useState(friends);
   const [includedFriends, setIncludedFriends] = React.useState([]);
   const [games, setGames] = React.useState({});
   const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
 
   const handleIncludeFriend = async (friend) => {
     const newlyIncludedFriends = includedFriends;
@@ -105,14 +113,6 @@ function SteamFriendFinder(props) {
     });
     setIncludedFriends(newlyIncludedFriends);
     setAllFriends(filteredAllFriends);
-    console.log(newlyIncludedFriends);
-    setLoading(true);
-    const response = await axios.post(
-      `https://55dov46vm5.execute-api.eu-central-1.amazonaws.com/prod/ashtonsSpinaGetSteamGames`,
-      { friends: newlyIncludedFriends }
-    );
-    setGames(response.data);
-    setLoading(false);
   };
 
   const handleExcludeFriend = async (friend) => {
@@ -123,17 +123,36 @@ function SteamFriendFinder(props) {
     });
     setIncludedFriends(filteredIncludedFriends);
     setAllFriends(newAllFriends);
-    setLoading(true);
-    const response = await axios.post(
-      `https://55dov46vm5.execute-api.eu-central-1.amazonaws.com/prod/ashtonsSpinaGetSteamGames`,
-      { friends: filteredIncludedFriends }
-    );
-    setGames(response.data);
+  };
+
+  const handleSearchGames = async () => {
+    try {
+      setLoading(true);
+      console.log({ friends: includedFriends });
+      const response = await axios.post(
+        `https://55dov46vm5.execute-api.eu-central-1.amazonaws.com/prod/ashtonsSpinaGetSteamGames`,
+        { friends: includedFriends }
+      );
+      setGames(response.data);
+    } catch (error) {
+      setError(true);
+    }
     setLoading(false);
   };
 
   return (
     <div className={classes.root}>
+      <Snackbar
+        open={error}
+        autoHideDuration={6000}
+        onClose={() => setError(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setError(false)} severity="error">
+          Steam Web API has limited calls. Try again in a bit when the limit has
+          reset.
+        </Alert>
+      </Snackbar>
       <Grid container spacing={4} justify="center" alignItems="center">
         <Paper className={classes.content}>
           <Grid container justify="center">
@@ -205,14 +224,29 @@ function SteamFriendFinder(props) {
               </Typography>
               <Grid
                 container
-                className={classes.friendSection}
+                className={classes.gameSection}
                 justify="center"
+                align="center"
               >
                 {loading && <CircularProgress color="secondary" />}
+                {!loading && (
+                  <Grid xs={12}>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      disableElevation
+                      onClick={() => handleSearchGames()}
+                    >
+                      Search for Joint Games
+                    </Button>
+                  </Grid>
+                )}
                 {!loading && !Object.keys(games).length && (
-                  <Typography className={classes.type} variant="h6">
-                    No friends selected
-                  </Typography>
+                  <Grid xs={12}>
+                    <Typography className={classes.type} variant="h6">
+                      No friends selected
+                    </Typography>
+                  </Grid>
                 )}
                 {!loading &&
                   Object.keys(games).map((game) => (
