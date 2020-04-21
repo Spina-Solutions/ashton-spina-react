@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -12,45 +12,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-
-const friends = [
-  {
-    name: 'Jake',
-    id: '76561198088011811',
-  },
-  {
-    name: 'Matt',
-    id: '76561198072808772',
-  },
-  {
-    name: 'Alex',
-    id: '76561199014752451',
-  },
-  {
-    name: 'Darren',
-    id: '76561198108301525',
-  },
-  {
-    name: 'Dan',
-    id: '76561198104361940',
-  },
-  {
-    name: 'Taylor',
-    id: '76561198038416248',
-  },
-  {
-    name: 'Nathan',
-    id: '76561198271731685',
-  },
-  {
-    name: 'Ashton',
-    id: '76561198028184744',
-  },
-  {
-    name: 'Mike',
-    id: '76561198106148866',
-  },
-];
+import {useFetch} from "../util/effects";
+import TextField from "@material-ui/core/TextField";
+import Divider from "@material-ui/core/Divider";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,17 +64,19 @@ function Alert(props) {
 
 function SteamFriendFinder(props) {
   const classes = useStyles();
-  const [allFriends, setAllFriends] = React.useState(friends);
+
+  const [allFriends, setAllFriends] = React.useState([]);
   const [includedFriends, setIncludedFriends] = React.useState([]);
   const [games, setGames] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [textFieldValue, setTextFieldValue] = React.useState(localStorage.getItem('user') === undefined ? '' : localStorage.getItem('user'));
 
   const handleIncludeFriend = async (friend) => {
     const newlyIncludedFriends = includedFriends;
     newlyIncludedFriends.push(friend);
     const filteredAllFriends = allFriends.filter(function (el) {
-      return el.id !== friend.id;
+      return el.steamid !== friend.steamid;
     });
     setIncludedFriends(newlyIncludedFriends);
     setAllFriends(filteredAllFriends);
@@ -119,7 +86,7 @@ function SteamFriendFinder(props) {
     const newAllFriends = allFriends;
     newAllFriends.push(friend);
     const filteredIncludedFriends = includedFriends.filter(function (el) {
-      return el.id !== friend.id;
+      return el.steamid !== friend.steamid;
     });
     setIncludedFriends(filteredIncludedFriends);
     setAllFriends(newAllFriends);
@@ -140,6 +107,23 @@ function SteamFriendFinder(props) {
     setLoading(false);
   };
 
+  const handleSearchFriends = async () => {
+    try {
+      setLoading(true);
+      let profileUrl, idUrl;
+      // if (textFieldValue.split('/'))
+
+
+
+      const response = await axios.post('https://h181cyn1lb.execute-api.eu-central-1.amazonaws.com/default/ashtonSpinaPostUserFriends', {userPersonaName: textFieldValue});
+      localStorage.setItem('user', textFieldValue);
+      setAllFriends(response.data.friends);
+    } catch (error) {
+      setError(true);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className={classes.root}>
       <Snackbar
@@ -149,40 +133,79 @@ function SteamFriendFinder(props) {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert onClose={() => setError(false)} severity="error">
-          Steam Web API has limited calls. Try again in a bit when the limit has
-          reset.
+          Something went wrong.  Maybe you typed something invalid?
+          <br/>
+          Otherwise, the problem is that the Steam Web API has limited capacity.
+          <br/>
+          Try again in a bit when the limit has reset.
         </Alert>
       </Snackbar>
       <Grid container spacing={4} justify="center" alignItems="center">
         <Paper className={classes.content}>
-          <Grid container justify="center">
+          <Grid container justify="center" align="center">
+            <Grid item xs={12}>
+              <Grid container justify="center" align="center">
+                <Grid item xs={6} md={4}>
+                  <TextField label="Enter your Steam Name" variant="outlined" value={textFieldValue} onChange={e => setTextFieldValue(e.target.value)}/>
+                </Grid>
+                <Grid item xs={6} md={4}>
+                  <Button
+                      color="secondary"
+                      variant="contained"
+                      disableElevation
+                      onClick={() => handleSearchFriends()}
+                  >
+                    Search for Friends
+                  </Button>
+                </Grid>
+              </Grid>
+              <br/>
+              <Divider/>
+              <br/>
+            </Grid>
             <Grid item xs={6}>
               <div style={{ marginLeft: '48px' }}>
                 <Typography variant="h5">Included Friends</Typography>
               </div>
               <Grid container className={classes.friendSection}>
                 {includedFriends.map((friend) => (
-                  <Paper
-                    key={`included-${friend.id}`}
-                    className={classes.friendCard}
-                    elevation={4}
-                    onClick={() => handleExcludeFriend(friend)}
+                  <Tooltip
+                      title={
+                        <React.Fragment>
+                          <Typography variant="body1">
+                            Real name: {friend.realname}
+                          </Typography>
+                          <Typography variant="body1">
+                            Last Online: {(new Date(friend.lastlogoff)).toString()}
+                          </Typography>
+                        </React.Fragment>
+                      }
+                      placement="right"
+                      aria-label={`Extra information`}
+                      arrow
                   >
-                    <Grid container>
-                      <Avatar
-                        alt="User Profile"
-                        src={
-                          friend.avatar
-                            ? friend.avatar
-                            : require('../images/steam.svg')
-                        }
-                      />
-                      <Typography className={classes.type} variant="h6">
-                        {friend.name}
-                      </Typography>
-                      <ChevronRightIcon className={classes.rightChev} />
-                    </Grid>
-                  </Paper>
+                    <Paper
+                      key={`included-${friend.steamid}`}
+                      className={classes.friendCard}
+                      elevation={4}
+                      onClick={() => handleExcludeFriend(friend)}
+                    >
+                      <Grid container>
+                        <Avatar
+                          alt="User Profile"
+                          src={
+                            friend.avatar
+                              ? friend.avatar
+                              : require('../images/steam.svg')
+                          }
+                        />
+                        <Typography className={classes.type} variant="h6">
+                          {friend.personaname}
+                        </Typography>
+                        <ChevronRightIcon className={classes.rightChev} />
+                      </Grid>
+                    </Paper>
+                </Tooltip>
                 ))}
               </Grid>
             </Grid>
@@ -192,27 +215,43 @@ function SteamFriendFinder(props) {
               </div>
               <Grid container className={classes.friendSection}>
                 {allFriends.map((friend) => (
-                  <Paper
-                    key={`all-${friend.id}`}
-                    className={classes.friendCard}
-                    elevation={4}
-                    onClick={() => handleIncludeFriend(friend)}
+                  <Tooltip
+                      title={
+                        <React.Fragment>
+                          <Typography variant="body1">
+                            Real name: {friend.realname}
+                          </Typography>
+                          <Typography variant="body1">
+                            Last Online: {(new Date(friend.lastlogoff)).toString()}
+                          </Typography>
+                        </React.Fragment>
+                      }
+                      placement="left"
+                      aria-label={`Extra information`}
+                      arrow
                   >
-                    <Grid container>
-                      <ChevronLeftIcon className={classes.leftChev} />
-                      <Avatar
-                        alt="User Profile"
-                        src={
-                          friend.avatar
-                            ? friend.avatar
-                            : require('../images/steam.svg')
-                        }
-                      />
-                      <Typography className={classes.type} variant="h6">
-                        {friend.name}
-                      </Typography>
-                    </Grid>
-                  </Paper>
+                    <Paper
+                      key={`all-${friend.steamid}`}
+                      className={classes.friendCard}
+                      elevation={4}
+                      onClick={() => handleIncludeFriend(friend)}
+                    >
+                      <Grid container>
+                        <ChevronLeftIcon className={classes.leftChev} />
+                        <Avatar
+                          alt="User Profile"
+                          src={
+                            friend.avatar
+                              ? friend.avatar
+                              : require('../images/steam.svg')
+                          }
+                        />
+                        <Typography className={classes.type} variant="h6">
+                          {friend.personaname}
+                        </Typography>
+                      </Grid>
+                    </Paper>
+                  </Tooltip>
                 ))}
               </Grid>
             </Grid>
@@ -230,7 +269,7 @@ function SteamFriendFinder(props) {
               >
                 {loading && <CircularProgress color="secondary" />}
                 {!loading && (
-                  <Grid xs={12}>
+                  <Grid item xs={12}>
                     <Button
                       color="secondary"
                       variant="contained"
@@ -242,7 +281,7 @@ function SteamFriendFinder(props) {
                   </Grid>
                 )}
                 {!loading && !Object.keys(games).length && (
-                  <Grid xs={12}>
+                  <Grid item xs={12}>
                     <Typography className={classes.type} variant="h6">
                       No friends selected
                     </Typography>
@@ -256,7 +295,7 @@ function SteamFriendFinder(props) {
                       elevation={4}
                     >
                       <Grid container>
-                        <Grid xs={2}>
+                        <Grid item xs={2}>
                           <LazyLoadComponent>
                             <Avatar
                               alt="User Profile"
@@ -268,12 +307,12 @@ function SteamFriendFinder(props) {
                             />
                           </LazyLoadComponent>
                         </Grid>
-                        <Grid xs={5}>
+                        <Grid item xs={5}>
                           <Typography className={classes.type} variant="h6">
                             {games[game].key}
                           </Typography>
                         </Grid>
-                        <Grid xs={5}>
+                        <Grid item xs={5}>
                           {games[game].value.people.map((person) => (
                             <Typography
                               className={classes.type}
