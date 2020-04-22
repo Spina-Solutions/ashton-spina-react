@@ -146,20 +146,24 @@ class BlogLayout extends React.Component {
                           justify="center"
                           alignItems="center"
                         >
-                          {items[key].category !== undefined && (
-                            <div>
-                              <Typography variant="subtitle1">
-                                {items[key].category}
+                          <Grid container justify="center" alignItems="center">
+                            {items[key].category !== undefined && (
+                              <Grid item xs={12}>
+                                <Typography variant="subtitle1">
+                                  {items[key].category}
+                                </Typography>
+                              </Grid>
+                            )}
+                            <Grid item xs={12}>
+                              <Typography
+                                variant={
+                                  this.state.width < 600 ? 'body2' : 'h6'
+                                }
+                              >
+                                {items[key].hook}
                               </Typography>
-                            </div>
-                          )}
-                          <div>
-                            <Typography
-                              variant={this.state.width < 600 ? 'body2' : 'h6'}
-                            >
-                              {items[key].hook}
-                            </Typography>
-                          </div>
+                            </Grid>
+                          </Grid>
                         </Grid>
                       </Grid>
                     </Paper>
@@ -175,13 +179,24 @@ class BlogLayout extends React.Component {
                           justify="center"
                           alignItems="center"
                         >
-                          <div>
-                            <Typography
-                              variant={this.state.width < 600 ? 'body2' : 'h6'}
-                            >
-                              {items[key].hook}
-                            </Typography>
-                          </div>
+                          <Grid container justify="center" alignItems="center">
+                            {items[key].category !== undefined && (
+                              <Grid item xs={12}>
+                                <Typography variant="subtitle1">
+                                  {items[key].category}
+                                </Typography>
+                              </Grid>
+                            )}
+                            <Grid item xs={12}>
+                              <Typography
+                                variant={
+                                  this.state.width < 600 ? 'body2' : 'h6'
+                                }
+                              >
+                                {items[key].hook}
+                              </Typography>
+                            </Grid>
+                          </Grid>
                         </Grid>
                         <Grid
                           item

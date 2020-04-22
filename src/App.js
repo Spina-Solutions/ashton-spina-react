@@ -99,6 +99,7 @@ const blogPosts = [
     iconUrl: '/icons/man.svg',
     paperBackground: '#b71c1c',
     imageUrl: require('./images/thumbs/gta_space_usage_tn.jpg'),
+    category: 'About',
   },
   {
     title: "What I've Done",
@@ -108,6 +109,15 @@ const blogPosts = [
     iconUrl: '/icons/cash-flow.svg',
     paperBackground: '#4a148c',
     imageUrl: require('./images/thumbs/gta_space_usage_tn.jpg'),
+    category: 'About',
+  },
+  {
+    title: 'Steam Game Group Finder',
+    hook: 'Find games that your group of friends can play on steam together!',
+    url: '/steam-game-group',
+    iconUrl: require('./images/steam.svg'),
+    paperBackground: '#c6d4df',
+    category: 'Tool',
   },
   {
     title: "Ontario's City Problem",
@@ -117,7 +127,7 @@ const blogPosts = [
     iconUrl: '/icons/cityscape.svg',
     paperBackground: '#0277bd',
     imageUrl: require('./images/thumbs/gta_space_usage_tn.jpg'),
-    category: 'Blog',
+    category: 'Opinion Piece',
   },
 ];
 
