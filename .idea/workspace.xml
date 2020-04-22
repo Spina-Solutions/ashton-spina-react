@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c357f96a-221d-46ae-ae00-cc1f0387f451" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/util/effects.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/SteamFriendFinder.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/SteamFriendFinder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/effects.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +32,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JavaScript" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../travel-recommender-react" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -81,7 +81,8 @@
       <workItem from="1586964090568" duration="53000" />
       <workItem from="1587218527574" duration="77000" />
       <workItem from="1587218614180" duration="455000" />
-      <workItem from="1587491278787" duration="7380000" />
+      <workItem from="1587491278787" duration="8370000" />
+      <workItem from="1587579129721" duration="6294000" />
     </task>
     <servers />
   </component>
