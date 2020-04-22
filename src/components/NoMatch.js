@@ -7,42 +7,41 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 
-const styles = theme => ({
-    root: {
-        flexGrow: 1,
-    },
-    button: {
-        margin: theme.spacing(1),
-    },
+const styles = (theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
 });
 
-
 function NoMatch(props) {
-    const { classes } = props;
-    return (
-        <div className={classes.root}>
-            <div style={{margin: '20px', height: '89vh'}}>
-                <Grid item xs={12} sm={6}>
-                    <Grid container justify ="center">
-                        <Typography gutterBottom variant="h1" component="h1">
-                            404 : This Page Doesn't Exist
-                        </Typography>
-                        <Grid container justify="center">
-                            <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
-                                <IconButton aria-label="Home" className={classes.button}>
-                                    <HomeIcon style={{ fontSize: '72px' }} color="secondary"/>
-                                </IconButton>
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </div>
-        </div>
-    );
+  const { classes } = props;
+  return (
+    <div className={classes.root}>
+      <div style={{ margin: '20px', height: '89vh' }}>
+        <Grid item xs={12} sm={6}>
+          <Grid container justify="center">
+            <Typography gutterBottom variant="h1" component="h1">
+              404 : This Page Doesn't Exist
+            </Typography>
+            <Grid container justify="center">
+              <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
+                <IconButton aria-label="Home" className={classes.button}>
+                  <HomeIcon style={{ fontSize: '72px' }} color="secondary" />
+                </IconButton>
+              </Link>
+            </Grid>
+          </Grid>
+        </Grid>
+      </div>
+    </div>
+  );
 }
 
 NoMatch.propTypes = {
-    classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(NoMatch);

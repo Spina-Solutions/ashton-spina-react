@@ -390,7 +390,7 @@ For example:
 ### `Button.js`
 
 ```js
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class Button extends Component {
   render() {
@@ -404,8 +404,8 @@ export default Button; // Don’t forget to use export default!
 ### `DangerButton.js`
 
 ```js
-import React, { Component } from 'react';
-import Button from './Button'; // Import a component from another file
+import React, { Component } from "react";
+import Button from "./Button"; // Import a component from another file
 
 class DangerButton extends Component {
   render() {
@@ -439,7 +439,7 @@ Here is an example:
 ### `moduleA.js`
 
 ```js
-const moduleA = 'Hello';
+const moduleA = "Hello";
 
 export { moduleA };
 ```
@@ -447,15 +447,15 @@ export { moduleA };
 ### `App.js`
 
 ```js
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class App extends Component {
   handleClick = () => {
-    import('./moduleA')
+    import("./moduleA")
       .then(({ moduleA }) => {
         // Use moduleA
       })
-      .catch(err => {
+      .catch((err) => {
         // Handle failure
       });
   };
@@ -497,8 +497,8 @@ This project setup uses [Webpack](https://webpack.js.org/) for handling all asse
 ### `Button.js`
 
 ```js
-import React, { Component } from 'react';
-import './Button.css'; // Tell Webpack that Button.js uses these styles
+import React, { Component } from "react";
+import "./Button.css"; // Tell Webpack that Button.js uses these styles
 
 class Button extends Component {
   render() {
@@ -543,9 +543,9 @@ CSS Modules let you use the same CSS class name in different files without worry
 ### `Button.js`
 
 ```js
-import React, { Component } from 'react';
-import styles from './Button.module.css'; // Import css modules stylesheet as styles
-import './another-stylesheet.css'; // Import regular stylesheet
+import React, { Component } from "react";
+import styles from "./Button.module.css"; // Import css modules stylesheet as styles
+import "./another-stylesheet.css"; // Import regular stylesheet
 
 class Button extends Component {
   render() {
@@ -590,8 +590,8 @@ To share variables between Sass files, you can use Sass imports. For example, `s
 This will allow you to do imports like
 
 ```scss
-@import 'styles/_colors.scss'; // assuming a styles directory under src/
-@import '~nprogress/nprogress'; // importing a css file from the nprogress node module
+@import "styles/_colors.scss"; // assuming a styles directory under src/
+@import "~nprogress/nprogress"; // importing a css file from the nprogress node module
 ```
 
 > **Tip:** You can opt into using this feature with [CSS modules](#adding-a-css-modules-stylesheet) too!
@@ -658,8 +658,8 @@ To reduce the number of requests to the server, importing images that are less t
 Here is an example:
 
 ```js
-import React from 'react';
-import logo from './logo.png'; // Tell Webpack this JS file uses this image
+import React from "react";
+import logo from "./logo.png"; // Tell Webpack this JS file uses this image
 
 console.log(logo); // /logo.84287d09.png
 
@@ -695,7 +695,7 @@ An alternative way of handling static assets is described in the next section.
 One way to add SVG files was described in the section above. You can also import SVGs directly as React components. You can use either of the two approaches. In your code it would look like this:
 
 ```js
-import { ReactComponent as Logo } from './logo.svg';
+import { ReactComponent as Logo } from "./logo.svg";
 const App = () => (
   <div>
     {/* Logo is an actual React component */}
@@ -734,7 +734,7 @@ If you put a file into the `public` folder, it will **not** be processed by Webp
 Inside `index.html`, you can use it like this:
 
 ```html
-<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
 ```
 
 Only files inside the `public` folder will be accessible by `%PUBLIC_URL%` prefix. If you need to use a file from `src` or `node_modules`, you’ll have to copy it there to explicitly specify your intention to make this file a part of the build.
@@ -803,7 +803,7 @@ yarn add bootstrap@4 reactstrap
 Import Bootstrap CSS and optionally Bootstrap theme CSS in the beginning of your `src/index.js` file:
 
 ```js
-import 'bootstrap/dist/css/bootstrap.css';
+import "bootstrap/dist/css/bootstrap.css";
 // Put any other imports below so that CSS from your
 // components takes precedence over default styles.
 ```
@@ -811,7 +811,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 Import required reactstrap components within `src/App.js` file or your custom component files:
 
 ```js
-import { Button } from 'reactstrap';
+import { Button } from "reactstrap";
 ```
 
 Now you are ready to use the imported reactstrap components within your component hierarchy defined in the render method. Here is an example [`App.js`](https://gist.githubusercontent.com/zx6658/d9f128cd57ca69e583ea2b5fea074238/raw/a56701c142d0c622eb6c20a457fbc01d708cb485/App.js) redone using reactstrap.
@@ -830,7 +830,7 @@ To customize Bootstrap, create a file called `src/custom.scss` (or similar) and 
 $body-bg: #000;
 
 // Import Bootstrap and its default variables
-@import '~bootstrap/scss/bootstrap.scss';
+@import "~bootstrap/scss/bootstrap.scss";
 ```
 
 > **Note:** You must prefix imports from `node_modules` with `~` as displayed above.
@@ -838,7 +838,7 @@ $body-bg: #000;
 Finally, import the newly created `.scss` file instead of the default Bootstrap `.css` in the beginning of your `src/index.js` file, for example:
 
 ```javascript
-import './custom.scss';
+import "./custom.scss";
 ```
 
 ## Adding Flow
@@ -879,7 +879,7 @@ yarn upgrade babel-plugin-relay@dev
 Then, wherever you use the `graphql` template tag, import the macro:
 
 ```js
-import graphql from 'babel-plugin-relay/macro';
+import graphql from "babel-plugin-relay/macro";
 // instead of:
 //   import { graphql } from "babel-plugin-relay"
 
@@ -970,7 +970,7 @@ a `.env` file. Both of these ways are described in the next few sections.
 Having access to the `NODE_ENV` is also useful for performing actions conditionally:
 
 ```js
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   analytics.disable();
 }
 ```
@@ -1208,9 +1208,9 @@ $ yarn add http-proxy-middleware
 Next, create `src/setupProxy.js` and place the following contents in it:
 
 ```js
-const proxy = require('http-proxy-middleware');
+const proxy = require("http-proxy-middleware");
 
-module.exports = function(app) {
+module.exports = function (app) {
   // ...
 };
 ```
@@ -1218,10 +1218,10 @@ module.exports = function(app) {
 You can now register proxies as you wish! Here's an example using the above `http-proxy-middleware`:
 
 ```js
-const proxy = require('http-proxy-middleware');
+const proxy = require("http-proxy-middleware");
 
-module.exports = function(app) {
-  app.use(proxy('/api', { target: 'http://localhost:5000/' }));
+module.exports = function (app) {
+  app.use(proxy("/api", { target: "http://localhost:5000/" }));
 };
 ```
 
@@ -1266,11 +1266,13 @@ Note that the server will use a self-signed certificate, so your web browser wil
 Since Create React App doesn’t support server rendering, you might be wondering how to make `<meta>` tags dynamic and reflect the current URL. To solve this, we recommend to add placeholders into the HTML, like this:
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta property="og:title" content="__OG_TITLE__">
-    <meta property="og:description" content="__OG_DESCRIPTION__">
+    <meta property="og:title" content="__OG_TITLE__" />
+    <meta property="og:description" content="__OG_DESCRIPTION__" />
+  </head>
+</html>
 ```
 
 Then, on the server, regardless of the backend you use, you can read `index.html` into memory and replace `__OG_TITLE__`, `__OG_DESCRIPTION__`, and any other placeholders with values depending on the current URL. Just make sure to sanitize and escape the interpolated values so that they are safe to embed into HTML!
@@ -1351,9 +1353,9 @@ To create tests, add `it()` (or `test()`) blocks with the name of the test and i
 Jest provides a built-in `expect()` global function for making assertions. A basic test could look like this:
 
 ```js
-import sum from './sum';
+import sum from "./sum";
 
-it('sums numbers', () => {
+it("sums numbers", () => {
   expect(sum(1, 2)).toEqual(3);
   expect(sum(2, 2)).toEqual(4);
 });
@@ -1369,12 +1371,12 @@ There is a broad spectrum of component testing techniques. They range from a “
 Different projects choose different testing tradeoffs based on how often components change, and how much logic they contain. If you haven’t decided on a testing strategy yet, we recommend that you start with creating simple smoke tests for your components:
 
 ```js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
+it("renders without crashing", () => {
+  const div = document.createElement("div");
   ReactDOM.render(<App />, div);
 });
 ```
@@ -1402,8 +1404,8 @@ The adapter will also need to be configured in your [global setup file](#initial
 #### `src/setupTests.js`
 
 ```js
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { configure } from "enzyme";
+import Adapter from "enzyme-adapter-react-16";
 
 configure({ adapter: new Adapter() });
 ```
@@ -1413,11 +1415,11 @@ configure({ adapter: new Adapter() });
 Now you can write a smoke test with it:
 
 ```js
-import React from 'react';
-import { shallow } from 'enzyme';
-import App from './App';
+import React from "react";
+import { shallow } from "enzyme";
+import App from "./App";
 
-it('renders without crashing', () => {
+it("renders without crashing", () => {
   shallow(<App />);
 });
 ```
@@ -1429,11 +1431,11 @@ You can read the [Enzyme documentation](http://airbnb.io/enzyme/) for more testi
 Here is an example from Enzyme documentation that asserts specific output, rewritten to use Jest matchers:
 
 ```js
-import React from 'react';
-import { shallow } from 'enzyme';
-import App from './App';
+import React from "react";
+import { shallow } from "enzyme";
+import App from "./App";
 
-it('renders welcome message', () => {
+it("renders welcome message", () => {
   const wrapper = shallow(<App />);
   const welcome = <h2>Welcome to React</h2>;
   // expect(wrapper.contains(welcome)).toBe(true);
@@ -1465,7 +1467,7 @@ yarn add jest-enzyme
 Import it in [`src/setupTests.js`](#initializing-test-environment) to make its matchers available in every test:
 
 ```js
-import 'jest-enzyme';
+import "jest-enzyme";
 ```
 
 #### Use `react-testing-library`
@@ -1489,22 +1491,22 @@ Similar to `enzyme` you can create a `src/setupTests.js` file to avoid boilerpla
 ```js
 // react-testing-library renders your components to document.body,
 // this will ensure they're removed after each test.
-import 'react-testing-library/cleanup-after-each';
+import "react-testing-library/cleanup-after-each";
 
 // this adds jest-dom's custom assertions
-import 'jest-dom/extend-expect';
+import "jest-dom/extend-expect";
 ```
 
 Here's an example of using `react-testing-library` and `jest-dom` for testing that the `<App />` component renders "Welcome to React".
 
 ```js
-import React from 'react';
-import { render } from 'react-testing-library';
-import App from './App';
+import React from "react";
+import { render } from "react-testing-library";
+import App from "./App";
 
-it('renders welcome message', () => {
+it("renders welcome message", () => {
   const { getByText } = render(<App />);
-  expect(getByText('Welcome to React')).toBeInTheDocument();
+  expect(getByText("Welcome to React")).toBeInTheDocument();
 });
 ```
 
@@ -1517,8 +1519,8 @@ We recommend that you use `expect()` for assertions and `jest.fn()` for spies. I
 However, if you are used to other libraries, such as [Chai](http://chaijs.com/) and [Sinon](http://sinonjs.org/), or if you have existing code using them that you’d like to port over, you can import them normally like this:
 
 ```js
-import sinon from 'sinon';
-import { expect } from 'chai';
+import sinon from "sinon";
+import { expect } from "chai";
 ```
 
 and then use them in your tests like you normally do.
@@ -1905,12 +1907,12 @@ If you do decide to opt-in to service worker registration, please take the
 following into account:
 
 1. After the initial caching is done, the [service worker lifecycle](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle)
-controls when updated content ends up being shown to users. In order to guard against
-[race conditions with lazy-loaded content](https://github.com/facebook/create-react-app/issues/3613#issuecomment-353467430),
-the default behavior is to conservatively keep the updated service worker in the "[waiting](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#waiting)"
-state. This means that users will end up seeing older content until they close (reloading is not
-enough) their existing, open tabs. See [this blog post](https://jeffy.info/2018/10/10/sw-in-c-r-a.html)
-for more details about this behavior.
+   controls when updated content ends up being shown to users. In order to guard against
+   [race conditions with lazy-loaded content](https://github.com/facebook/create-react-app/issues/3613#issuecomment-353467430),
+   the default behavior is to conservatively keep the updated service worker in the "[waiting](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#waiting)"
+   state. This means that users will end up seeing older content until they close (reloading is not
+   enough) their existing, open tabs. See [this blog post](https://jeffy.info/2018/10/10/sw-in-c-r-a.html)
+   for more details about this behavior.
 
 1. Users aren't always familiar with offline-first web apps. It can be useful to
    [let the user know](https://developers.google.com/web/fundamentals/instant-and-offline/offline-ux#inform_the_user_when_the_app_is_ready_for_offline_consumption)
@@ -2029,14 +2031,14 @@ You don’t necessarily need a static server in order to run a Create React App 
 Here’s a programmatic example using [Node](https://nodejs.org/) and [Express](http://expressjs.com/):
 
 ```javascript
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, "build")));
 
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.listen(9000);
@@ -2459,19 +2461,19 @@ Note that in order to support routers that use HTML5 `pushState` API, you may wa
 
 You can adjust various development and production settings by setting environment variables in your shell or with [.env](#adding-development-environment-variables-in-env).
 
-| Variable             |      Development       |     Production     | Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|       Variable       |      Development       |     Production     | Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | :------------------: | :--------------------: | :----------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| BROWSER              |   :white_check_mark:   |        :x:         | By default, Create React App will open the default system browser, favoring Chrome on macOS. Specify a [browser](https://github.com/sindresorhus/opn#app) to override this behavior, or set it to `none` to disable it completely. If you need to customize the way the browser is launched, you can specify a node script instead. Any arguments passed to `npm start` will also be passed to this script, and the url where your app is served will be the last argument. Your script's file name must have the `.js` extension.                                                                                                                                       |
-| HOST                 |   :white_check_mark:   |        :x:         | By default, the development web server binds to `localhost`. You may use this variable to specify a different host.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| PORT                 |   :white_check_mark:   |        :x:         | By default, the development web server will attempt to listen on port 3000 or prompt you to attempt the next available port. You may use this variable to specify a different port.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| HTTPS                |   :white_check_mark:   |        :x:         | When set to `true`, Create React App will run the development server in `https` mode.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| PUBLIC_URL           |          :x:           | :white_check_mark: | Create React App assumes your application is hosted at the serving web server's root or a subpath as specified in [`package.json` (`homepage`)](#building-for-relative-paths). Normally, Create React App ignores the hostname. You may use this variable to force assets to be referenced verbatim to the url you provide (hostname included). This may be particularly useful when using a CDN to host your application.                                                                                                                                                                                                                                               |
-| CI                   | :large_orange_diamond: | :white_check_mark: | When set to `true`, Create React App treats warnings as failures in the build. It also makes the test runner non-watching. Most CIs set this flag by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| REACT_EDITOR         |   :white_check_mark:   |        :x:         | When an app crashes in development, you will see an error overlay with clickable stack trace. When you click on it, Create React App will try to determine the editor you are using based on currently running processes, and open the relevant source file. You can [send a pull request to detect your editor of choice](https://github.com/facebook/create-react-app/issues/2636). Setting this environment variable overrides the automatic detection. If you do it, make sure your systems [PATH](<https://en.wikipedia.org/wiki/PATH_(variable)>) environment variable points to your editor’s bin folder. You can also set it to `none` to disable it completely. |
+|       BROWSER        |   :white_check_mark:   |        :x:         | By default, Create React App will open the default system browser, favoring Chrome on macOS. Specify a [browser](https://github.com/sindresorhus/opn#app) to override this behavior, or set it to `none` to disable it completely. If you need to customize the way the browser is launched, you can specify a node script instead. Any arguments passed to `npm start` will also be passed to this script, and the url where your app is served will be the last argument. Your script's file name must have the `.js` extension.                                                                                                                                       |
+|         HOST         |   :white_check_mark:   |        :x:         | By default, the development web server binds to `localhost`. You may use this variable to specify a different host.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|         PORT         |   :white_check_mark:   |        :x:         | By default, the development web server will attempt to listen on port 3000 or prompt you to attempt the next available port. You may use this variable to specify a different port.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|        HTTPS         |   :white_check_mark:   |        :x:         | When set to `true`, Create React App will run the development server in `https` mode.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|      PUBLIC_URL      |          :x:           | :white_check_mark: | Create React App assumes your application is hosted at the serving web server's root or a subpath as specified in [`package.json` (`homepage`)](#building-for-relative-paths). Normally, Create React App ignores the hostname. You may use this variable to force assets to be referenced verbatim to the url you provide (hostname included). This may be particularly useful when using a CDN to host your application.                                                                                                                                                                                                                                               |
+|          CI          | :large_orange_diamond: | :white_check_mark: | When set to `true`, Create React App treats warnings as failures in the build. It also makes the test runner non-watching. Most CIs set this flag by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|     REACT_EDITOR     |   :white_check_mark:   |        :x:         | When an app crashes in development, you will see an error overlay with clickable stack trace. When you click on it, Create React App will try to determine the editor you are using based on currently running processes, and open the relevant source file. You can [send a pull request to detect your editor of choice](https://github.com/facebook/create-react-app/issues/2636). Setting this environment variable overrides the automatic detection. If you do it, make sure your systems [PATH](<https://en.wikipedia.org/wiki/PATH_(variable)>) environment variable points to your editor’s bin folder. You can also set it to `none` to disable it completely. |
 | CHOKIDAR_USEPOLLING  |   :white_check_mark:   |        :x:         | When set to `true`, the watcher runs in polling mode, as necessary inside a VM. Use this option if `npm start` isn't detecting changes.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| GENERATE_SOURCEMAP   |          :x:           | :white_check_mark: | When set to `false`, source maps are not generated for a production build. This solves OOM issues on some smaller machines.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| NODE_PATH            |   :white_check_mark:   | :white_check_mark: | Same as [`NODE_PATH` in Node.js](https://nodejs.org/api/modules.html#modules_loading_from_the_global_folders), but only relative folders are allowed. Can be handy for emulating a monorepo setup by setting `NODE_PATH=src`.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| INLINE_RUNTIME_CHUNK |          :x:           | :white_check_mark: | By default, Create React App will embed the runtime script into `index.html` during the production build. When set to `false`, the script will not be embedded and will be imported as usual. This is normally required when dealing with CSP.                                                                                                                                                                                                                                                                                                                                                                                                                       |
+|  GENERATE_SOURCEMAP  |          :x:           | :white_check_mark: | When set to `false`, source maps are not generated for a production build. This solves OOM issues on some smaller machines.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|      NODE_PATH       |   :white_check_mark:   | :white_check_mark: | Same as [`NODE_PATH` in Node.js](https://nodejs.org/api/modules.html#modules_loading_from_the_global_folders), but only relative folders are allowed. Can be handy for emulating a monorepo setup by setting `NODE_PATH=src`.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| INLINE_RUNTIME_CHUNK |          :x:           | :white_check_mark: | By default, Create React App will embed the runtime script into `index.html` during the production build. When set to `false`, the script will not be embedded and will be imported as usual. This is normally required when dealing with CSP.                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 ## Troubleshooting
 
@@ -2534,20 +2536,20 @@ To add a specific Moment.js locale to your bundle, you need to import it explici
 For example:
 
 ```js
-import moment from 'moment';
-import 'moment/locale/fr';
+import moment from "moment";
+import "moment/locale/fr";
 ```
 
 If you are importing multiple locales this way, you can later switch between them by calling `moment.locale()` with the locale name:
 
 ```js
-import moment from 'moment';
-import 'moment/locale/fr';
-import 'moment/locale/es';
+import moment from "moment";
+import "moment/locale/fr";
+import "moment/locale/es";
 
 // ...
 
-moment.locale('fr');
+moment.locale("fr");
 ```
 
 This will only work for locales that have been explicitly imported before.

@@ -1,6 +1,6 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
-import Slider from "./Slider/Slider";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import Slider from './Slider/Slider';
 
 class SlideOut extends React.Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class SlideOut extends React.Component {
       curUniqId: props.uniqId,
       prevChild: null,
       prevUniqId: null,
-      animationCallback: null
+      animationCallback: null,
     };
   }
 
@@ -21,27 +21,25 @@ class SlideOut extends React.Component {
     const uniqId = this.props.uniqKey || this.props.children.type;
 
     if (prevUniqId !== uniqId) {
-
       this.setState({
         childPosition: Slider.TO_LEFT,
         curChild: this.props.children,
         curUniqId: uniqId,
         prevChild: prevProps.children,
         prevUniqId,
-        animationCallback: this.swapChildren
+        animationCallback: this.swapChildren,
       });
     }
   }
 
   swapChildren = () => {
-
     this.setState({
       childPosition: Slider.FROM_RIGHT,
       prevChild: null,
       prevUniqId: null,
       animationCallback: () => {
         this.setState({ animationCallback: null });
-      }
+      },
     });
   };
 
@@ -59,7 +57,7 @@ class SlideOut extends React.Component {
 
 const animateSwitch = (CustomSwitch, AnimatorComponent) => ({
   updateStep,
-  children
+  children,
 }) => (
   <Route
     render={({ location }) => (
