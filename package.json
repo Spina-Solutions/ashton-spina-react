@@ -8,7 +8,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "sync": "yarn build && aws s3 sync build/ s3://ashtonspina.com",
+    "sync": "yarn build && aws s3 sync build/ s3://ashtonspina.com && aws cloudfront create-invalidation --distribution-id E3EI5HE1PEA4QR --paths \"/*\"",
     "analyze": "source-map-explorer build/static/js/main.*",
     "lint:prettier": "prettier \"**/*.{ts,js,json,css,scss,vue,html,md}\" \"!{/coverage/**/*,*/dist/**/*,*/build/**/*, /documentation/**/*}\" --check",
     "lint:prettier:fix": "yarn lint:prettier --write"
