@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c357f96a-221d-46ae-ae00-cc1f0387f451" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/friends.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/gaming.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/steam.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/windowSize.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/SteamFriendFinder.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/SteamFriendFinder.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +19,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProjectId" id="1PC9zPGapjcOaiUvrk3rjJA7xNC" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -146,6 +144,10 @@
     </state>
     <state x="2908" y="461" width="584" height="540" key="find.popup/1920.0.2560.1440/4480.167.1920.1080/0.176.1920.1080@1920.0.2560.1440" timestamp="1586980213307" />
     <state x="2908" y="461" width="584" height="600" key="find.popup/1920.0.2560.1440/4480.360.1920.1080/0.490.1920.1080@1920.0.2560.1440" timestamp="1587656760003" />
+    <state x="2864" y="340" key="run.anything.popup" timestamp="1588699886656">
+      <screen x="1920" y="0" width="2560" height="1440" />
+    </state>
+    <state x="2864" y="340" key="run.anything.popup/1920.0.2560.1440/0.360.1920.1080/4480.247.1920.1080@1920.0.2560.1440" timestamp="1588699886656" />
     <state x="2863" y="349" width="672" height="678" key="search.everywhere.popup" timestamp="1587661938941">
       <screen x="1920" y="0" width="2560" height="1440" />
     </state>

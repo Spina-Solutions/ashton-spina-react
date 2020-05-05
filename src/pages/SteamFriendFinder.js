@@ -72,7 +72,6 @@ const useStyles = makeStyles((theme) => ({
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    minWidth: 360,
     width: '100%',
     minHeight: '60px'
   },
@@ -368,12 +367,14 @@ function SteamFriendFinder(props) {
                                           ? friend.avatar
                                           : require('./steam.svg')
                                       }
+                                      style={{height: isMobile(size) ? '18px' : '48px', width: isMobile(size) ? '18px' : '48px', marginTop: isMobile(size) ? '12px' : 0}}
                                     />
                                   </Grid>
                                   <Grid item xs={7}>
                                     <Typography
                                       className={classes.type}
                                       variant={isMobile(size) ? 'body2' : 'h6'}
+                                      style={{wordWrap: 'break-word'}}
                                     >
                                       {friend.personaname}
                                     </Typography>
@@ -451,12 +452,14 @@ function SteamFriendFinder(props) {
                                             ? friend.avatar
                                             : require('./steam.svg')
                                         }
+                                      style={{height: isMobile(size) ? '18px' : '48px', width: isMobile(size) ? '18px' : '48px', marginTop: isMobile(size) ? '12px' : 0}}
                                       />
                                     </Grid>
                                     <Grid item xs={7}>
                                       <Typography
                                         className={classes.type}
                                         variant={isMobile(size) ? 'body2' : 'h6'}
+                                        style={{wordWrap: 'break-word'}}
                                       >
                                         {friend.personaname}
                                       </Typography>
@@ -482,7 +485,7 @@ function SteamFriendFinder(props) {
                 >
                   <InputBase
                       className={classes.searchInput}
-                      placeholder="Enter Steam Name of Friend to Find in your Friends List"
+                      placeholder="Search Friends"
                       inputProps={{ 'aria-label': 'steam info' }}
                       value={friendsFilter}
                       onChange={(e) => setFriendsFilter(e.target.value)}
@@ -518,10 +521,10 @@ function SteamFriendFinder(props) {
                                 aria-label="text alignment"
                             >
                               <ToggleButton value="none" aria-label="left aligned">
-                                Show All Games
+                                All
                               </ToggleButton>
                               <ToggleButton value="all" aria-label="centered">
-                                Show Only Games Entire Group Owns
+                                Only Games Entire Group Owns
                               </ToggleButton>
                             </ToggleButtonGroup>
                           </Grid>
@@ -577,12 +580,12 @@ function SteamFriendFinder(props) {
                                             ? `https://steamcdn-a.akamaihd.net/steam/apps/${games[game].value.appid}/header.jpg`
                                             : require('./steam.svg')
                                         }
-                                        style={{minWidth: '72px', minHeight: '72px'}}
+                                        style={{height: isMobile(size) ? '24px' : '72px', width: isMobile(size) ? '24px' : '72px'}}
                                       />
                                     </LazyLoadComponent>
                                   </Grid>
                                   <Grid item xs={3}>
-                                    <Typography className={classes.type} variant="h6">
+                                    <Typography className={classes.type} variant={isMobile(size) ? 'body1' : 'h6'}>
                                       {games[game].key}
                                     </Typography>
                                   </Grid>
