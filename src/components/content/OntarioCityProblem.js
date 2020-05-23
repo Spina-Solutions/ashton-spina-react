@@ -8,6 +8,11 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import YouTube from 'react-youtube';
+import {
+  structuredBlogPostSchemaElement,
+  toTitleCase,
+} from '../../util/textformatting';
+import { Helmet } from 'react-helmet';
 
 const styles = (theme) => ({
   root: {
@@ -70,6 +75,41 @@ function OntarioCityProblem(props) {
   };
   return (
     <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Ashton Spina: Ontario's City Problem</title>
+        <meta
+          name="description"
+          content={`Ontario has a problem with how it handles urbanization and cities. Read my opinion on what that problem is and how to change it.`}
+        />
+        <script className="structured-data-list" type="application/ld+json">
+          {structuredBlogPostSchemaElement(
+            "Ontario's City Problem",
+            `Ontario has a problem with how it handles urbanization and cities. Read my opinion on what that problem is and how to change it.`,
+            require('../../images/gta_space_usage.jpg')
+          )}
+        </script>
+        <script className="structured-data-list" type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Ashton Spina',
+                item: 'https://ashtonspina.com',
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: "Ontario's City Problem",
+                item: window.location.href,
+              },
+            ],
+          })}
+        </script>
+      </Helmet>
       <CardMedia
         className={classes.media}
         image={require('../../images/gta_space_usage.jpg')}

@@ -87,56 +87,113 @@ class BlogLayout extends React.Component {
                             },
                           }}
                         >
-                          <Link
-                            to={items[key].url}
-                            style={{
-                              textDecoration: 'none',
-                              color: 'black',
-                            }}
-                          >
-                            <Grid
-                              className={classes.image}
-                              container
-                              justify="center"
-                              alignItems="center"
+                          {items[key].external ? (
+                            <a
+                              href={items[key].url}
+                              style={{
+                                textDecoration: 'none',
+                                color: 'black',
+                              }}
                             >
                               <Grid
-                                item
-                                xs={12}
-                                md={6}
                                 className={classes.image}
-                                align="center"
+                                container
+                                justify="center"
+                                alignItems="center"
                               >
-                                <Tooltip
-                                  title="Click here to find out more"
-                                  aria-label="Click here to find out more"
+                                <Grid
+                                  item
+                                  xs={12}
+                                  md={6}
+                                  className={classes.image}
+                                  align="center"
                                 >
-                                  <img
-                                    src={items[key].iconUrl}
-                                    alt={items[key].name}
-                                    style={{
-                                      height:
-                                        this.state.width < 600
-                                          ? '100px'
-                                          : '180px',
-                                      width:
-                                        this.state.width < 600
-                                          ? '100px'
-                                          : '180px',
-                                    }}
-                                  />
-                                </Tooltip>
+                                  <Tooltip
+                                    title="Click here to find out more"
+                                    aria-label="Click here to find out more"
+                                  >
+                                    <img
+                                      src={items[key].iconUrl}
+                                      alt={items[key].name}
+                                      style={{
+                                        height:
+                                          this.state.width < 600
+                                            ? '100px'
+                                            : '180px',
+                                        width:
+                                          this.state.width < 600
+                                            ? '100px'
+                                            : '180px',
+                                      }}
+                                    />
+                                  </Tooltip>
+                                </Grid>
+                                <Grid item xs={12} md={6} align="center">
+                                  <Typography
+                                    variant={
+                                      this.state.width < 600 ? 'h6' : 'h3'
+                                    }
+                                    className={classes.text}
+                                  >
+                                    {items[key].title}
+                                  </Typography>
+                                </Grid>
                               </Grid>
-                              <Grid item xs={12} md={6} align="center">
-                                <Typography
-                                  variant={this.state.width < 600 ? 'h6' : 'h3'}
-                                  className={classes.text}
+                            </a>
+                          ) : (
+                            <Link
+                              to={items[key].url}
+                              style={{
+                                textDecoration: 'none',
+                                color: 'black',
+                              }}
+                            >
+                              <Grid
+                                className={classes.image}
+                                container
+                                justify="center"
+                                alignItems="center"
+                              >
+                                <Grid
+                                  item
+                                  xs={12}
+                                  md={6}
+                                  className={classes.image}
+                                  align="center"
                                 >
-                                  {items[key].title}
-                                </Typography>
+                                  <Tooltip
+                                    title="Click here to find out more"
+                                    aria-label="Click here to find out more"
+                                  >
+                                    <img
+                                      src={items[key].iconUrl}
+                                      alt={items[key].name}
+                                      style={{
+                                        height:
+                                          this.state.width < 600
+                                            ? '100px'
+                                            : '180px',
+                                        width:
+                                          this.state.width < 600
+                                            ? '100px'
+                                            : '180px',
+                                      }}
+                                    />
+                                  </Tooltip>
+                                </Grid>
+                                <Grid item xs={12} md={6} align="center">
+                                  <Typography
+                                    variant={
+                                      this.state.width < 600 ? 'h6' : 'h3'
+                                    }
+                                    className={classes.text}
+                                  >
+                                    {items[key].title}
+                                  </Typography>
+                                </Grid>
                               </Grid>
-                            </Grid>
-                          </Link>
+                            </Link>
+                          )}
                         </Grid>
                         <Grid
                           item
@@ -209,56 +266,113 @@ class BlogLayout extends React.Component {
                             },
                           }}
                         >
-                          <Link
-                            to={items[key].url}
-                            style={{
-                              textDecoration: 'none',
-                              color: 'black',
-                            }}
-                          >
-                            <Grid
-                              className={classes.image}
-                              container
-                              justify="center"
-                              alignItems="center"
+                          {items[key].external ? (
+                            <a
+                              href={items[key].url}
+                              style={{
+                                textDecoration: 'none',
+                                color: 'black',
+                              }}
                             >
-                              <Grid item xs={12} md={6} align="center">
-                                <Typography
-                                  variant={this.state.width < 600 ? 'h6' : 'h3'}
-                                  className={classes.text}
-                                >
-                                  {items[key].title}
-                                </Typography>
-                              </Grid>
                               <Grid
-                                item
-                                xs={12}
-                                md={6}
                                 className={classes.image}
-                                align="center"
+                                container
+                                justify="center"
+                                alignItems="center"
                               >
-                                <Tooltip
-                                  title="Click here to find out more"
-                                  aria-label="Click here to find out more"
+                                <Grid item xs={12} md={6} align="center">
+                                  <Typography
+                                    variant={
+                                      this.state.width < 600 ? 'h6' : 'h3'
+                                    }
+                                    className={classes.text}
+                                  >
+                                    {items[key].title}
+                                  </Typography>
+                                </Grid>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  md={6}
+                                  className={classes.image}
+                                  align="center"
                                 >
-                                  <img
-                                    src={items[key].iconUrl}
-                                    alt={items[key].name}
-                                    style={{
-                                      height:
-                                        this.state.width < 600
-                                          ? '100px'
-                                          : '180px',
-                                      width:
-                                        this.state.width < 600
-                                          ? '100px'
-                                          : '180px',
-                                    }}
-                                  />
-                                </Tooltip>
+                                  <Tooltip
+                                    title="Click here to find out more"
+                                    aria-label="Click here to find out more"
+                                  >
+                                    <img
+                                      src={items[key].iconUrl}
+                                      alt={items[key].name}
+                                      style={{
+                                        height:
+                                          this.state.width < 600
+                                            ? '100px'
+                                            : '180px',
+                                        width:
+                                          this.state.width < 600
+                                            ? '100px'
+                                            : '180px',
+                                      }}
+                                    />
+                                  </Tooltip>
+                                </Grid>
                               </Grid>
-                            </Grid>
-                          </Link>
+                            </a>
+                          ) : (
+                            <Link
+                              to={items[key].url}
+                              style={{
+                                textDecoration: 'none',
+                                color: 'black',
+                              }}
+                            >
+                              <Grid
+                                className={classes.image}
+                                container
+                                justify="center"
+                                alignItems="center"
+                              >
+                                <Grid item xs={12} md={6} align="center">
+                                  <Typography
+                                    variant={
+                                      this.state.width < 600 ? 'h6' : 'h3'
+                                    }
+                                    className={classes.text}
+                                  >
+                                    {items[key].title}
+                                  </Typography>
+                                </Grid>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  md={6}
+                                  className={classes.image}
+                                  align="center"
+                                >
+                                  <Tooltip
+                                    title="Click here to find out more"
+                                    aria-label="Click here to find out more"
+                                  >
+                                    <img
+                                      src={items[key].iconUrl}
+                                      alt={items[key].name}
+                                      style={{
+                                        height:
+                                          this.state.width < 600
+                                            ? '100px'
+                                            : '180px',
+                                        width:
+                                          this.state.width < 600
+                                            ? '100px'
+                                            : '180px',
+                                      }}
+                                    />
+                                  </Tooltip>
+                                </Grid>
+                              </Grid>
+                            </Link>
+                          )}
                         </Grid>
                       </Grid>
                     </Paper>
