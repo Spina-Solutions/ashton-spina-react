@@ -33,6 +33,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-ga": "2.7.0",
+    "react-helmet": "^6.0.0",
     "react-lazy-load-image-component": "1.4.3",
     "react-media": "1.10.0",
     "react-particles-js": "3.0.3",

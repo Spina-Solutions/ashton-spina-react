@@ -33,6 +33,7 @@ const styles = (theme) => ({
 
 function ContentPage(props) {
   const { classes } = props;
+  console.log(props);
   return (
     <div className={classes.root}>
       <Grid container>

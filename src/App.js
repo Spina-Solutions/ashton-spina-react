@@ -8,7 +8,6 @@ import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Route } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import SwitchWithSlide from './SwitchWithSlide';
-import SteamFriendFinder from './pages/SteamFriendFinder';
 
 const theme = createMuiTheme({
   palette: {
@@ -112,12 +111,23 @@ const blogPosts = [
     category: 'About',
   },
   {
-    title: 'Steam Game Group Finder',
-    hook: 'Find games that your group of friends can play on steam together!',
-    url: '/steam-game-group',
-    iconUrl: require('./images/steam.svg'),
-    paperBackground: '#c6d4df',
+    title: 'Travel-Atlas',
+    hook:
+      'A website dedicated to matching users with a destination that suits their needs.',
+    iconUrl: '/icons/suitcase.svg',
+    paperBackground: '#F9A825',
+    url: 'https://travel-atlas.com',
     category: 'Tool',
+    external: true,
+  },
+  {
+    title: 'Games for your Group',
+    hook: 'Find games that your group of friends can play on steam together!',
+    url: 'https://gamesforyourgroup.com',
+    iconUrl: require('./images/steam.svg'),
+    paperBackground: '#009688',
+    category: 'Tool',
+    external: true,
   },
   {
     title: "Ontario's City Problem",
@@ -182,11 +192,6 @@ class App extends Component {
                         items={projects.sort(() => Math.random() - 0.5)}
                       />
                     )}
-                  />
-                  <Route
-                    exact
-                    path="/steam-game-group"
-                    render={(props) => <SteamFriendFinder />}
                   />
                   <Route path="/content" render={(props) => <ContentPage />} />
                   <Route component={NoMatch} />
