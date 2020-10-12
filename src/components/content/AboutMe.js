@@ -81,7 +81,7 @@ function AboutMe(props) {
         experience at verying levels in Java, C/C++, Android Development,
         ReactJS, NodeJS, MongoDB, and others as well. Though I love web
         technologies, I'm passionate about success more than any one technology
-        and am always looking to expand into n
+        and am always looking to expand into new fields (or something like that).
       </Typography>
       <br />
       <Divider />
