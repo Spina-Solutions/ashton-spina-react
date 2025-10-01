@@ -1,0 +1,8 @@
+# robots.txt for www.ashtonspina.com
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.ashtonspina.com/sitemap.xml
+

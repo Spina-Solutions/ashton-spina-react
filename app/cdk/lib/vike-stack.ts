@@ -201,6 +201,16 @@ export class VikeStack extends cdk.Stack {
 
     distribution.addBehavior("/assets/*", assetOrigin, assetBehaviorOptions);
     distribution.addBehavior("/photography/*", assetOrigin, assetBehaviorOptions);
+    
+    // Add behaviors for SEO files to serve from S3
+    distribution.addBehavior("/sitemap.xml", assetOrigin, {
+      ...assetBehaviorOptions,
+      cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+    });
+    distribution.addBehavior("/robots.txt", assetOrigin, {
+      ...assetBehaviorOptions,
+      cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+    });
 
     // Deploy static assets to the S3 bucket and invalidate the CloudFront cache
     new s3deploy.BucketDeployment(this, "DeployStaticAssets", {
@@ -220,6 +230,22 @@ export class VikeStack extends cdk.Stack {
       cacheControl: [
         s3deploy.CacheControl.maxAge(cdk.Duration.days(365)),
         s3deploy.CacheControl.sMaxAge(cdk.Duration.days(365)),
+      ],
+    });
+    
+    // Deploy SEO files (sitemap.xml, robots.txt) to S3 root
+    new s3deploy.BucketDeployment(this, "DeploySEOFiles", {
+      sources: [s3deploy.Source.asset(join(__dirname, "../../dist/client"), {
+        exclude: ["assets/**", "photography/**", "**/*.js", "**/*.css", "**/*.map"],
+      })],
+      destinationBucket: bucket,
+      distribution,
+      distributionPaths: ["/sitemap.xml", "/robots.txt"],
+      prune: false,
+      outputObjectKeys: false,
+      cacheControl: [
+        s3deploy.CacheControl.maxAge(cdk.Duration.days(1)),
+        s3deploy.CacheControl.sMaxAge(cdk.Duration.days(1)),
       ],
     });
 
