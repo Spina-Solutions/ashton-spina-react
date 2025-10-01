@@ -1,0 +1,10 @@
+{
+  "hosted-zone:account=146425736795:domainName=conjugr8.com:region=us-east-1": {
+    "Id": "/hostedzone/Z04147671P9334YOS7RSR",
+    "Name": "conjugr8.com."
+  },
+  "hosted-zone:account=146425736795:domainName=ashtonspina.com:region=us-east-1": {
+    "Id": "/hostedzone/Z3BPPTY20OJ61G",
+    "Name": "ashtonspina.com."
+  }
+}

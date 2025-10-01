@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <link rel="stylesheet" type="text/css" href="/assets/static/style-8743189a.BcWtY8Ol.css">
+        <link rel="stylesheet" type="text/css" href="/assets/static/layouts_tailwind-00e65532.BR6sVzxW.css">
+        <meta charset="UTF-8" />
+        
+    <title>JobCrawls - Find Your Next Job in Finland | IT, Tech &amp; Remote Jobs</title><meta property="og:title" content="JobCrawls - Find Your Next Job in Finland | IT, Tech &amp; Remote Jobs" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-2FNT5F8TNE"></script><title>JobCrawls - Find Your Next Job in Finland | IT, Tech, Remote</title><meta name="description" content="Discover thousands of job opportunities in Finland. Search IT, tech, remote, and international jobs. Compare salaries, save jobs, and track your applications."/><meta name="keywords" content="jobs finland, it jobs finland, tech jobs finland, remote jobs finland, software engineer finland, developer jobs finland, work in finland, finnish jobs, helsinki jobs, espoo jobs, tampere jobs, turku jobs"/><meta name="language" content="en"/><meta name="author" content="JobCrawls"/><meta name="robots" content="index, follow"/><meta name="revisit-after" content="7 days"/><link rel="canonical" href="https://www.jobcrawls.com/en/strict-origin-when-cross-origin"/><link rel="alternate" href="https://www.jobcrawls.com/fi/strict-origin-when-cross-origin" hrefLang="fi"/><link rel="alternate" href="https://www.jobcrawls.com/sv/strict-origin-when-cross-origin" hrefLang="sv"/><link rel="alternate" href="https://www.jobcrawls.com/en" hrefLang="x-default"/><link rel="icon" href="/assets/static/logo.BwD0XrzT.webp"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/><link rel="manifest" href="/manifest.json"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.jobcrawls.com/en/strict-origin-when-cross-origin"/><meta property="og:title" content="JobCrawls - Find Your Next Job in Finland | IT, Tech, Remote"/><meta property="og:description" content="Discover thousands of job opportunities in Finland. Search IT, tech, remote, and international jobs. Compare salaries, save jobs, and track your applications."/><meta property="og:image" content="https://www.jobcrawls.com/logo_jobcrawls_horizontal.png"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image:alt" content="JobCrawls - Job Search Platform for Finland"/><meta property="og:site_name" content="JobCrawls"/><meta property="og:locale" content="en_US"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:url" content="https://www.jobcrawls.com/en/strict-origin-when-cross-origin"/><meta name="twitter:title" content="JobCrawls - Find Your Next Job in Finland | IT, Tech, Remote"/><meta name="twitter:description" content="Discover thousands of job opportunities in Finland. Search IT, tech, remote, and international jobs. Compare salaries, save jobs, and track your applications."/><meta name="twitter:image" content="https://www.jobcrawls.com/logo_jobcrawls_horizontal.png"/><meta name="twitter:image:alt" content="JobCrawls - Job Search Platform for Finland"/><meta name="theme-color" content="#3B82F6"/><meta name="msapplication-TileColor" content="#3B82F6"/><meta name="msapplication-config" content="/browserconfig.xml"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="referrer" content="strict-origin-when-cross-origin"/><link rel="dns-prefetch" href="//www.google-analytics.com"/><link rel="dns-prefetch" href="//fonts.googleapis.com"/><link rel="dns-prefetch" href="//fonts.gstatic.com"/><link rel="preload" href="/logo_horizontal.png" as="image" type="image/png"/><link rel="preload" href="/logo_square.png" as="image" type="image/png"/><link rel="preload" href="/logo_jobcrawls_horizontal.png" as="image" type="image/png"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js" as="script"/><link rel="preload" href="/assets/logo.webp" as="image" type="image/webp"/><link rel="preload" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIxIDIxTDE2LjY1IDE2LjY1TTE2LjY1IDE2LjY1QTEwLjUgMTAuNSAwIDEgMSA0LjUgNC41YTEwLjUgMTAuNSAwIDAgMSAxMi4xNSAxMi4xNVoiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" as="image" type="image/svg+xml"/><script>(() => { try {
+            // Inject preferences from server
+            var serverThemeInfo = {"effectiveTheme":"light","userPreference":null};
+            var serverClientPreferences = {"theme":"system","layout":"list","sort":"relevance","handedness":"right","contrast":"normal","isFinland":true};
+            
+            window.__THEME_INFO__ = serverThemeInfo;
+            window.__CLIENT_PREFERENCES__ = serverClientPreferences;
+            
+            // Determine effective theme
+            var effectiveDark = false;
+            
+            if (serverThemeInfo && serverThemeInfo.effectiveTheme) {
+              // Use server-detected theme
+              effectiveDark = serverThemeInfo.effectiveTheme === 'dark';
+            } else {
+              // Fallback to cookie detection
+              var m = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+              var v = m ? decodeURIComponent(m[1]) : '';
+              effectiveDark = v === 'dark' || (!v || v === 'system') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+            
+            // Apply theme immediately
+            var e = document.documentElement;
+            if (effectiveDark) {
+              e.classList.add('dark');
+            } else {
+              e.classList.remove('dark');
+            }
+            
+            // Apply layout preference immediately
+            if (serverClientPreferences && serverClientPreferences.layout) {
+              document.body.setAttribute('data-layout', serverClientPreferences.layout);
+            }
+          } catch(_) {} })();</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"JobCrawls","url":"https://www.jobcrawls.com","logo":"https://www.jobcrawls.com/logo_jobcrawls_horizontal.png","description":"Comprehensive job search platform for Finland. Find IT, tech, remote, and international jobs with salary comparison and application tracking.","foundingDate":"2024","address":{"@type":"PostalAddress","addressCountry":"FI","addressLocality":"Helsinki"},"contactPoint":{"@type":"ContactPoint","contactType":"customer service","availableLanguage":["English","Finnish","Swedish"]},"sameAs":["https://www.linkedin.com/company/jobcrawls","https://twitter.com/jobcrawls"]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"JobCrawls","url":"https://www.jobcrawls.com","description":"Find your next job in Finland. Search IT, tech, remote, and international jobs with comprehensive filtering and salary comparison.","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.jobcrawls.com/en/?en_search[query]={search_term_string}"},"query-input":"required name=search_term_string"},"publisher":{"@type":"Organization","name":"JobCrawls"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.jobcrawls.com"}]}</script><script>window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-2FNT5F8TNE');</script><script>
+            (function() {
+              try {
+                const theme = 'system';
+                const handedness = localStorage.getItem('handedness') || 'right';
+                const contrast = localStorage.getItem('contrast') || 'normal';
+                
+                const root = document.documentElement;
+                
+                // Apply handedness
+                root.classList.add(handedness + '-handed');
+                
+                // Apply contrast
+                if (contrast === 'more') {
+                  root.classList.add('contrast-more');
+                }
+              } catch (e) {
+                // Silently fail if localStorage is not available
+              }
+            })();
+          </script>
+    
+    
+    
+  
+      </head>
+      <body>
+        
+        <div id="root"><div class="min-h-screen bg-gray-50 dark:bg-gray-900"></div></div>
+        
+        <script id="vike_pageContext" type="application/json">{"locale":"en","session":null,"themeInfo":{"effectiveTheme":"light","userPreference":null},"clientPreferences":{"theme":"system","layout":"list","sort":"relevance","handedness":"right","contrast":"normal","isFinland":true},"redux":{"ssrState":{"lang":{"value":"fi"},"tray":{"value":false},"jobs":{"viewedJobs":[],"savedJobs":[],"appliedJobs":[]},"savedSearches":{"savedSearches":[]},"comparisonPreferences":{"salaryWeight":0.4,"vacationWeight":0.2,"benefitsWeight":0.2,"remotenessWeight":0.2},"jobForm":{"title":"","normalisedTitle":"","normalisedRoleLevel":"","description":"","locations":[],"remoteness":"","jobType":"","salaryRangeMin":0,"salaryRangeMax":0,"vacationWeeks":0,"benefits":[],"company":{"name":"","website":"","logoUrl":"","about":"","address":"","companyValues":[],"numberOfEmployees":0,"industry":"","contactDetails":""}},"ui":{"hasSeenSearchPulse":false},"finlandFilter":{"enabled":true}}},"_urlRewrite":null,"pageId":"/pages/_error","routeParams":{},"pageProps":{"is404":true},"is404":true,"_pageContextInitIsPassedToClient":true}</script>
+        <script id="vike_globalContext" type="application/json">{}</script>
+        <script type="module" async>
+import("/assets/entries/pages_client.Cio_wGKL.js");
+import("/assets/entries/entry-client-routing.Diu5aNbj.js");
+</script>
+        <link rel="modulepreload" href="/assets/entries/pages_error.C2n02rXS.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-DcNoDgM7.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-D9X484nS.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-DW_-0K_T.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-C_cn2UYG.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-DdPQwqt5.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-C0I8G-zx.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-DrXpS-4_.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk--twJYa9F.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-BTt0KmOe.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-CNQOvVeb.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-CVQzWiho.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/assets/chunks/chunk-CPDGBsvb.js" as="script" type="text/javascript">
+      </body>
+    </html>
