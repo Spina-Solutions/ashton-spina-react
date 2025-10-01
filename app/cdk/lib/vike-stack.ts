@@ -132,27 +132,43 @@ export class VikeStack extends cdk.Stack {
             `function handler(event) {
   var request = event.request;
   var host = request.headers && request.headers.host ? request.headers.host.value : '';
-  // Only redirect apex to www; keep other hosts untouched
-  if (host === '${domainName}') {
-    // Build querystring from object shape of CloudFront Functions
-    var qs = '';
-    if (request.querystring) {
-      var parts = [];
-      for (var key in request.querystring) {
-        if (!Object.prototype.hasOwnProperty.call(request.querystring, key)) continue;
-        var entry = request.querystring[key];
-        if (entry && entry.multiValue && entry.multiValue.length > 0) {
-          for (var i = 0; i < entry.multiValue.length; i++) {
-            parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(entry.multiValue[i].value || ''));
-          }
-        } else {
-          parts.push(encodeURIComponent(key) + '=' + encodeURIComponent((entry && entry.value) || ''));
+  
+  // Helper to build querystring from CloudFront querystring object
+  function buildQueryString(querystring) {
+    if (!querystring) return '';
+    var parts = [];
+    for (var key in querystring) {
+      if (!Object.prototype.hasOwnProperty.call(querystring, key)) continue;
+      var entry = querystring[key];
+      if (entry && entry.multiValue && entry.multiValue.length > 0) {
+        for (var i = 0; i < entry.multiValue.length; i++) {
+          parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(entry.multiValue[i].value || ''));
         }
-      }
-      if (parts.length > 0) {
-        qs = '?' + parts.join('&');
+      } else {
+        parts.push(encodeURIComponent(key) + '=' + encodeURIComponent((entry && entry.value) || ''));
       }
     }
+    return parts.length > 0 ? '?' + parts.join('&') : '';
+  }
+  
+  // Remove trailing slashes (except root /)
+  if (request.uri.length > 1 && request.uri.endsWith('/')) {
+    var newUri = request.uri.slice(0, -1);
+    var qs = buildQueryString(request.querystring);
+    var location = 'https://' + host + newUri + qs;
+    return { statusCode: 301, statusDescription: 'Moved Permanently', headers: { location: { value: location } } };
+  }
+  
+  // Legacy URL redirect: /content/ontario-city-problem -> /media/ontario-city-problem
+  if (request.uri === '/content/ontario-city-problem') {
+    var qs = buildQueryString(request.querystring);
+    var location = 'https://www.${domainName}/media/ontario-city-problem' + qs;
+    return { statusCode: 301, statusDescription: 'Moved Permanently', headers: { location: { value: location } } };
+  }
+  
+  // Only redirect apex to www; keep other hosts untouched
+  if (host === '${domainName}') {
+    var qs = buildQueryString(request.querystring);
     var location = 'https://www.${domainName}' + request.uri + qs;
     return { statusCode: 301, statusDescription: 'Moved Permanently', headers: { location: { value: location } } };
   }
@@ -191,6 +207,7 @@ export class VikeStack extends cdk.Stack {
       // Only deploy the assets folder to reduce bundle size and /tmp usage
       sources: [s3deploy.Source.asset(join(__dirname, "../../dist/client/assets"))],
       destinationBucket: bucket,
+      destinationKeyPrefix: "assets",
       distribution,
       distributionPaths: ["/assets/*"],
       // Avoid long deletion scans; also keeps existing photography files intact

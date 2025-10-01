@@ -96,15 +96,10 @@ This solution does not only apply to the GTA, although evidently the GTA has the
   },
   {
     id: 'travel-photography-tips',
-    title: 'Travel Photography: Capturing the Moment',
-    excerpt: 'Essential tips and techniques for taking stunning travel photographs that tell a story.',
-    date: '2024-01-05',
-    readTime: '6 min read',
+    title: 'Travel Photography Tips: Capturing the World',
+    excerpt: 'Essential tips and techniques for capturing stunning travel photographs that tell compelling stories from around the world.',
+    date: '2024-03-15',
+    readTime: '12 min read',
     category: 'article',
-    content: `# Travel Photography: Capturing the Moment
-
-Photography is about more than just taking pictures...
-
-[Full article content would go here]`
   }
 ];

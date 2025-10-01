@@ -1,6 +1,19 @@
-import type { Data } from "vike/types";
+type Article = {
+  id: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
+  category: 'article' | 'podcast';
+  url?: string;
+  content?: string;
+};
 
-const article = {
+type Data = {
+  article: Article;
+};
+
+const article: Article = {
   id: 'ontario-city-problem',
   title: 'Ontario\'s City Problem',
   excerpt: 'Exploring the challenges facing urban development in Ontario and potential solutions for sustainable growth.',
@@ -76,7 +89,7 @@ This solution does not only apply to the GTA, although evidently the GTA has the
 - [Point2Homes](https://www.point2homes.com/news/canada-real-estate/how-large-are-canadian-homes.html)`
 };
 
-export default function data(): Data {
+export default function data() {
   console.log('Data loader returning:', { article });
   return {
     article
