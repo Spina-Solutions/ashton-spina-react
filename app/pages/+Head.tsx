@@ -42,6 +42,11 @@ export default function HeadDefault() {
           gtag('config', '${import.meta.env.PUBLIC_ENV__GOOGLE_ANALYTICS}');`,
         }}
       ></script>
+      <script
+        async
+        src="https://analytics.ahrefs.com/analytics.js"
+        data-key="7ZS+wdwfaGmBFVx/JZtmLg"
+      />
     </>
   );
 }
