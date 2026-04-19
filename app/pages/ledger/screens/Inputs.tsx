@@ -1,8 +1,26 @@
 import { Fragment, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { Bar, EditableCell, Folio, Panel, Segmented, Smallcaps, Stat, Who } from "../primitives.js";
 import { BUSINESS, CATEGORIES, SETTINGS, deriveBiz, fmt, fx } from "../data.js";
 import type { Derived, LedgerState } from "../state.js";
-import type { Iou, IouEntry, SplitMode, Asset, Debt } from "../data.js";
+import type { CategoryKey, Iou, IouEntry, SplitMode, Asset, AssetOwner, Debt } from "../data.js";
+
+const CATEGORY_OPTIONS: { value: CategoryKey; label: string }[] =
+  Object.entries(CATEGORIES).map(([k, v]) => ({ value: k as CategoryKey, label: v.label }));
+
+function CategorySelect({ value, onChange }: { value?: string; onChange: (v: string) => void }) {
+  return (
+    <select
+      value={value || "other"}
+      onChange={e => onChange(e.target.value)}
+      style={{ border: 0, background: "transparent", fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", cursor: "pointer" }}
+    >
+      {CATEGORY_OPTIONS.map(o => (
+        <option key={o.value} value={o.value}>{o.label}</option>
+      ))}
+    </select>
+  );
+}
 
 type InputsSection = "income" | "joint" | "personal" | "business" | "tax" | "assets" | "ious" | "split";
 
@@ -58,16 +76,19 @@ function IncomeSection({ state }: { state: LedgerState }) {
 
   const update = (person: "ashton" | "partner", key: string, v: number) => {
     setIncome(i => {
-      const next = { ...i, [person]: { ...i[person], [key]: v } };
-      next.ashton.total = (next.ashton.salary || 0) + (next.ashton.dividend || 0);
-      next.partner.total = next.partner.salary || 0;
-      return next;
+      const updatedPerson = { ...i[person], [key]: v };
+      const merged = { ...i, [person]: updatedPerson };
+      return {
+        ashton: { ...merged.ashton, total: (merged.ashton.salary || 0) + (merged.ashton.dividend || 0) },
+        partner: { ...merged.partner, total: merged.partner.salary || 0 },
+      };
     });
   };
 
   const applyAshtonGross = (gross: number) => {
     const netSalary = gross * (1 - tax.salaryTaxRate);
     setAshtonGrossDraft(gross);
+    update("ashton", "gross", gross);
     update("ashton", "salary", Math.round(netSalary * 100) / 100);
   };
 
@@ -168,11 +189,12 @@ function JointSection({ state }: { state: LedgerState }) {
   const update = (id: string, v: number) => setJoint(js => js.map(j => j.id === id ? { ...j, amt: v } : j));
   const add = () => setJoint(js => [...js, { id: `c${Date.now()}`, label: "New item", amt: 0, cat: "other" }]);
   const updateLabel = (id: string, v: string) => setJoint(js => js.map(j => j.id === id ? { ...j, label: v } : j));
+  const updateCat = (id: string, v: string) => setJoint(js => js.map(j => j.id === id ? { ...j, cat: v } : j));
   const remove = (id: string) => setJoint(js => js.filter(j => j.id !== id));
 
   return (
     <Panel title="Joint expenses" meta={`${joint.length} items · €${Math.round(total).toLocaleString()}/mo`}>
-      <table className="table">
+      <div className="table-wrap"><table className="table">
         <thead>
           <tr><th>Item</th><th>Category</th><th className="num">Monthly</th><th className="num">Yearly</th><th></th></tr>
         </thead>
@@ -184,7 +206,7 @@ function JointSection({ state }: { state: LedgerState }) {
                   onChange={e => updateLabel(j.id!, e.target.value)}
                   style={{ minWidth: 200 }} />
               </td>
-              <td><span className="pill">{j.cat}</span></td>
+              <td><CategorySelect value={j.cat} onChange={v => updateCat(j.id!, v)} /></td>
               <EditableCell value={j.amt} onChange={v => update(j.id!, v)} prefix="€" />
               <td className="num italic" style={{ color: "var(--ink-3)" }}>€{(j.amt * 12).toLocaleString()}</td>
               <td><button onClick={() => remove(j.id!)} style={{ color: "var(--ink-3)" }}>×</button></td>
@@ -197,7 +219,7 @@ function JointSection({ state }: { state: LedgerState }) {
             <td></td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
       <button className="btn mt-md" onClick={add}>+ Add joint expense</button>
     </Panel>
   );
@@ -217,11 +239,15 @@ function PersonalList({ title, list, setList }: { title: string; list: LedgerSta
   const total = list.reduce((s, x) => s + x.amt, 0);
   const update = (i: number, v: number) => setList(xs => xs.map((x, j) => j === i ? { ...x, amt: v } : x));
   const updateLabel = (i: number, v: string) => setList(xs => xs.map((x, j) => j === i ? { ...x, label: v } : x));
-  const add = () => setList(xs => [...xs, { label: "New item", amt: 0 }]);
+  const updateCat = (i: number, v: string) => setList(xs => xs.map((x, j) => j === i ? { ...x, cat: v } : x));
+  const add = () => setList(xs => [...xs, { label: "New item", amt: 0, cat: "other" }]);
   const remove = (i: number) => setList(xs => xs.filter((_, j) => j !== i));
   return (
     <Panel title={title} meta={`${list.length} · €${Math.round(total).toLocaleString()}/mo`}>
-      <table className="table">
+      <div className="table-wrap"><table className="table">
+        <thead>
+          <tr><th>Item</th><th>Category</th><th className="num">Monthly</th><th></th></tr>
+        </thead>
         <tbody>
           {list.map((it, i) => (
             <tr key={i}>
@@ -229,17 +255,18 @@ function PersonalList({ title, list, setList }: { title: string; list: LedgerSta
                 <input className="cell-input" value={it.label}
                   onChange={e => updateLabel(i, e.target.value)} />
               </td>
+              <td><CategorySelect value={it.cat} onChange={v => updateCat(i, v)} /></td>
               <EditableCell value={it.amt} onChange={v => update(i, v)} prefix="€" />
               <td><button onClick={() => remove(i)} style={{ color: "var(--ink-3)" }}>×</button></td>
             </tr>
           ))}
           <tr className="total">
-            <td>Total</td>
+            <td colSpan={2}>Total</td>
             <td className="num">€{Math.round(total).toLocaleString()}</td>
             <td></td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
       <button className="btn mt-md" onClick={add}>+ Add</button>
     </Panel>
   );
@@ -257,7 +284,7 @@ function BusinessSection({ state }: { state: LedgerState }) {
   return (
     <div className="grid g-2-1">
       <Panel title="Business costs" meta={`${bizCosts.length} · €${Math.round(total).toLocaleString()}/mo`}>
-        <table className="table">
+        <div className="table-wrap"><table className="table">
           <tbody>
             {bizCosts.map((c, i) => (
               <tr key={i}>
@@ -277,7 +304,7 @@ function BusinessSection({ state }: { state: LedgerState }) {
               <td></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
         <button className="btn mt-md" onClick={add}>+ Add business cost</button>
       </Panel>
       <Panel title="Revenue & summary">
@@ -301,13 +328,17 @@ function AssetsSection({ state }: { state: LedgerState }) {
   const totalDebt = debts.reduce((s, d) => s + d.bal * fx[d.cur], 0);
   const upd = (id: string, v: number) => setAssets(as => as.map(a => a.id === id ? { ...a, bal: v } : a));
   const updLabel = (id: string, v: string) => setAssets(as => as.map(a => a.id === id ? { ...a, label: v } : a));
+  const updOwner = (id: string, owner: AssetOwner) => setAssets(as => as.map(a => a.id === id ? { ...a, owner } : a));
   const rem = (id: string) => setAssets(as => as.filter(a => a.id !== id));
   const add = () => setAssets(as => [...as, { id: `a${Date.now()}`, label: "New account", type: "cash", scope: "personal", owner: "ashton", cur: "EUR", bal: 0, apy: 0 }]);
 
   const updDebt = (id: string, v: number) => setDebts(ds => ds.map(d => d.id === id ? { ...d, bal: v } : d));
   const updDebtLabel = (id: string, v: string) => setDebts(ds => ds.map(d => d.id === id ? { ...d, label: v } : d));
+  const updDebtOwner = (id: string, owner: AssetOwner) => setDebts(ds => ds.map(d => d.id === id ? { ...d, owner } : d));
+  const updDebtCounterparty = (id: string, counterparty: Debt["counterparty"]) =>
+    setDebts(ds => ds.map(d => d.id === id ? { ...d, counterparty } : d));
   const remDebt = (id: string) => setDebts(ds => ds.filter(d => d.id !== id));
-  const addDebt = () => setDebts(ds => [...ds, { id: `d${Date.now()}`, label: "New debt", owner: "ashton", bal: 0, cur: "EUR", rate: 0 }]);
+  const addDebt = () => setDebts(ds => [...ds, { id: `d${Date.now()}`, label: "New debt", owner: "ashton", counterparty: "external", bal: 0, cur: "EUR", rate: 0 }]);
 
   const updateScope = (id: string, scope: Asset["scope"]) => setAssets(as => as.map(a => a.id === id ? { ...a, scope } : a));
   const updateType = (id: string, type: Asset["type"]) => setAssets(as => as.map(a => a.id === id ? { ...a, type } : a));
@@ -316,14 +347,20 @@ function AssetsSection({ state }: { state: LedgerState }) {
   return (
     <>
       <Panel title="Assets" meta={`${assets.length} accounts · €${Math.round(total).toLocaleString()} total`}>
-        <table className="table">
+        <div className="table-wrap"><table className="table">
           <thead>
-            <tr><th>Account</th><th>Scope</th><th>Type</th><th>Cur</th><th className="num">Balance</th><th className="num">EUR</th><th></th></tr>
+            <tr><th>Account</th><th>Owner</th><th>Scope</th><th>Type</th><th>Cur</th><th className="num">Balance</th><th className="num">EUR</th><th></th></tr>
           </thead>
           <tbody>
             {assets.map(a => (
               <tr key={a.id}>
                 <td><input className="cell-input" value={a.label} onChange={e => updLabel(a.id, e.target.value)} /></td>
+                <td>
+                  <select value={a.owner} onChange={e => updOwner(a.id, e.target.value as AssetOwner)} style={{ border: 0, background: "transparent", fontFamily: "var(--mono)", fontSize: 10 }}>
+                    <option value="ashton">Ashton</option>
+                    <option value="partner">Maria</option>
+                  </select>
+                </td>
                 <td>
                   <select value={a.scope} onChange={e => updateScope(a.id, e.target.value as Asset["scope"])} style={{ border: 0, background: "transparent", fontFamily: "var(--mono)", fontSize: 10 }}>
                     <option value="personal">personal</option>
@@ -353,43 +390,145 @@ function AssetsSection({ state }: { state: LedgerState }) {
               </tr>
             ))}
             <tr className="total">
-              <td colSpan={5}>Total</td>
+              <td colSpan={6}>Total</td>
               <td className="num">€{Math.round(total).toLocaleString()}</td>
               <td></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
         <button className="btn mt-md" onClick={add}>+ Add account</button>
       </Panel>
 
       <Panel title="Debts" meta={`${debts.length} · €${Math.round(totalDebt).toLocaleString()} outstanding`}>
-        <table className="table">
+        <div className="italic mb-md" style={{ fontSize: 12, color: "var(--ink-3)" }}>
+          Choose who owes the debt and to whom. Debts between Ashton and Maria cancel out in the Joint view but show on each individual's net worth.
+        </div>
+        <div className="table-wrap"><table className="table">
           <thead>
-            <tr><th>Debt</th><th>Cur</th><th className="num">Balance</th><th className="num">Rate</th><th className="num">Annual interest</th><th></th></tr>
+            <tr>
+              <th>Debt</th>
+              <th>Owed by</th>
+              <th>Owed to</th>
+              <th>Cur</th>
+              <th className="num">Balance</th>
+              <th className="num">Rate</th>
+              <th className="num">Annual interest</th>
+              <th></th>
+            </tr>
           </thead>
           <tbody>
-            {debts.map(debt => (
-              <tr key={debt.id}>
-                <td><input className="cell-input" value={debt.label} onChange={e => updDebtLabel(debt.id, e.target.value)} /></td>
-                <td className="mono" style={{ fontSize: 10 }}>{debt.cur}</td>
-                <EditableCell value={debt.bal} onChange={v => updDebt(debt.id, v)} prefix={debt.cur === "CAD" ? "C$" : "€"} />
-                <td className="num">{(debt.rate * 100).toFixed(2)}%</td>
-                <td className="num neg">−€{Math.round(debt.bal * fx[debt.cur] * debt.rate).toLocaleString()}</td>
-                <td><button onClick={() => remDebt(debt.id)} style={{ color: "var(--ink-3)" }}>×</button></td>
-              </tr>
-            ))}
+            {debts.map(debt => {
+              const cp = debt.counterparty ?? "external";
+              return (
+                <tr key={debt.id}>
+                  <td><input className="cell-input" value={debt.label} onChange={e => updDebtLabel(debt.id, e.target.value)} /></td>
+                  <td>
+                    <select value={debt.owner} onChange={e => updDebtOwner(debt.id, e.target.value as AssetOwner)} style={{ border: 0, background: "transparent", fontFamily: "var(--mono)", fontSize: 10 }}>
+                      <option value="ashton">Ashton</option>
+                      <option value="partner">Maria</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select value={cp} onChange={e => updDebtCounterparty(debt.id, e.target.value as Debt["counterparty"])} style={{ border: 0, background: "transparent", fontFamily: "var(--mono)", fontSize: 10 }}>
+                      <option value="external">external</option>
+                      <option value="ashton" disabled={debt.owner === "ashton"}>Ashton</option>
+                      <option value="partner" disabled={debt.owner === "partner"}>Maria</option>
+                    </select>
+                  </td>
+                  <td className="mono" style={{ fontSize: 10 }}>{debt.cur}</td>
+                  <EditableCell value={debt.bal} onChange={v => updDebt(debt.id, v)} prefix={debt.cur === "CAD" ? "C$" : "€"} />
+                  <td className="num">{(debt.rate * 100).toFixed(2)}%</td>
+                  <td className="num neg">−€{Math.round(debt.bal * fx[debt.cur] * debt.rate).toLocaleString()}</td>
+                  <td><button onClick={() => remDebt(debt.id)} style={{ color: "var(--ink-3)" }}>×</button></td>
+                </tr>
+              );
+            })}
             <tr className="total">
-              <td colSpan={2}>Total</td>
+              <td colSpan={4}>Total</td>
               <td className="num">€{Math.round(totalDebt).toLocaleString()}</td>
               <td></td>
               <td className="num neg">−€{Math.round(debts.reduce((s, d) => s + d.bal * fx[d.cur] * d.rate, 0)).toLocaleString()}</td>
               <td></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
         <button className="btn mt-md" onClick={addDebt}>+ Add debt</button>
       </Panel>
     </>
+  );
+}
+
+interface IouRowProps {
+  i: Iou;
+  isOpen: boolean;
+  setOpen: Dispatch<SetStateAction<string | null>>;
+  upd: (id: string, k: keyof Iou, v: unknown) => void;
+  rem: (id: string) => void;
+  addEntry: (id: string, entry: IouEntry) => void;
+}
+
+function IouRow({ i, isOpen, setOpen, upd, rem, addEntry }: IouRowProps) {
+  const outstanding = i.principal - i.paid;
+  const pct = i.principal ? (i.paid / i.principal * 100) : 0;
+  return (
+    <Fragment>
+      <tr>
+        <td>
+          <input className="cell-input" value={i.counterparty}
+            onChange={e => upd(i.id, "counterparty", e.target.value)} />
+          {i.note && <div className="italic" style={{ fontSize: 11, color: "var(--ink-3)" }}>{i.note}</div>}
+        </td>
+        <td>
+          <select value={i.direction} onChange={e => upd(i.id, "direction", e.target.value)}
+            style={{ border: 0, background: "transparent", fontFamily: "var(--mono)", fontSize: 10 }}>
+            <option value="incoming">owes me</option>
+            <option value="outgoing">I owe</option>
+          </select>
+        </td>
+        <td className="mono" style={{ fontSize: 10 }}>{i.cur}</td>
+        <td className="num mono">{fmt(i.principal, i.cur, { decimals: 0 })}</td>
+        <td className="num mono pos">{fmt(i.paid, i.cur, { decimals: 0 })}</td>
+        <td className="num mono" style={{ fontWeight: 700 }}>{fmt(outstanding, i.cur, { decimals: 0 })}</td>
+        <td style={{ width: 120 }}><Bar pct={pct} variant={i.direction === "incoming" ? "moss" : "rust"} /></td>
+        <td className="num mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>{pct.toFixed(0)}%</td>
+        <td>
+          <button onClick={() => setOpen(isOpen ? null : i.id)} className="smallcaps">{isOpen ? "close" : "edit"}</button>
+          {" · "}
+          <button onClick={() => rem(i.id)} style={{ color: "var(--ink-3)" }}>×</button>
+        </td>
+      </tr>
+      {isOpen && (
+        <tr>
+          <td colSpan={9} style={{ background: "var(--paper-2)", padding: 14 }}>
+            <div className="flex-between" style={{ marginBottom: 10 }}>
+              <Smallcaps>Description / note</Smallcaps>
+            </div>
+            <input className="cell-input" value={i.note || ""}
+              placeholder="What is this IOU about? e.g. Rent apartment coverage, cat vet, splitting settlement…"
+              onChange={e => upd(i.id, "note", e.target.value)}
+              style={{ fontStyle: "italic", padding: "6px 8px", marginBottom: 14, border: "1px solid var(--rule-soft)", background: "var(--paper)" }} />
+
+            <Smallcaps>Ledger — {i.counterparty}</Smallcaps>
+            <table className="table mt-sm" style={{ background: "transparent" }}>
+              <thead><tr><th>Date</th><th>Label</th><th>Kind</th><th className="num">Amount ({i.cur})</th></tr></thead>
+              <tbody>
+                {(i.history || []).map((h, idx) => (
+                  <tr key={idx}>
+                    <td className="mono" style={{ fontSize: 10 }}>{h.d}</td>
+                    <td>{h.label}</td>
+                    <td><span className="pill">{h.kind}</span></td>
+                    <td className={`num ${h.kind === "repaid" ? "pos" : ""}`}>
+                      {h.kind === "repaid" ? "+" : ""}{fmt(h.amt, i.cur, { decimals: 2 })}
+                    </td>
+                  </tr>
+                ))}
+                <NewEntryRow onAdd={(entry) => addEntry(i.id, entry)} direction={i.direction} />
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      )}
+    </Fragment>
   );
 }
 
@@ -415,72 +554,6 @@ function IousSection({ state }: { state: LedgerState }) {
   const incSum = incoming.reduce((s, i) => s + (i.principal - i.paid) * fx[i.cur], 0);
   const outSum = outgoing.reduce((s, i) => s + (i.principal - i.paid) * fx[i.cur], 0);
 
-  const Row = ({ i }: { i: Iou }) => {
-    const outstanding = i.principal - i.paid;
-    const pct = i.principal ? (i.paid / i.principal * 100) : 0;
-    const isOpen = open === i.id;
-    return (
-      <Fragment>
-        <tr>
-          <td>
-            <input className="cell-input" value={i.counterparty}
-              onChange={e => upd(i.id, "counterparty", e.target.value)} />
-            {i.note && <div className="italic" style={{ fontSize: 11, color: "var(--ink-3)" }}>{i.note}</div>}
-          </td>
-          <td>
-            <select value={i.direction} onChange={e => upd(i.id, "direction", e.target.value)}
-              style={{ border: 0, background: "transparent", fontFamily: "var(--mono)", fontSize: 10 }}>
-              <option value="incoming">owes me</option>
-              <option value="outgoing">I owe</option>
-            </select>
-          </td>
-          <td className="mono" style={{ fontSize: 10 }}>{i.cur}</td>
-          <td className="num mono">{fmt(i.principal, i.cur, { decimals: 0 })}</td>
-          <td className="num mono pos">{fmt(i.paid, i.cur, { decimals: 0 })}</td>
-          <td className="num mono" style={{ fontWeight: 700 }}>{fmt(outstanding, i.cur, { decimals: 0 })}</td>
-          <td style={{ width: 120 }}><Bar pct={pct} variant={i.direction === "incoming" ? "moss" : "rust"} /></td>
-          <td className="num mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>{pct.toFixed(0)}%</td>
-          <td>
-            <button onClick={() => setOpen(isOpen ? null : i.id)} className="smallcaps">{isOpen ? "close" : "edit"}</button>
-            {" · "}
-            <button onClick={() => rem(i.id)} style={{ color: "var(--ink-3)" }}>×</button>
-          </td>
-        </tr>
-        {isOpen && (
-          <tr>
-            <td colSpan={9} style={{ background: "var(--paper-2)", padding: 14 }}>
-              <div className="flex-between" style={{ marginBottom: 10 }}>
-                <Smallcaps>Description / note</Smallcaps>
-              </div>
-              <input className="cell-input" value={i.note || ""}
-                placeholder="What is this IOU about? e.g. Rent apartment coverage, cat vet, splitting settlement…"
-                onChange={e => upd(i.id, "note", e.target.value)}
-                style={{ fontStyle: "italic", padding: "6px 8px", marginBottom: 14, border: "1px solid var(--rule-soft)", background: "var(--paper)" }} />
-
-              <Smallcaps>Ledger — {i.counterparty}</Smallcaps>
-              <table className="table mt-sm" style={{ background: "transparent" }}>
-                <thead><tr><th>Date</th><th>Label</th><th>Kind</th><th className="num">Amount ({i.cur})</th></tr></thead>
-                <tbody>
-                  {(i.history || []).map((h, idx) => (
-                    <tr key={idx}>
-                      <td className="mono" style={{ fontSize: 10 }}>{h.d}</td>
-                      <td>{h.label}</td>
-                      <td><span className="pill">{h.kind}</span></td>
-                      <td className={`num ${h.kind === "repaid" ? "pos" : ""}`}>
-                        {h.kind === "repaid" ? "+" : ""}{fmt(h.amt, i.cur, { decimals: 2 })}
-                      </td>
-                    </tr>
-                  ))}
-                  <NewEntryRow onAdd={(entry) => addEntry(i.id, entry)} direction={i.direction} />
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        )}
-      </Fragment>
-    );
-  };
-
   return (
     <Fragment>
       <div className="grid g-3">
@@ -490,7 +563,7 @@ function IousSection({ state }: { state: LedgerState }) {
       </div>
 
       <Panel title="Money owed between people" meta="click a row to see history">
-        <table className="table">
+        <div className="table-wrap"><table className="table">
           <thead>
             <tr>
               <th>Person</th><th>Direction</th><th>Cur</th>
@@ -503,9 +576,12 @@ function IousSection({ state }: { state: LedgerState }) {
             </tr>
           </thead>
           <tbody>
-            {ious.map(i => <Row key={i.id} i={i} />)}
+            {ious.map(i => (
+              <IouRow key={i.id} i={i} isOpen={open === i.id}
+                setOpen={setOpen} upd={upd} rem={rem} addEntry={addEntry} />
+            ))}
           </tbody>
-        </table>
+        </table></div>
         <button className="btn mt-md" onClick={add}>+ Add IOU</button>
       </Panel>
     </Fragment>

@@ -62,8 +62,11 @@ export interface Derived {
   pensionAssets: number;
   totalAssets: number;
   totalDebt: number;
+  externalDebt: number;
   debtA: number;
   debtM: number;
+  debtAClaim: number;
+  debtMClaim: number;
   netWorth: number;
   netWorthA: number;
   netWorthM: number;
