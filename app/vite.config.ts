@@ -11,6 +11,10 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 3000,
   },
+  ssr: {
+    // Let Node resolve AWS SDK natively so the worktree's node_modules are found
+    external: ["@aws-sdk/client-dynamodb", "@aws-sdk/util-dynamodb"],
+  },
   plugins: [
     vike(),
     devServer({
