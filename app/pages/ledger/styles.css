@@ -603,6 +603,14 @@
   .ledger-root .g-4 { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* Narrow: collapse 2-column grids to 1 so panels aren't too cramped to read */
+@media (max-width: 767px) {
+  .ledger-root .g-2 { grid-template-columns: 1fr; }
+  .ledger-root .g-2-1 { grid-template-columns: 1fr; }
+  .ledger-root .g-1-2 { grid-template-columns: 1fr; }
+  .ledger-root .g-3-2 { grid-template-columns: 1fr; }
+}
+
 /* Mobile: single column everything */
 @media (max-width: 639px) {
   .ledger-root .content {
@@ -619,11 +627,7 @@
   .ledger-root .folio h2 { font-size: 26px; }
   .ledger-root .folio .dek { font-size: 12.5px; margin-top: 4px; }
 
-  .ledger-root .g-2 { grid-template-columns: 1fr; }
-  .ledger-root .g-2-1 { grid-template-columns: 1fr; }
-  .ledger-root .g-1-2 { grid-template-columns: 1fr; }
   .ledger-root .g-3 { grid-template-columns: 1fr; }
-  .ledger-root .g-3-2 { grid-template-columns: 1fr; }
   .ledger-root .g-4 { grid-template-columns: repeat(2, 1fr); }
 
   .ledger-root .stat { padding: 12px 14px 14px; }

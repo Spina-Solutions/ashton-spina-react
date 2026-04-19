@@ -98,8 +98,6 @@ export function useLedgerSync(
   }, [payload, persist]);
 
   // Pull the latest server state when the tab regains focus / becomes visible again.
-  // This is what makes the ledger stay in sync across desktop + tablet — otherwise
-  // each device keeps whatever was loaded at mount and last-writer-wins on save.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const onVisible = () => {
@@ -114,6 +112,14 @@ export function useLedgerSync(
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("focus", onFocus);
     };
+  }, [reload]);
+
+  // Periodic background poll — catches changes made on another device while this tab stays open
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (!initialising.current && document.visibilityState === "visible") reload();
+    }, 60_000);
+    return () => clearInterval(id);
   }, [reload]);
 
   return { status, lastSaved, reload };
