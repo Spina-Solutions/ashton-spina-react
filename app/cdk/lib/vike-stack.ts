@@ -14,6 +14,7 @@ import * as nodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as origin from "aws-cdk-lib/aws-cloudfront-origins";
 import * as api from "aws-cdk-lib/aws-apigatewayv2";
 import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as route53 from "aws-cdk-lib/aws-route53";
 import * as targets from "aws-cdk-lib/aws-route53-targets";
 import { existsSync } from "node:fs";
@@ -50,6 +51,22 @@ export class VikeStack extends cdk.Stack {
       ? Array.from(new Set([siteDomainName, domainName!].filter(Boolean)))
       : undefined;
 
+    // DynamoDB table for ledger data storage
+    // PK: userId (e.g. "ashton"), SK: dataKey (e.g. "ledger#state")
+    const ledgerTable = new dynamodb.Table(this, "LedgerTable", {
+      partitionKey: { name: "userId", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "dataKey", type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: true },
+    });
+
+    new ssm.StringParameter(this, "LedgerTableNameParameter", {
+      parameterName: `/${this.stackName}/ledger/table-name`,
+      stringValue: ledgerTable.tableName,
+      tier: ssm.ParameterTier.STANDARD,
+    });
+
     const bucket = new s3.Bucket(this, "StaticAssetsBucket", {
       /**
        * The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
@@ -78,6 +95,7 @@ export class VikeStack extends cdk.Stack {
       depsLockFilePath: findBunLockFile(),
       environment: {
         NODE_ENV: "production",
+        LEDGER_TABLE_NAME: ledgerTable.tableName,
       },
       bundling: {
         banner,
@@ -96,6 +114,8 @@ export class VikeStack extends cdk.Stack {
       logRetention: logs.RetentionDays.THREE_DAYS,
       tracing: lambda.Tracing.ACTIVE,
     });
+
+    ledgerTable.grantReadWriteData(fn);
 
     const integration = new HttpLambdaIntegration("RequestHandlerIntegration", fn, {
       payloadFormatVersion: api.PayloadFormatVersion.VERSION_2_0,
