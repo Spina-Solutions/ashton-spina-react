@@ -196,14 +196,24 @@ export const ASSETS: Asset[] = [
   { id: "varma_pension", label: "TyEL pension (est.)",  type: "pension",   scope: "personal", owner: "partner", cur: "EUR", bal: 14000.00, apy: null },
 ];
 
-export interface Debt { id: string; label: string; owner: AssetOwner; bal: number; cur: string; rate: number; }
+export type DebtCounterparty = "external" | "ashton" | "partner";
+
+export interface Debt {
+  id: string;
+  label: string;
+  owner: AssetOwner;
+  counterparty?: DebtCounterparty;
+  bal: number;
+  cur: string;
+  rate: number;
+}
 
 export const DEBTS: Debt[] = [
-  { id: "osap",       label: "Canada-Ontario Student Loan (OSAP)", owner: "ashton",  bal:  9900.00, cur: "CAD", rate: 0.050 },
-  { id: "duo",        label: "DUO student loan",                   owner: "ashton",  bal:  5000.00, cur: "EUR", rate: 0.050 },
-  { id: "biz_loan",   label: "Business Loan",                      owner: "ashton",  bal:  2000.00, cur: "EUR", rate: 0.000 },
-  { id: "maria_duo",  label: "DUO (Maria)",                        owner: "partner", bal:  1800.00, cur: "EUR", rate: 0.028 },
-  { id: "maria_fi",   label: "Kela student loan",                  owner: "partner", bal: 12400.00, cur: "EUR", rate: 0.019 },
+  { id: "osap",       label: "Canada-Ontario Student Loan (OSAP)", owner: "ashton",  counterparty: "external", bal:  9900.00, cur: "CAD", rate: 0.050 },
+  { id: "duo",        label: "DUO student loan",                   owner: "ashton",  counterparty: "external", bal:  5000.00, cur: "EUR", rate: 0.050 },
+  { id: "biz_loan",   label: "Business Loan",                      owner: "ashton",  counterparty: "external", bal:  2000.00, cur: "EUR", rate: 0.000 },
+  { id: "maria_duo",  label: "DUO (Maria)",                        owner: "partner", counterparty: "external", bal:  1800.00, cur: "EUR", rate: 0.028 },
+  { id: "maria_fi",   label: "Kela student loan",                  owner: "partner", counterparty: "external", bal: 12400.00, cur: "EUR", rate: 0.019 },
 ];
 
 export interface IouEntry { d: string; label: string; amt: number; kind: "lent" | "borrowed" | "repaid" | "adjust"; }

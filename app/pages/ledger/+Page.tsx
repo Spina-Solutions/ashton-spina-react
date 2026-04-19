@@ -35,7 +35,7 @@ const ROUTES: RouteDef[] = [
 
 import type { SyncStatus } from "./useLedgerSync.js";
 
-function SyncBadge({ status, lastSaved }: { status: SyncStatus; lastSaved: string | null }) {
+function SyncBadge({ status, lastSaved, onRefresh }: { status: SyncStatus; lastSaved: string | null; onRefresh: () => void }) {
   const dot: Record<SyncStatus, { label: string; color: string }> = {
     loading: { label: "loading…",  color: "var(--ink-3)" },
     idle:    { label: lastSaved ? `saved ${new Date(lastSaved).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "local only", color: "var(--ink-4)" },
@@ -45,9 +45,16 @@ function SyncBadge({ status, lastSaved }: { status: SyncStatus; lastSaved: strin
   };
   const { label, color } = dot[status];
   return (
-    <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 5, fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", color }}>
+    <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 8, fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", color }}>
       <span style={{ width: 5, height: 5, borderRadius: "50%", background: color, display: "inline-block", flexShrink: 0 }} />
-      {label.toUpperCase()}
+      <span>{label.toUpperCase()}</span>
+      <button
+        onClick={onRefresh}
+        title="Pull latest from the server (useful if you edited on another device)"
+        style={{ marginLeft: "auto", fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", color: "var(--ink-3)", textDecoration: "underline", cursor: "pointer" }}
+      >
+        REFRESH
+      </button>
     </div>
   );
 }
@@ -111,7 +118,7 @@ export default function LedgerPage() {
     if (s.pensions) setPensions(s.pensions as PensionAccount[]);
   }, []);
 
-  const { status: syncStatus, lastSaved } = useLedgerSync(syncPayload, onLoad);
+  const { status: syncStatus, lastSaved, reload } = useLedgerSync(syncPayload, onLoad);
 
   const state: LedgerState = {
     income, setIncome,
@@ -137,9 +144,12 @@ export default function LedgerPage() {
     const mPersonal = mariaP.reduce((s, x) => s + x.amt, 0);
     const aDividendNet = income.ashton.dividend * (1 - tax.dividendTaxRate);
     const aIncome = income.ashton.salary + aDividendNet;
-    const mGrossSalary = income.partner.gross || income.partner.total;
-    const mIncome = mGrossSalary * (1 - tax.mariaTaxRate);
-    const aGross = income.ashton.gross || aIncome;
+    // partner.salary is the source of truth for Maria's net take-home — editable in both
+    // net and gross modes in the Income section. Gross is derived from it + tax rate so
+    // Dashboard and Flow always reflect the latest salary edit.
+    const mIncome = income.partner.salary || 0;
+    const mGrossSalary = tax.mariaTaxRate < 1 ? mIncome / (1 - tax.mariaTaxRate) : mIncome;
+    const aGross = tax.salaryTaxRate < 1 ? (income.ashton.salary / (1 - tax.salaryTaxRate)) + income.ashton.dividend : aIncome;
     const mGross = mGrossSalary;
     const bizNetLocal = bizRevenue - bizCosts.reduce((s, c) => s + c.amt, 0);
     let aShare: number;
@@ -168,15 +178,24 @@ export default function LedgerPage() {
     const brokerageAssets = assets.filter(a => a.type === "brokerage").reduce((s, a) => s + a.bal * fx[a.cur], 0);
     const pensionAssets = assets.filter(a => a.type === "pension").reduce((s, a) => s + a.bal * fx[a.cur], 0);
     const totalAssets = personalAssets + businessAssets;
-    const debtA = debts.filter(dd => dd.owner === "ashton").reduce((s, dd) => s + dd.bal * fx[dd.cur], 0);
-    const debtM = debts.filter(dd => dd.owner === "partner").reduce((s, dd) => s + dd.bal * fx[dd.cur], 0);
-    const totalDebt = debts.reduce((s, dd) => s + dd.bal * fx[dd.cur], 0);
+    // Debts can be owed to an outside party ("external") or to the other partner.
+    // Internal debts cancel at the household level but still shift each person's net worth.
+    const eurBal = (dd: Debt) => dd.bal * fx[dd.cur];
+    const isInternal = (dd: Debt) => dd.counterparty === "ashton" || dd.counterparty === "partner";
+    const debtA = debts.filter(dd => dd.owner === "ashton").reduce((s, dd) => s + eurBal(dd), 0);
+    const debtM = debts.filter(dd => dd.owner === "partner").reduce((s, dd) => s + eurBal(dd), 0);
+    // Claims = money the OTHER partner owes this person via an internal debt.
+    const debtAClaim = debts.filter(dd => dd.owner === "partner" && dd.counterparty === "ashton").reduce((s, dd) => s + eurBal(dd), 0);
+    const debtMClaim = debts.filter(dd => dd.owner === "ashton" && dd.counterparty === "partner").reduce((s, dd) => s + eurBal(dd), 0);
+    const externalDebt = debts.filter(dd => !isInternal(dd)).reduce((s, dd) => s + eurBal(dd), 0);
+    const totalDebt = debts.reduce((s, dd) => s + eurBal(dd), 0);
     const iouIncoming = ious.filter(i => i.direction === "incoming").reduce((s, i) => s + (i.principal - i.paid) * fx[i.cur], 0);
     const iouOutgoing = ious.filter(i => i.direction === "outgoing").reduce((s, i) => s + (i.principal - i.paid) * fx[i.cur], 0);
     const iouNet = iouIncoming - iouOutgoing;
-    const netWorth = totalAssets - totalDebt + iouNet;
-    const netWorthA = personalAssetsA + businessAssets - debtA + iouNet;
-    const netWorthM = personalAssetsM - debtM;
+    // Household net worth only deducts external debts — inter-partner debts cancel.
+    const netWorth = totalAssets - externalDebt + iouNet;
+    const netWorthA = personalAssetsA + businessAssets - debtA + debtAClaim + iouNet;
+    const netWorthM = personalAssetsM - debtM + debtMClaim;
 
     const bizCostTotal = bizCosts.reduce((s, c) => s + c.amt, 0);
     const bizNetFinal = bizRevenue - bizCostTotal;
@@ -186,7 +205,9 @@ export default function LedgerPage() {
       hhBurn, hhIncome, hhSaving,
       personalAssets, personalAssetsA, personalAssetsM, businessAssets,
       liquidAssets, liquidA, liquidM, brokerageAssets, pensionAssets,
-      totalAssets, totalDebt, debtA, debtM, netWorth, netWorthA, netWorthM,
+      totalAssets, totalDebt, externalDebt,
+      debtA, debtM, debtAClaim, debtMClaim,
+      netWorth, netWorthA, netWorthM,
       bizCostTotal, bizNet: bizNetFinal,
       iouIncoming, iouOutgoing, iouNet,
     };
@@ -271,7 +292,7 @@ export default function LedgerPage() {
           <div className="footer-note">
             &ldquo;Annual income twenty pounds, annual expenditure nineteen nineteen and six, result happiness.&rdquo;
             <div className="smallcaps mt-sm">— Mr. Micawber</div>
-            <SyncBadge status={syncStatus} lastSaved={lastSaved} />
+            <SyncBadge status={syncStatus} lastSaved={lastSaved} onRefresh={reload} />
           </div>
         </aside>
 

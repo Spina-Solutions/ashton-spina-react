@@ -13,34 +13,38 @@ export function Dashboard({ state, d }: { state: LedgerState; d: Derived }) {
 
   // Joint pot uses ALL accessible assets (liquid + brokerage + business), not just cash.
   // This matches what Ashton's individual view does (liquidA + businessAssets).
+  const mult = state.amtPeriod === "annual" ? 12 : 1;
+  const periodLabel = state.amtPeriod === "annual" ? "/yr" : "/mo";
+  const claimSub = (claim: number) => claim > 0 ? ` · €${Math.round(claim).toLocaleString()} owed to me` : "";
+
   const heroMap = {
     joint: {
       net: d.netWorth,
       netLabel: "Household net worth",
-      netSub: `€${Math.round(d.totalAssets).toLocaleString()} assets · €${Math.round(d.totalDebt).toLocaleString()} debt · €${Math.round(d.iouNet).toLocaleString()} IOU`,
-      saving: d.hhSaving,
+      netSub: `€${Math.round(d.totalAssets).toLocaleString()} assets · €${Math.round(d.externalDebt).toLocaleString()} debt · €${Math.round(d.iouNet).toLocaleString()} IOU`,
+      saving: d.hhSaving * mult,
       savingLabel: "Household saving",
-      savingSub: `${Math.round(d.hhSaving / d.hhIncome * 100)}% of €${Math.round(d.hhIncome).toLocaleString()} combined income`,
+      savingSub: `${Math.round(d.hhSaving / d.hhIncome * 100)}% of €${Math.round(d.hhIncome * mult).toLocaleString()}${periodLabel} combined income`,
       runwayPot: d.liquidAssets + d.brokerageAssets + d.businessAssets,
       runwayBurn: d.hhBurn,
     },
     ashton: {
       net: d.netWorthA,
       netLabel: "Ashton net worth",
-      netSub: `€${Math.round(d.personalAssetsA + d.businessAssets).toLocaleString()} assets · €${Math.round(d.debtA).toLocaleString()} debt · €${Math.round(d.iouNet).toLocaleString()} IOU`,
-      saving: d.aIncome - d.aBurn,
+      netSub: `€${Math.round(d.personalAssetsA + d.businessAssets).toLocaleString()} assets · €${Math.round(d.debtA).toLocaleString()} debt · €${Math.round(d.iouNet).toLocaleString()} IOU${claimSub(d.debtAClaim)}`,
+      saving: (d.aIncome - d.aBurn) * mult,
       savingLabel: "Ashton saving",
-      savingSub: `€${Math.round(d.aIncome).toLocaleString()} in · €${Math.round(d.aBurn).toLocaleString()} out (€${Math.round(d.aPersonal).toLocaleString()} personal + €${Math.round(d.jointTotal * d.aShare).toLocaleString()} joint share)`,
+      savingSub: `€${Math.round(d.aIncome * mult).toLocaleString()}${periodLabel} in · €${Math.round(d.aBurn * mult).toLocaleString()}${periodLabel} out (€${Math.round(d.aPersonal * mult).toLocaleString()} personal + €${Math.round(d.jointTotal * d.aShare * mult).toLocaleString()} joint share)`,
       runwayPot: d.liquidA + d.businessAssets,
       runwayBurn: d.aBurn,
     },
     partner: {
       net: d.netWorthM,
       netLabel: "Maria net worth",
-      netSub: `€${Math.round(d.personalAssetsM).toLocaleString()} assets · €${Math.round(d.debtM).toLocaleString()} debt`,
-      saving: d.mIncome - d.mBurn,
+      netSub: `€${Math.round(d.personalAssetsM).toLocaleString()} assets · €${Math.round(d.debtM).toLocaleString()} debt${claimSub(d.debtMClaim)}`,
+      saving: (d.mIncome - d.mBurn) * mult,
       savingLabel: "Maria saving",
-      savingSub: `€${Math.round(d.mIncome).toLocaleString()} in · €${Math.round(d.mBurn).toLocaleString()} out (€${Math.round(d.mPersonal).toLocaleString()} personal + €${Math.round(d.jointTotal * d.mShare).toLocaleString()} joint share)`,
+      savingSub: `€${Math.round(d.mIncome * mult).toLocaleString()}${periodLabel} in · €${Math.round(d.mBurn * mult).toLocaleString()}${periodLabel} out (€${Math.round(d.mPersonal * mult).toLocaleString()} personal + €${Math.round(d.jointTotal * d.mShare * mult).toLocaleString()} joint share)`,
       runwayPot: d.liquidM,
       runwayBurn: d.mBurn,
     },
@@ -89,10 +93,10 @@ export function Dashboard({ state, d }: { state: LedgerState; d: Derived }) {
         </div>
 
         <div className="grid g-2">
-          <Panel title="This month" meta={dashView === "joint" ? "household flow" : `${dashView === "ashton" ? "Ashton" : "Maria"} flow`}>
-            {dashView === "joint" ? <JointTable d={d} state={state} /> :
-              dashView === "ashton" ? <PersonTable who="ashton" d={d} /> :
-                <PersonTable who="partner" d={d} />}
+          <Panel title={state.amtPeriod === "annual" ? "This year" : "This month"} meta={dashView === "joint" ? "household flow" : `${dashView === "ashton" ? "Ashton" : "Maria"} flow`}>
+            {dashView === "joint" ? <JointTable d={d} state={state} mult={mult} periodLabel={periodLabel} /> :
+              dashView === "ashton" ? <PersonTable who="ashton" d={d} mult={mult} periodLabel={periodLabel} /> :
+                <PersonTable who="partner" d={d} mult={mult} periodLabel={periodLabel} />}
           </Panel>
 
           <CategoryComparison state={state} d={d} />
@@ -107,49 +111,51 @@ export function Dashboard({ state, d }: { state: LedgerState; d: Derived }) {
   );
 }
 
-function JointTable({ d, state }: { d: Derived; state: LedgerState }) {
+function JointTable({ d, state, mult, periodLabel }: { d: Derived; state: LedgerState; mult: number; periodLabel: string }) {
   const b = deriveBiz(
     { monthlyRevenue: state.bizRevenue, costs: state.bizCosts, grossSalary: BUSINESS.grossSalary, dividendMonthly: state.income.ashton.dividend },
     state.tax,
   );
+  const m = (n: number) => `€${Math.round(n * mult).toLocaleString()}`;
   return (
     <table className="table">
       <tbody>
-        <tr className="subtotal"><td colSpan={2} style={{ paddingBottom: 2 }}>Business (Ashton's Oy)</td></tr>
-        <tr><td className="italic" style={{ paddingLeft: 14 }}>Revenue</td><td className="num">€{Math.round(state.bizRevenue).toLocaleString()}</td></tr>
-        <tr><td className="italic" style={{ paddingLeft: 14 }}>Operating costs</td><td className="num neg">−€{Math.round(d.bizCostTotal).toLocaleString()}</td></tr>
-        <tr><td className="italic" style={{ paddingLeft: 14 }}>→ Salary + dividend to Ashton</td><td className="num">€{Math.round(b.netSalary + b.dividendNet).toLocaleString()}</td></tr>
-        <tr><td className="italic" style={{ paddingLeft: 14 }}>→ Retained in Oy</td><td className="num">€{Math.round(b.retained).toLocaleString()}</td></tr>
+        <tr className="subtotal"><td colSpan={2} style={{ paddingBottom: 2 }}>Business (Ashton's Oy) · {periodLabel.replace("/", "per ")}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 14 }}>Revenue</td><td className="num">{m(state.bizRevenue)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 14 }}>Operating costs</td><td className="num neg">−{m(d.bizCostTotal)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 14 }}>→ Salary + dividend to Ashton</td><td className="num">{m(b.netSalary + b.dividendNet)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 14 }}>→ Retained in Oy</td><td className="num">{m(b.retained)}</td></tr>
         <tr className="subtotal"><td colSpan={2} style={{ paddingBottom: 2, paddingTop: 8 }}>Household cashflow</td></tr>
-        <tr><td><Who who="ashton" label="Ashton income" /></td><td className="num">€{Math.round(d.aIncome).toLocaleString()}</td></tr>
-        <tr><td className="italic" style={{ paddingLeft: 14, color: "var(--ink-3)" }}>Business retained in Oy</td><td className="num" style={{ color: "var(--ink-3)" }}>€{Math.round(b.retained).toLocaleString()}</td></tr>
-        <tr><td><Who who="partner" label="Maria income" /></td><td className="num">€{Math.round(d.mIncome).toLocaleString()}</td></tr>
-        <tr className="subtotal"><td>Combined income (incl. retained)</td><td className="num">€{Math.round(d.hhIncome + b.retained).toLocaleString()}</td></tr>
-        <tr><td>Joint expenses</td><td className="num neg">−€{Math.round(d.jointTotal).toLocaleString()}</td></tr>
-        <tr><td>Ashton personal</td><td className="num neg">−€{Math.round(d.aPersonal).toLocaleString()}</td></tr>
-        <tr><td>Maria personal</td><td className="num neg">−€{Math.round(d.mPersonal).toLocaleString()}</td></tr>
-        <tr className="total"><td>Net monthly saving</td><td className={`num ${d.hhSaving > 0 ? "pos" : "neg"}`}>€{Math.round(d.hhSaving).toLocaleString()}</td></tr>
+        <tr><td><Who who="ashton" label="Ashton income" /></td><td className="num">{m(d.aIncome)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 14, color: "var(--ink-3)" }}>Business retained in Oy</td><td className="num" style={{ color: "var(--ink-3)" }}>{m(b.retained)}</td></tr>
+        <tr><td><Who who="partner" label="Maria income" /></td><td className="num">{m(d.mIncome)}</td></tr>
+        <tr className="subtotal"><td>Combined income (incl. retained)</td><td className="num">{m(d.hhIncome + b.retained)}</td></tr>
+        <tr><td>Joint expenses</td><td className="num neg">−{m(d.jointTotal)}</td></tr>
+        <tr><td>Ashton personal</td><td className="num neg">−{m(d.aPersonal)}</td></tr>
+        <tr><td>Maria personal</td><td className="num neg">−{m(d.mPersonal)}</td></tr>
+        <tr className="total"><td>Net saving ({periodLabel.replace("/", "")})</td><td className={`num ${d.hhSaving > 0 ? "pos" : "neg"}`}>{m(d.hhSaving)}</td></tr>
       </tbody>
     </table>
   );
 }
 
-function PersonTable({ who, d }: { who: "ashton" | "partner"; d: Derived }) {
+function PersonTable({ who, d, mult, periodLabel }: { who: "ashton" | "partner"; d: Derived; mult: number; periodLabel: string }) {
   const A = who === "ashton";
   const income = A ? d.aIncome : d.mIncome;
   const personal = A ? d.aPersonal : d.mPersonal;
   const jointShare = d.jointTotal * (A ? d.aShare : d.mShare);
   const net = income - personal - jointShare;
+  const m = (n: number) => `€${Math.round(n * mult).toLocaleString()}`;
   return (
     <table className="table">
       <tbody>
-        <tr><td>Take-home income</td><td className="num">€{Math.round(income).toLocaleString()}</td></tr>
+        <tr><td>Take-home income ({periodLabel.replace("/", "")})</td><td className="num">{m(income)}</td></tr>
         <tr><td>Share of joint ({((A ? d.aShare : d.mShare) * 100) | 0}%)</td>
-          <td className="num neg">−€{Math.round(jointShare).toLocaleString()}</td></tr>
+          <td className="num neg">−{m(jointShare)}</td></tr>
         <tr><td>Personal spending</td>
-          <td className="num neg">−€{Math.round(personal).toLocaleString()}</td></tr>
+          <td className="num neg">−{m(personal)}</td></tr>
         <tr className="total"><td>Surplus</td>
-          <td className={`num ${net >= 0 ? "pos" : "neg"}`}>€{Math.round(net).toLocaleString()}</td></tr>
+          <td className={`num ${net >= 0 ? "pos" : "neg"}`}>{m(net)}</td></tr>
       </tbody>
     </table>
   );
@@ -199,8 +205,14 @@ function AssetsPanel({ dashView, d, state }: { dashView: "joint" | "ashton" | "p
         <hr className="rule" style={{ margin: "4px 0" }} />
         <div className="flex-between italic" style={{ color: "var(--crimson)" }}>
           <span>Debts</span>
-          <span className="mono">−€{Math.round(dashView === "ashton" ? d.debtA : d.totalDebt).toLocaleString()}</span>
+          <span className="mono">−€{Math.round(dashView === "ashton" ? d.debtA : d.externalDebt).toLocaleString()}</span>
         </div>
+        {dashView === "ashton" && d.debtAClaim > 0 && (
+          <div className="flex-between italic" style={{ color: "var(--moss)" }}>
+            <span>Owed to me (from Maria)</span>
+            <span className="mono">+€{Math.round(d.debtAClaim).toLocaleString()}</span>
+          </div>
+        )}
       </div>
     </div>
   );

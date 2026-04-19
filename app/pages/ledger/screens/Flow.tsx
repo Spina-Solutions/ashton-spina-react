@@ -12,15 +12,21 @@ export function Flow({ state, d }: { state: LedgerState; d: Derived }) {
   });
   useEffect(() => { localStorage.setItem("ledger.flowByCat", byCategory ? "1" : "0"); }, [byCategory]);
 
+  const mult = state.amtPeriod === "annual" ? 12 : 1;
+  const periodLabel = state.amtPeriod === "annual" ? "/yr" : "/mo";
+
   const biz = {
     monthlyRevenue: bizRevenue, costs: bizCosts,
     grossSalary: BUSINESS.grossSalary, dividendMonthly: state.income.ashton.dividend,
   };
   const b = deriveBiz(biz, tax);
 
-  const mGross = state.income.partner.gross || state.income.partner.total;
-  const mTax = mGross * tax.mariaTaxRate;
-  const mNet = mGross - mTax;
+  // Maria's net take-home is the source of truth; gross is re-derived so Flow always
+  // reflects current salary + tax-rate state (previously a stale partner.gross field
+  // made Dashboard / Flow numbers diverge from the salary the user just typed).
+  const mNet = state.income.partner.salary || 0;
+  const mGross = tax.mariaTaxRate < 1 ? mNet / (1 - tax.mariaTaxRate) : mNet;
+  const mTax = mGross - mNet;
 
   const ashtonNet = b.netSalary + b.dividendNet;
   const jointTotal = d.jointTotal;
@@ -32,15 +38,16 @@ export function Flow({ state, d }: { state: LedgerState; d: Derived }) {
   const [fullscreen, setFullscreen] = useState(false);
 
   const svgProps: FullFlowProps = {
-    bizRevenue, bizCostTotal: b.opCosts, grossSalary: BUSINESS.grossSalary,
-    salaryTax: b.salaryTax, netSalary: b.netSalary,
-    preTaxProfit: b.preTaxProfit, corpTax: b.corpTax, afterCorp: b.afterCorp,
-    dividendGross: b.dividendGross, dividendTax: b.dividendTax, dividendNet: b.dividendNet,
-    retained: b.retained, ashtonNet,
-    mGross, mTax, mNet,
-    aJointShare, mJointShare,
-    aPersonal: d.aPersonal, mPersonal: d.mPersonal, aLeftover, mLeftover,
-    jointTotal, byCategory,
+    bizRevenue: bizRevenue * mult, bizCostTotal: b.opCosts * mult, grossSalary: BUSINESS.grossSalary * mult,
+    salaryTax: b.salaryTax * mult, netSalary: b.netSalary * mult,
+    preTaxProfit: b.preTaxProfit * mult, corpTax: b.corpTax * mult, afterCorp: b.afterCorp * mult,
+    dividendGross: b.dividendGross * mult, dividendTax: b.dividendTax * mult, dividendNet: b.dividendNet * mult,
+    retained: b.retained * mult, ashtonNet: ashtonNet * mult,
+    mGross: mGross * mult, mTax: mTax * mult, mNet: mNet * mult,
+    aJointShare: aJointShare * mult, mJointShare: mJointShare * mult,
+    aPersonal: d.aPersonal * mult, mPersonal: d.mPersonal * mult,
+    aLeftover: aLeftover * mult, mLeftover: mLeftover * mult,
+    jointTotal: jointTotal * mult, byCategory,
     joint: state.joint, ashtonP: state.ashtonP, mariaP: state.mariaP,
     aShare: d.aShare, mShare: d.mShare,
   };
@@ -51,8 +58,8 @@ export function Flow({ state, d }: { state: LedgerState; d: Derived }) {
         dek="From business revenue through three tax gates (salary, corporate, dividend) to the things the money actually does." />
 
       <div className="content">
-        <Panel title="Monthly cashflow — April"
-          meta={`Biz €${Math.round(bizRevenue).toLocaleString()} in · Ashton net €${Math.round(ashtonNet).toLocaleString()} · Maria net €${Math.round(mNet).toLocaleString()}`}
+        <Panel title={`${state.amtPeriod === "annual" ? "Yearly" : "Monthly"} cashflow — April`}
+          meta={`Biz €${Math.round(bizRevenue * mult).toLocaleString()}${periodLabel} in · Ashton net €${Math.round(ashtonNet * mult).toLocaleString()}${periodLabel} · Maria net €${Math.round(mNet * mult).toLocaleString()}${periodLabel}`}
           action={
             <button className="btn" style={{ padding: "3px 10px", fontSize: 9 }} onClick={() => setFullscreen(true)}>
               ⤢ Fullscreen
@@ -78,48 +85,48 @@ export function Flow({ state, d }: { state: LedgerState; d: Derived }) {
         )}
 
         <div className="grid g-2">
-          <Panel title="Business — Ashton's Oy" meta={`€${Math.round(bizRevenue).toLocaleString()}/mo in`}>
+          <Panel title="Business — Ashton's Oy" meta={`€${Math.round(bizRevenue * mult).toLocaleString()}${periodLabel} in`}>
             <table className="table">
               <tbody>
-                <tr><td>Gross revenue</td><td className="num">€{bizRevenue.toLocaleString()}</td></tr>
-                <tr><td className="italic">Operating costs</td><td className="num neg">−€{Math.round(b.opCosts).toLocaleString()}</td></tr>
-                <tr><td className="italic">Gross salary booked to Ashton</td><td className="num neg">−€{Math.round(BUSINESS.grossSalary).toLocaleString()}</td></tr>
-                <tr><td className="italic" style={{ paddingLeft: 20 }}>→ Salary tax ({(tax.salaryTaxRate * 100).toFixed(1)}%) to state</td><td className="num neg">−€{Math.round(b.salaryTax).toLocaleString()}</td></tr>
-                <tr><td className="italic" style={{ paddingLeft: 20 }}>→ Net salary to Ashton</td><td className="num">€{Math.round(b.netSalary).toLocaleString()}</td></tr>
-                <tr className="subtotal"><td>Pre-tax profit</td><td className="num">€{Math.round(b.preTaxProfit).toLocaleString()}</td></tr>
-                <tr><td>Corporate tax ({(tax.corpTaxRate * 100).toFixed(0)}%)</td><td className="num neg">−€{Math.round(b.corpTax).toLocaleString()}</td></tr>
-                <tr className="subtotal"><td>After-tax profit</td><td className="num">€{Math.round(b.afterCorp).toLocaleString()}</td></tr>
-                <tr><td>Dividend declared</td><td className="num neg">−€{Math.round(b.dividendGross).toLocaleString()}</td></tr>
-                <tr className="total"><td>Retained in Oy</td><td className={`num ${b.retained >= 0 ? "pos" : "neg"}`}>€{Math.round(b.retained).toLocaleString()}</td></tr>
+                <tr><td>Gross revenue</td><td className="num">€{Math.round(bizRevenue * mult).toLocaleString()}</td></tr>
+                <tr><td className="italic">Operating costs</td><td className="num neg">−€{Math.round(b.opCosts * mult).toLocaleString()}</td></tr>
+                <tr><td className="italic">Gross salary booked to Ashton</td><td className="num neg">−€{Math.round(BUSINESS.grossSalary * mult).toLocaleString()}</td></tr>
+                <tr><td className="italic" style={{ paddingLeft: 20 }}>→ Salary tax ({(tax.salaryTaxRate * 100).toFixed(1)}%) to state</td><td className="num neg">−€{Math.round(b.salaryTax * mult).toLocaleString()}</td></tr>
+                <tr><td className="italic" style={{ paddingLeft: 20 }}>→ Net salary to Ashton</td><td className="num">€{Math.round(b.netSalary * mult).toLocaleString()}</td></tr>
+                <tr className="subtotal"><td>Pre-tax profit</td><td className="num">€{Math.round(b.preTaxProfit * mult).toLocaleString()}</td></tr>
+                <tr><td>Corporate tax ({(tax.corpTaxRate * 100).toFixed(0)}%)</td><td className="num neg">−€{Math.round(b.corpTax * mult).toLocaleString()}</td></tr>
+                <tr className="subtotal"><td>After-tax profit</td><td className="num">€{Math.round(b.afterCorp * mult).toLocaleString()}</td></tr>
+                <tr><td>Dividend declared</td><td className="num neg">−€{Math.round(b.dividendGross * mult).toLocaleString()}</td></tr>
+                <tr className="total"><td>Retained in Oy</td><td className={`num ${b.retained >= 0 ? "pos" : "neg"}`}>€{Math.round(b.retained * mult).toLocaleString()}</td></tr>
               </tbody>
             </table>
           </Panel>
 
-          <Panel title="Ashton — take-home (two streams)" meta={`€${Math.round(ashtonNet).toLocaleString()}/mo`}>
+          <Panel title="Ashton — take-home (two streams)" meta={`€${Math.round(ashtonNet * mult).toLocaleString()}${periodLabel}`}>
             <table className="table">
               <tbody>
-                <tr><td>Net salary (after {(tax.salaryTaxRate * 100).toFixed(1)}% withholding)</td><td className="num">€{Math.round(b.netSalary).toLocaleString()}</td></tr>
-                <tr><td>Dividend declared</td><td className="num">€{Math.round(b.dividendGross).toLocaleString()}</td></tr>
-                <tr><td className="italic" style={{ paddingLeft: 20 }}>− dividend tax ({(tax.dividendTaxRate * 100).toFixed(1)}%)</td><td className="num neg">−€{Math.round(b.dividendTax).toLocaleString()}</td></tr>
-                <tr><td className="italic" style={{ paddingLeft: 20 }}>= dividend net</td><td className="num">€{Math.round(b.dividendNet).toLocaleString()}</td></tr>
-                <tr className="subtotal"><td>Spendable</td><td className="num">€{Math.round(ashtonNet).toLocaleString()}</td></tr>
-                <tr><td>Share of joint ({(d.aShare * 100).toFixed(0)}%)</td><td className="num neg">−€{Math.round(aJointShare).toLocaleString()}</td></tr>
-                <tr><td>Personal spend</td><td className="num neg">−€{Math.round(d.aPersonal).toLocaleString()}</td></tr>
-                <tr className="total"><td>Surplus</td><td className={`num ${aLeftover >= 0 ? "pos" : "neg"}`}>€{Math.round(aLeftover).toLocaleString()}</td></tr>
+                <tr><td>Net salary (after {(tax.salaryTaxRate * 100).toFixed(1)}% withholding)</td><td className="num">€{Math.round(b.netSalary * mult).toLocaleString()}</td></tr>
+                <tr><td>Dividend declared</td><td className="num">€{Math.round(b.dividendGross * mult).toLocaleString()}</td></tr>
+                <tr><td className="italic" style={{ paddingLeft: 20 }}>− dividend tax ({(tax.dividendTaxRate * 100).toFixed(1)}%)</td><td className="num neg">−€{Math.round(b.dividendTax * mult).toLocaleString()}</td></tr>
+                <tr><td className="italic" style={{ paddingLeft: 20 }}>= dividend net</td><td className="num">€{Math.round(b.dividendNet * mult).toLocaleString()}</td></tr>
+                <tr className="subtotal"><td>Spendable</td><td className="num">€{Math.round(ashtonNet * mult).toLocaleString()}</td></tr>
+                <tr><td>Share of joint ({(d.aShare * 100).toFixed(0)}%)</td><td className="num neg">−€{Math.round(aJointShare * mult).toLocaleString()}</td></tr>
+                <tr><td>Personal spend</td><td className="num neg">−€{Math.round(d.aPersonal * mult).toLocaleString()}</td></tr>
+                <tr className="total"><td>Surplus</td><td className={`num ${aLeftover >= 0 ? "pos" : "neg"}`}>€{Math.round(aLeftover * mult).toLocaleString()}</td></tr>
               </tbody>
             </table>
           </Panel>
         </div>
 
-        <Panel title="Maria — salary → spendable" meta={`€${Math.round(mGross).toLocaleString()}/mo gross`}>
+        <Panel title="Maria — salary → spendable" meta={`€${Math.round(mGross * mult).toLocaleString()}${periodLabel} gross`}>
           <table className="table">
             <tbody>
-              <tr><td>Gross salary</td><td className="num">€{mGross.toLocaleString()}</td></tr>
-              <tr><td className="italic">Income tax + social contributions ({(tax.mariaTaxRate * 100).toFixed(1)}%)</td><td className="num neg">−€{Math.round(mTax).toLocaleString()}</td></tr>
-              <tr className="subtotal"><td>Net take-home</td><td className="num">€{Math.round(mNet).toLocaleString()}</td></tr>
-              <tr><td>Share of joint ({(d.mShare * 100).toFixed(0)}%)</td><td className="num neg">−€{Math.round(mJointShare).toLocaleString()}</td></tr>
-              <tr><td>Personal spend</td><td className="num neg">−€{Math.round(d.mPersonal).toLocaleString()}</td></tr>
-              <tr className="total"><td>Surplus</td><td className={`num ${mLeftover >= 0 ? "pos" : "neg"}`}>€{Math.round(mLeftover).toLocaleString()}</td></tr>
+              <tr><td>Gross salary</td><td className="num">€{Math.round(mGross * mult).toLocaleString()}</td></tr>
+              <tr><td className="italic">Income tax + social contributions ({(tax.mariaTaxRate * 100).toFixed(1)}%)</td><td className="num neg">−€{Math.round(mTax * mult).toLocaleString()}</td></tr>
+              <tr className="subtotal"><td>Net take-home</td><td className="num">€{Math.round(mNet * mult).toLocaleString()}</td></tr>
+              <tr><td>Share of joint ({(d.mShare * 100).toFixed(0)}%)</td><td className="num neg">−€{Math.round(mJointShare * mult).toLocaleString()}</td></tr>
+              <tr><td>Personal spend</td><td className="num neg">−€{Math.round(d.mPersonal * mult).toLocaleString()}</td></tr>
+              <tr className="total"><td>Surplus</td><td className={`num ${mLeftover >= 0 ? "pos" : "neg"}`}>€{Math.round(mLeftover * mult).toLocaleString()}</td></tr>
             </tbody>
           </table>
         </Panel>
@@ -146,6 +153,8 @@ interface FullFlowProps {
 interface FlowNode { id: string; label: string; value: number; color: string; x: number; y: number; h: number; sources?: Record<string, number>; }
 interface LinkDef { from: string; to: string; value: number; color: string; }
 
+const FLOW_COL_ORDER_KEY = "ledger.flowColOrders";
+
 function FullFlow(props: FullFlowProps) {
   const {
     bizRevenue, bizCostTotal, grossSalary, salaryTax, netSalary,
@@ -157,8 +166,21 @@ function FullFlow(props: FullFlowProps) {
   } = props;
 
   const [hovered, setHovered] = useState<{ from: string; to: string; value: number; color: string; x: number; y: number } | null>(null);
-  // colOrders stores the user-dragged order for each reorderable column key
-  const [colOrders, setColOrders] = useState<Record<string, string[]>>({});
+  // colOrders stores the user-dragged order for each reorderable column key.
+  // Persisted so a drag survives route changes (Flow unmounts when the user switches pages).
+  const [colOrders, setColOrders] = useState<Record<string, string[]>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const raw = localStorage.getItem(FLOW_COL_ORDER_KEY);
+      return raw ? JSON.parse(raw) as Record<string, string[]> : {};
+    } catch {
+      return {};
+    }
+  });
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem(FLOW_COL_ORDER_KEY, JSON.stringify(colOrders));
+  }, [colOrders]);
   const [dragging, setDragging] = useState<{ colKey: string; nodeId: string } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
