@@ -11,6 +11,8 @@
     "cdk": "cdk"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1032.0",
+    "@aws-sdk/util-dynamodb": "^3.996.2",
     "@hono/node-server": "^1.19.5",
     "@sentry/react": "^10.17.0",
     "@ts-rest/core": "^3.52.1",
