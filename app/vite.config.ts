@@ -6,6 +6,11 @@ import { defineConfig } from "vite";
 import vike from "vike/plugin";
 
 export default defineConfig({
+  // Prefer IPv4 so `localhost` → 127.0.0.1 still connects (Node may otherwise bind [::1] only).
+  server: {
+    host: "127.0.0.1",
+    port: 3000,
+  },
   plugins: [
     vike(),
     devServer({

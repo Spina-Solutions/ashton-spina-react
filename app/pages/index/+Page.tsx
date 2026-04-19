@@ -375,9 +375,16 @@ export default function Page() {
             </div>
           </a>
 
-          {/* Wander - purple theme */}
-          <a href="https://github.com/RUGSoftEng/2017-Cognitive-Sensors" target="_blank" rel="noreferrer" className={"group block p-4 rounded-2xl border bg-purple-50/80 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 hover:bg-purple-100/80 dark:hover:bg-purple-900/30 transition-colors"}>
-            <div className={"space-y-3"}>
+          {/* Wander - purple theme (no nested anchors — invalid HTML breaks hydration) */}
+          <div className={"group relative block p-4 rounded-2xl border bg-purple-50/80 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 hover:bg-purple-100/80 dark:hover:bg-purple-900/30 transition-colors"}>
+            <a
+              href="https://github.com/RUGSoftEng/2017-Cognitive-Sensors"
+              target="_blank"
+              rel="noreferrer"
+              className={"absolute inset-0 z-0 rounded-2xl"}
+              aria-label="Wander (Cognitive Sensors) on GitHub"
+            />
+            <div className={"relative z-10 space-y-3 pointer-events-none"}>
               {/* Header with logo and title */}
               <div className={"flex items-center gap-3"}>
                 <img src={wanderLogo} alt="Wander logo" className={"h-10 w-10 rounded-lg object-cover border border-purple-200 dark:border-purple-800 bg-white"} />
@@ -385,11 +392,18 @@ export default function Page() {
               </div>
               {/* Description */}
               <div className={"text-sm text-purple-800/80 dark:text-purple-200/80"}>
-                Android research app for cognitive testing and mind‑wandering data.
-                <a className={"ml-1 underline"} href="https://ashtonspina.com/content/wander" target="_blank" rel="noreferrer">Read more</a>
+                Android research app for cognitive testing and mind‑wandering data.{" "}
+                <a
+                  className={"ml-1 underline pointer-events-auto relative z-20"}
+                  href="https://ashtonspina.com/content/wander"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Read more
+                </a>
               </div>
             </div>
-          </a>
+          </div>
         </div>
         
         {/* Projects Link */}
