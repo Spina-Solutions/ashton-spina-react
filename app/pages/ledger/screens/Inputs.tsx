@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { Bar, EditableCell, Folio, Panel, Segmented, Smallcaps, Stat, Who } from "../primitives.js";
-import { BUSINESS, CATEGORIES, SETTINGS, deriveBiz, fmt, fx } from "../data.js";
+import { BUSINESS, CATEGORIES, deriveBiz, fmt, fx } from "../data.js";
 import type { Derived, LedgerState } from "../state.js";
 import type { CategoryKey, Iou, IouEntry, SplitMode, Asset, AssetOwner, Debt } from "../data.js";
 
@@ -618,7 +618,9 @@ function NewEntryRow({ onAdd, direction }: { onAdd: (entry: IouEntry) => void; d
 }
 
 function SplitSection({ state, d }: { state: LedgerState; d: Derived }) {
-  const { splitMode, setSplitMode } = state;
+  const { splitMode, setSplitMode, customSplit, setCustomSplit } = state;
+  const ashtonPct = Math.round(customSplit * 100);
+  const mariaPct = 100 - ashtonPct;
   return (
     <div className="grid g-2">
       <Panel title="Split mode" meta="how joint expenses are divided">
@@ -638,8 +640,26 @@ function SplitSection({ state, d }: { state: LedgerState; d: Derived }) {
           {splitMode === "gross"  && "Split by pre-tax gross income — a fairer split when one partner pays a lot more tax."}
           {splitMode === "bizNet" && "Split by what Ashton really earns including retained business profit. He'll pay the largest share because the Oy is growing equity in his name."}
           {splitMode === "fifty"  && "Each partner pays half, regardless of income."}
-          {splitMode === "custom" && `Use a fixed ratio (currently Ashton ${(SETTINGS.ashtonPortionCustom * 100).toFixed(0)}%).`}
+          {splitMode === "custom" && `Use the slider below to set a fixed ratio.`}
         </div>
+        {splitMode === "custom" && (
+          <div className="mt-md" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div className="flex-between" style={{ fontSize: 13 }}>
+              <span>Ashton</span>
+              <span className="mono" style={{ fontWeight: 700 }}>{ashtonPct}%</span>
+            </div>
+            <input
+              type="range" min={0} max={100} step={1}
+              value={ashtonPct}
+              onChange={e => setCustomSplit(Number(e.target.value) / 100)}
+              style={{ width: "100%", accentColor: "var(--ink)" }}
+            />
+            <div className="flex-between" style={{ fontSize: 12, color: "var(--ink-3)" }}>
+              <span>Maria {mariaPct}%</span>
+              <span>Ashton {ashtonPct}%</span>
+            </div>
+          </div>
+        )}
       </Panel>
       <Panel title="Current ratio" meta={splitMode === "fifty" ? "50 / 50" : "by income"}>
         <table className="table">
@@ -657,6 +677,84 @@ function SplitSection({ state, d }: { state: LedgerState; d: Derived }) {
   );
 }
 
+type TaxInputMode = "pct" | "abs";
+
+function TaxRow({ label, k, desc, derived, rate, gross, onRate }: {
+  label: string;
+  k: string;
+  desc: string;
+  derived: string;
+  rate: number;
+  gross: number;
+  onRate: (v: number) => void;
+}) {
+  const [mode, setMode] = useState<TaxInputMode>("pct");
+  const [draft, setDraft] = useState("");
+  const [editing, setEditing] = useState(false);
+
+  const displayPct = (rate * 100).toFixed(2);
+  const displayAbs = Math.round(rate * gross).toString();
+
+  function commitDraft() {
+    const raw = parseFloat(draft);
+    if (!isNaN(raw)) {
+      if (mode === "pct") onRate(Math.max(0, Math.min(0.95, raw / 100)));
+      else if (gross > 0) onRate(Math.max(0, Math.min(0.95, raw / gross)));
+    }
+    setEditing(false);
+  }
+
+  return (
+    <tr>
+      <td>
+        <div>{label}</div>
+        <div className="italic" style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2 }}>{desc}</div>
+      </td>
+      <td style={{ width: 180 }}>
+        {mode === "pct" && (
+          <input type="range" min={0} max={0.6} step={0.001} value={rate}
+            onChange={e => onRate(parseFloat(e.target.value))}
+            style={{ width: "100%", accentColor: "var(--rust)" }} />
+        )}
+      </td>
+      <td className="num" style={{ width: 130 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 6 }}>
+          {editing ? (
+            <input
+              autoFocus
+              className="cell-input mono"
+              style={{ width: 70, textAlign: "right", fontWeight: 600, fontSize: 13 }}
+              value={draft}
+              onChange={e => setDraft(e.target.value)}
+              onBlur={commitDraft}
+              onKeyDown={e => { if (e.key === "Enter") commitDraft(); if (e.key === "Escape") setEditing(false); }}
+            />
+          ) : (
+            <span
+              className="mono"
+              style={{ fontWeight: 600, fontSize: 13, cursor: "text", borderBottom: "1px dashed var(--rule)" }}
+              onClick={() => { setDraft(mode === "pct" ? displayPct : displayAbs); setEditing(true); }}
+              title="Click to edit"
+            >
+              {mode === "pct" ? `${displayPct}%` : `€${displayAbs}`}
+            </span>
+          )}
+          <button
+            onClick={() => { setEditing(false); setMode(m => m === "pct" ? "abs" : "pct"); }}
+            style={{ fontSize: 9, fontFamily: "var(--mono)", letterSpacing: "0.06em", textTransform: "uppercase",
+              padding: "2px 5px", border: "1px solid var(--rule-soft)", background: "var(--paper-2)",
+              cursor: "pointer", color: "var(--ink-2)", borderRadius: 2, whiteSpace: "nowrap" }}
+            title="Toggle between % rate and € monthly amount"
+          >
+            {mode === "pct" ? "%" : "€"}
+          </button>
+        </div>
+      </td>
+      <td className="num mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>{derived}</td>
+    </tr>
+  );
+}
+
 function TaxSection({ state }: { state: LedgerState }) {
   const { tax, setTax, bizRevenue, bizCosts, income } = state;
   const upd = (k: keyof typeof tax, v: number) => setTax(t => ({ ...t, [k]: Math.max(0, Math.min(0.95, v)) }));
@@ -669,26 +767,6 @@ function TaxSection({ state }: { state: LedgerState }) {
   const mGross = income.partner.gross || income.partner.total;
   const mTax = mGross * tax.mariaTaxRate;
 
-  const Row = ({ label, k, desc, derived }: { label: string; k: keyof typeof tax; desc: string; derived: string }) => (
-    <tr>
-      <td>
-        <div>{label}</div>
-        <div className="italic" style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2 }}>{desc}</div>
-      </td>
-      <td style={{ width: 180 }}>
-        <div className="flex-between" style={{ gap: 8, alignItems: "center" }}>
-          <input type="range" min={0} max={0.6} step={0.001} value={tax[k]}
-            onChange={e => upd(k, parseFloat(e.target.value))}
-            style={{ flex: 1, accentColor: "var(--rust)" }} />
-        </div>
-      </td>
-      <td className="num mono" style={{ width: 80, fontWeight: 600 }}>
-        {(tax[k] * 100).toFixed(2)}%
-      </td>
-      <td className="num mono" style={{ fontSize: 11, color: "var(--ink-3)", width: 180 }}>{derived}</td>
-    </tr>
-  );
-
   return (
     <>
       <Panel title="Tax rates" meta="separate gates for salary, corporate profit, and dividends">
@@ -697,25 +775,29 @@ function TaxSection({ state }: { state: LedgerState }) {
           corporate tax applies to pre-tax profit inside the Oy, and dividend tax is paid personally on declared dividends.
           What survives each gate is what actually funds you.
         </div>
-        <table className="table">
+        <div className="table-wrap"><table className="table">
           <thead>
-            <tr><th>Rate</th><th>Adjust</th><th className="num">Value</th><th className="num">Current monthly amount</th></tr>
+            <tr><th>Rate</th><th>Slider</th><th className="num">Value — click to edit</th><th className="num">Current monthly amount</th></tr>
           </thead>
           <tbody>
-            <Row k="salaryTaxRate" label="Salary tax (withholding)"
+            <TaxRow k="salaryTaxRate" label="Salary tax (withholding)"
               desc={`Paid by the Oy on Ashton's €${BUSINESS.grossSalary.toLocaleString()} gross salary. Goes directly to state — never enters Ashton's pocket.`}
-              derived={`−€${Math.round(b.salaryTax).toLocaleString()} of gross · net €${Math.round(b.netSalary).toLocaleString()}`} />
-            <Row k="corpTaxRate" label="Corporate tax"
+              derived={`−€${Math.round(b.salaryTax).toLocaleString()} of gross · net €${Math.round(b.netSalary).toLocaleString()}`}
+              rate={tax.salaryTaxRate} gross={BUSINESS.grossSalary} onRate={v => upd("salaryTaxRate", v)} />
+            <TaxRow k="corpTaxRate" label="Corporate tax"
               desc={`Applied to the Oy's pre-tax profit (revenue − costs − gross salary). Finnish default 20%.`}
-              derived={`−€${Math.round(b.corpTax).toLocaleString()} of €${Math.round(b.preTaxProfit).toLocaleString()} profit · after-tax €${Math.round(b.afterCorp).toLocaleString()}`} />
-            <Row k="dividendTaxRate" label="Dividend tax (personal)"
+              derived={`−€${Math.round(b.corpTax).toLocaleString()} of €${Math.round(b.preTaxProfit).toLocaleString()} profit · after-tax €${Math.round(b.afterCorp).toLocaleString()}`}
+              rate={tax.corpTaxRate} gross={b.preTaxProfit} onRate={v => upd("corpTaxRate", v)} />
+            <TaxRow k="dividendTaxRate" label="Dividend tax (personal)"
               desc={`Paid by Ashton personally on declared dividends. Finnish unlisted Oy dividends are partially tax-advantaged; 26.25% is a conservative blended rate above the acquisition-cost cap.`}
-              derived={`−€${Math.round(b.dividendTax).toLocaleString()} of €${Math.round(b.dividendGross).toLocaleString()} gross · net €${Math.round(b.dividendNet).toLocaleString()}`} />
-            <Row k="mariaTaxRate" label="Maria — income tax + social"
+              derived={`−€${Math.round(b.dividendTax).toLocaleString()} of €${Math.round(b.dividendGross).toLocaleString()} gross · net €${Math.round(b.dividendNet).toLocaleString()}`}
+              rate={tax.dividendTaxRate} gross={b.dividendGross} onRate={v => upd("dividendTaxRate", v)} />
+            <TaxRow k="mariaTaxRate" label="Maria — income tax + social"
               desc={`Applied to Maria's gross salary. Includes income tax and employee social contributions as a combined effective rate.`}
-              derived={`−€${Math.round(mTax).toLocaleString()} of €${Math.round(mGross).toLocaleString()} gross · net €${Math.round(mGross - mTax).toLocaleString()}`} />
+              derived={`−€${Math.round(mTax).toLocaleString()} of €${Math.round(mGross).toLocaleString()} gross · net €${Math.round(mGross - mTax).toLocaleString()}`}
+              rate={tax.mariaTaxRate} gross={mGross} onRate={v => upd("mariaTaxRate", v)} />
           </tbody>
-        </table>
+        </table></div>
       </Panel>
 
       <div className="grid g-2">

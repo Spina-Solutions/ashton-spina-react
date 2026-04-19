@@ -77,6 +77,7 @@ export default function LedgerPage() {
   const [bizCosts, setBizCosts] = useState<BizCost[]>(BUSINESS.costs);
   const [bizRevenue, setBizRevenue] = useState<number>(BUSINESS.monthlyRevenue);
   const [splitMode, setSplitMode] = useState<SplitMode>(SETTINGS.splitMode);
+  const [customSplit, setCustomSplit] = useState<number>(SETTINGS.ashtonPortionCustom);
   const [scenarios, setScenarios] = useState<Scenario[]>(SCENARIOS);
   const [tax, setTax] = useState<TaxRates>(TAX);
   const [dashView, setDashView] = useState<"joint" | "ashton" | "partner">(
@@ -96,10 +97,10 @@ export default function LedgerPage() {
     income: income as LedgerStatePayload["income"],
     joint, ashtonP, mariaP, assets, debts, ious,
     bizCosts, bizRevenue,
-    splitMode,
+    splitMode, customSplit,
     tax: tax as LedgerStatePayload["tax"],
     scenarios, pensions,
-  }), [income, joint, ashtonP, mariaP, assets, debts, ious, bizCosts, bizRevenue, splitMode, tax, scenarios, pensions]);
+  }), [income, joint, ashtonP, mariaP, assets, debts, ious, bizCosts, bizRevenue, splitMode, customSplit, tax, scenarios, pensions]);
 
   // Apply loaded state from DynamoDB
   const onLoad = useCallback((s: LedgerStatePayload) => {
@@ -113,6 +114,7 @@ export default function LedgerPage() {
     setBizCosts(s.bizCosts as BizCost[]);
     setBizRevenue(s.bizRevenue);
     setSplitMode(s.splitMode as SplitMode);
+    if (typeof (s as Record<string, unknown>).customSplit === "number") setCustomSplit((s as Record<string, unknown>).customSplit as number);
     setTax(s.tax as TaxRates);
     setScenarios(s.scenarios as Scenario[]);
     if (s.pensions) setPensions(s.pensions as PensionAccount[]);
@@ -131,6 +133,7 @@ export default function LedgerPage() {
     bizCosts, setBizCosts,
     bizRevenue, setBizRevenue,
     splitMode, setSplitMode,
+    customSplit, setCustomSplit,
     tax, setTax,
     scenarios, setScenarios,
     dashView, setDashView: setDashView as Dispatch<SetStateAction<"joint" | "ashton" | "partner">>,
@@ -159,7 +162,7 @@ export default function LedgerPage() {
       const aBizContribution = aIncome + Math.max(0, bizNetLocal);
       aShare = aBizContribution / (aBizContribution + mIncome);
     }
-    else if (splitMode === "custom") aShare = SETTINGS.ashtonPortionCustom || 0.6;
+    else if (splitMode === "custom") aShare = customSplit;
     else aShare = aIncome / (aIncome + mIncome);
     const mShare = 1 - aShare;
     const aBurn = aPersonal + jointTotal * aShare;

@@ -24,6 +24,8 @@ export interface LedgerState {
   setBizRevenue: Dispatch<SetStateAction<number>>;
   splitMode: SplitMode;
   setSplitMode: Dispatch<SetStateAction<SplitMode>>;
+  customSplit: number;
+  setCustomSplit: Dispatch<SetStateAction<number>>;
   tax: TaxRates;
   setTax: Dispatch<SetStateAction<TaxRates>>;
   scenarios: Scenario[];
