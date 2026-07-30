@@ -61,6 +61,7 @@ export interface Derived {
   liquidA: number;
   liquidM: number;
   brokerageAssets: number;
+  personalBrokerageA: number;
   pensionAssets: number;
   totalAssets: number;
   totalDebt: number;

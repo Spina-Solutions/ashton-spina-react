@@ -273,9 +273,15 @@ function PersonalList({ title, list, setList }: { title: string; list: LedgerSta
 }
 
 function BusinessSection({ state }: { state: LedgerState }) {
-  const { bizRevenue, setBizRevenue, bizCosts, setBizCosts } = state;
-  const total = bizCosts.reduce((s, c) => s + c.amt, 0);
-  const net = bizRevenue - total;
+  const { bizRevenue, setBizRevenue, bizCosts, setBizCosts, income, tax } = state;
+  const opCostTotal = bizCosts.reduce((s, c) => s + c.amt, 0);
+  // Gross salary derived from live net salary so it stays in sync with the Income section.
+  const grossSalary = tax.salaryTaxRate < 1
+    ? income.ashton.salary / (1 - tax.salaryTaxRate)
+    : income.ashton.salary;
+  const preTaxProfit = Math.max(0, bizRevenue - opCostTotal - grossSalary);
+  const corpTax = preTaxProfit * tax.corpTaxRate;
+  const afterCorpTax = preTaxProfit - corpTax;
   const update = (i: number, v: number) => setBizCosts(xs => xs.map((x, j) => j === i ? { ...x, amt: v } : x));
   const updateLabel = (i: number, v: string) => setBizCosts(xs => xs.map((x, j) => j === i ? { ...x, label: v } : x));
   const add = () => setBizCosts(xs => [...xs, { label: "New cost", amt: 0 }]);
@@ -283,7 +289,7 @@ function BusinessSection({ state }: { state: LedgerState }) {
 
   return (
     <div className="grid g-2-1">
-      <Panel title="Business costs" meta={`${bizCosts.length} · €${Math.round(total).toLocaleString()}/mo`}>
+      <Panel title="Business costs" meta={`${bizCosts.length} · €${Math.round(opCostTotal).toLocaleString()}/mo`}>
         <div className="table-wrap"><table className="table">
           <tbody>
             {bizCosts.map((c, i) => (
@@ -299,8 +305,8 @@ function BusinessSection({ state }: { state: LedgerState }) {
             ))}
             <tr className="total">
               <td>Total</td>
-              <td className="num">€{Math.round(total).toLocaleString()}</td>
-              <td className="num">€{Math.round(total * 12).toLocaleString()}</td>
+              <td className="num">€{Math.round(opCostTotal).toLocaleString()}</td>
+              <td className="num">€{Math.round(opCostTotal * 12).toLocaleString()}</td>
               <td></td>
             </tr>
           </tbody>
@@ -311,10 +317,11 @@ function BusinessSection({ state }: { state: LedgerState }) {
         <table className="table">
           <tbody>
             <tr><td>Monthly revenue</td><EditableCell value={bizRevenue} onChange={setBizRevenue} prefix="€" /></tr>
-            <tr><td>Costs</td><td className="num neg">−€{Math.round(total).toLocaleString()}</td></tr>
-            <tr className="subtotal"><td>Pre-tax net</td><td className="num">€{Math.round(net).toLocaleString()}</td></tr>
-            <tr><td>Corporate tax (~20%)</td><td className="num neg">−€{Math.round(net * 0.20).toLocaleString()}</td></tr>
-            <tr className="total"><td>After tax</td><td className="num">€{Math.round(net * 0.80).toLocaleString()}</td></tr>
+            <tr><td className="italic">Operating costs</td><td className="num neg">−€{Math.round(opCostTotal).toLocaleString()}</td></tr>
+            <tr><td className="italic">Gross salary (Ashton)</td><td className="num neg">−€{Math.round(grossSalary).toLocaleString()}</td></tr>
+            <tr className="subtotal"><td>Pre-tax profit</td><td className="num">€{Math.round(preTaxProfit).toLocaleString()}</td></tr>
+            <tr><td className="italic">Corporate tax ({(tax.corpTaxRate * 100).toFixed(0)}%)</td><td className="num neg">−€{Math.round(corpTax).toLocaleString()}</td></tr>
+            <tr className="total"><td>After-tax profit</td><td className="num">€{Math.round(afterCorpTax).toLocaleString()}</td></tr>
           </tbody>
         </table>
       </Panel>
@@ -373,7 +380,6 @@ function AssetsSection({ state }: { state: LedgerState }) {
                     <option value="hysa">hysa</option>
                     <option value="brokerage">brokerage</option>
                     <option value="receivable">receivable</option>
-                    <option value="pension">pension</option>
                   </select>
                 </td>
                 <td>

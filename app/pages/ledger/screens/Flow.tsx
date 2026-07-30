@@ -232,60 +232,116 @@ function FullFlow(props: FullFlowProps) {
   const topY = pad + headerPad;
   const botY = topY + topStreamH + 40;
 
-  const getOrder = (key: string, defaults: string[]) => colOrders[key] ?? defaults;
+  // Merge stored order with current defaults: preserves user's custom order while adding
+  // any new items (e.g. new expense categories) and dropping stale ones.
+  const getOrder = (key: string, defaults: string[]) => {
+    const stored = colOrders[key];
+    if (!stored) return defaults;
+    const valid = stored.filter(id => defaults.includes(id));
+    const added = defaults.filter(id => !stored.includes(id));
+    return valid.length > 0 ? [...valid, ...added] : defaults;
+  };
 
-  // Item definitions for each reorderable column
+  // ── Category aggregation (unconditional so IDs are available for draggableCols) ──
+  const catAgg: Record<string, { value: number; sources: Record<string, number> }> = {};
+  const addToCat = (catId: string, source: string, val: number) => {
+    if (val <= 0) return;
+    if (!catAgg[catId]) catAgg[catId] = { value: 0, sources: {} };
+    catAgg[catId].value += val;
+    catAgg[catId].sources[source] = (catAgg[catId].sources[source] || 0) + val;
+  };
+  (joint || []).forEach(j => addToCat(j.cat || "other", "joint", j.amt));
+  (ashtonP || []).forEach(e => addToCat(e.cat || "other", "a_pers", e.amt));
+  (mariaP || []).forEach(e => addToCat(e.cat || "other", "m_pers", e.amt));
+  addToCat("savings", "a_save", aLeftover);
+  addToCat("savings", "m_save", mLeftover);
+  const catRowsSorted = Object.entries(catAgg)
+    .map(([rawId, v]) => ({ rawId, id: `cat_${rawId}`, ...v }))
+    .sort((a, b) => b.value - a.value);
+  const catItemDefs: Record<string, Omit<FlowNode, "x" | "y" | "h">> = Object.fromEntries(
+    catRowsSorted.map(r => {
+      const meta = CATEGORIES[r.rawId] || { label: r.rawId, color: "#888" };
+      return [r.id, { id: r.id, label: meta.label, value: r.value, color: meta.color || "#888", sources: r.sources }];
+    })
+  );
+  const catDefaultOrder = catRowsSorted.map(r => r.id);
+
+  // ── Item definitions for every reorderable column ──
+  const srcItemDefs: Record<string, Omit<FlowNode, "x" | "y" | "h">> = {
+    biz_rev: { id: "biz_rev", label: "Business revenue",   value: bizRevenue, color: COL.BIZ },
+    m_gross: { id: "m_gross", label: "Maria gross salary", value: mGross,     color: COL.MARIA },
+  };
   const t1Items: Record<string, Omit<FlowNode, "x" | "y" | "h">> = {
-    biz_costs: { id: "biz_costs", label: "Operating costs", value: bizCostTotal, color: COL.COST },
-    gross_sal: { id: "gross_sal", label: "Gross salary (Ashton)", value: grossSalary, color: COL.ASHTON },
-    pre_profit: { id: "pre_profit", label: "Pre-tax profit", value: Math.max(0, preTaxProfit), color: COL.BIZ },
+    biz_costs:  { id: "biz_costs",  label: "Operating costs",        value: bizCostTotal,          color: COL.COST },
+    gross_sal:  { id: "gross_sal",  label: "Gross salary (Ashton)",   value: grossSalary,           color: COL.ASHTON },
+    pre_profit: { id: "pre_profit", label: "Pre-tax profit",          value: Math.max(0, preTaxProfit), color: COL.BIZ },
+  };
+  const b1ItemDefs: Record<string, Omit<FlowNode, "x" | "y" | "h">> = {
+    m_tax: { id: "m_tax", label: "Income tax → state", value: mTax, color: COL.TAX },
+    m_net: { id: "m_net", label: "Net take-home",      value: mNet, color: COL.MARIA },
   };
   const t2Items: Record<string, Omit<FlowNode, "x" | "y" | "h">> = {
-    sal_tax: { id: "sal_tax", label: "Salary tax → state", value: salaryTax, color: COL.TAX },
-    net_sal: { id: "net_sal", label: "Net salary", value: netSalary, color: COL.ASHTON },
-    corp_tax: { id: "corp_tax", label: "Corporate tax → state", value: corpTax, color: COL.TAX },
-    after_corp: { id: "after_corp", label: "After-tax profit", value: Math.max(0, afterCorp), color: COL.BIZ },
+    sal_tax:    { id: "sal_tax",    label: "Salary tax → state",    value: salaryTax,             color: COL.TAX },
+    net_sal:    { id: "net_sal",    label: "Net salary",            value: netSalary,             color: COL.ASHTON },
+    corp_tax:   { id: "corp_tax",   label: "Corporate tax → state", value: corpTax,               color: COL.TAX },
+    after_corp: { id: "after_corp", label: "After-tax profit",      value: Math.max(0, afterCorp), color: COL.BIZ },
   };
   const t3Items: Record<string, Omit<FlowNode, "x" | "y" | "h">> = {
-    div_gross: { id: "div_gross", label: "Dividend (gross)", value: dividendGross, color: COL.ASHTON },
-    retained: { id: "retained", label: "Retained in Oy", value: Math.max(0, retained), color: COL.SAVE },
+    div_gross: { id: "div_gross", label: "Dividend (gross)",   value: dividendGross,        color: COL.ASHTON },
+    retained:  { id: "retained",  label: "Retained in Oy",    value: Math.max(0, retained), color: COL.SAVE },
   };
   const t4Items: Record<string, Omit<FlowNode, "x" | "y" | "h">> = {
-    div_tax: { id: "div_tax", label: "Dividend tax → state", value: dividendTax, color: COL.TAX },
-    div_net: { id: "div_net", label: "Dividend (net)", value: dividendNet, color: COL.ASHTON },
+    div_tax: { id: "div_tax", label: "Dividend tax → state", value: dividendTax,  color: COL.TAX },
+    div_net: { id: "div_net", label: "Dividend (net)",       value: dividendNet,  color: COL.ASHTON },
+  };
+  const spendItemDefs: Record<string, Omit<FlowNode, "x" | "y" | "h">> = {
+    a_pool: { id: "a_pool", label: "Ashton spendable", value: ashtonNet, color: COL.ASHTON },
+    m_pool: { id: "m_pool", label: "Maria spendable",  value: mNet,      color: COL.MARIA },
   };
   const destItemDefs: Record<string, Omit<FlowNode, "x" | "y" | "h">> = {
-    joint:  { id: "joint",  label: "Joint expenses",  value: jointTotal, color: COL.JOINT },
-    a_pers: { id: "a_pers", label: "Ashton personal",  value: aPersonal,  color: COL.COST },
-    a_save: { id: "a_save", label: "Ashton surplus",   value: aLeftover,  color: COL.SAVE },
-    m_pers: { id: "m_pers", label: "Maria personal",   value: mPersonal,  color: COL.COST },
-    m_save: { id: "m_save", label: "Maria surplus",    value: mLeftover,  color: COL.SAVE },
+    joint:  { id: "joint",  label: "Joint expenses", value: jointTotal, color: COL.JOINT },
+    a_pers: { id: "a_pers", label: "Ashton personal", value: aPersonal,  color: COL.COST },
+    a_save: { id: "a_save", label: "Ashton surplus",  value: aLeftover,  color: COL.SAVE },
+    m_pers: { id: "m_pers", label: "Maria personal",  value: mPersonal,  color: COL.COST },
+    m_save: { id: "m_save", label: "Maria surplus",   value: mLeftover,  color: COL.SAVE },
   };
 
-  // Columns where drag-reorder is enabled
+  // All draggable columns — src/spend use slot-based Y positioning (topY / botY);
+  // all others use continuous stacking.
   const draggableCols: Record<string, { items: Record<string, Omit<FlowNode, "x"|"y"|"h">>; defaults: string[] }> = {
-    t1:    { items: t1Items,    defaults: ["biz_costs", "gross_sal", "pre_profit"] },
-    t2:    { items: t2Items,    defaults: ["sal_tax", "net_sal", "corp_tax", "after_corp"] },
-    t3:    { items: t3Items,    defaults: ["div_gross", "retained"] },
-    t4:    { items: t4Items,    defaults: ["div_tax", "div_net"] },
+    src:   { items: srcItemDefs,  defaults: ["biz_rev", "m_gross"] },
+    t1:    { items: t1Items,      defaults: ["biz_costs", "gross_sal", "pre_profit"] },
+    b1:    { items: b1ItemDefs,   defaults: ["m_tax", "m_net"] },
+    t2:    { items: t2Items,      defaults: ["sal_tax", "net_sal", "corp_tax", "after_corp"] },
+    t3:    { items: t3Items,      defaults: ["div_gross", "retained"] },
+    t4:    { items: t4Items,      defaults: ["div_tax", "div_net"] },
+    spend: { items: spendItemDefs, defaults: ["a_pool", "m_pool"] },
     dests: { items: destItemDefs, defaults: ["joint", "a_pers", "a_save", "m_pers", "m_save"] },
+    cats:  { items: catItemDefs,  defaults: catDefaultOrder },
   };
 
-  const t0 = stack([{ id: "biz_rev", label: "Business revenue", value: bizRevenue, color: COL.BIZ }], col[0], topY);
-  const t1 = stack(getOrder("t1", draggableCols.t1.defaults).map(id => t1Items[id]).filter(Boolean), col[1], topY);
-  const t2 = stack(getOrder("t2", draggableCols.t2.defaults).map(id => t2Items[id]).filter(Boolean), col[2], topY);
-  const t3 = stack(getOrder("t3", draggableCols.t3.defaults).map(id => t3Items[id]).filter(Boolean), col[3], topY);
-  const t4 = stack(getOrder("t4", draggableCols.t4.defaults).map(id => t4Items[id]).filter(Boolean), col[4], topY);
-  const t5 = stack([{ id: "a_pool", label: "Ashton spendable", value: ashtonNet, color: COL.ASHTON }], col[5], topY);
+  // ── Build node arrays ──
 
-  const b0 = stack([{ id: "m_gross", label: "Maria gross salary", value: mGross, color: COL.MARIA }], col[0], botY);
-  const b1 = stack([
-    { id: "m_tax", label: "Income tax → state", value: mTax, color: COL.TAX },
-    { id: "m_net", label: "Net take-home", value: mNet, color: COL.MARIA },
-  ], col[1], botY);
-  const b5 = stack([{ id: "m_pool", label: "Maria spendable", value: mNet, color: COL.MARIA }], col[5], botY);
+  // src/spend: "slot-based" columns — first item in order → topY, second → botY.
+  // Ribbons reference byId[nodeId] so they automatically follow the swapped positions.
+  const srcOrder  = getOrder("src",   draggableCols.src.defaults);
+  const spendOrder = getOrder("spend", draggableCols.spend.defaults);
+  const makeSlotNode = (
+    defs: Record<string, Omit<FlowNode, "x"|"y"|"h">>, id: string, x: number, y: number
+  ): FlowNode => ({ ...defs[id], x, y, h: vScale(defs[id].value) });
 
-  const destX = col[5] + 180;
+  const t0 = [makeSlotNode(srcItemDefs,   srcOrder[0],   col[0], topY)];
+  const b0 = [makeSlotNode(srcItemDefs,   srcOrder[1],   col[0], botY)];
+  const t5 = [makeSlotNode(spendItemDefs, spendOrder[0], col[5], topY)];
+  const b5 = [makeSlotNode(spendItemDefs, spendOrder[1], col[5], botY)];
+
+  const t1 = stack(getOrder("t1", draggableCols.t1.defaults).map(id => t1Items[id]).filter(Boolean),    col[1], topY);
+  const b1 = stack(getOrder("b1", draggableCols.b1.defaults).map(id => b1ItemDefs[id]).filter(Boolean), col[1], botY);
+  const t2 = stack(getOrder("t2", draggableCols.t2.defaults).map(id => t2Items[id]).filter(Boolean),    col[2], topY);
+  const t3 = stack(getOrder("t3", draggableCols.t3.defaults).map(id => t3Items[id]).filter(Boolean),    col[3], topY);
+  const t4 = stack(getOrder("t4", draggableCols.t4.defaults).map(id => t4Items[id]).filter(Boolean),    col[4], topY);
+
+  const destX    = col[5] + 180;
   const destStart = topY + 20;
   const dests = stack(
     getOrder("dests", draggableCols.dests.defaults).map(id => destItemDefs[id]).filter(Boolean),
@@ -293,28 +349,12 @@ function FullFlow(props: FullFlowProps) {
   );
 
   const catX = destX + 260;
-  let cats: FlowNode[] = [];
-  if (byCategory) {
-    const agg: Record<string, { value: number; sources: Record<string, number> }> = {};
-    const add = (catId: string, source: string, val: number) => {
-      if (val <= 0) return;
-      if (!agg[catId]) agg[catId] = { value: 0, sources: { joint: 0, a_pers: 0, m_pers: 0 } };
-      agg[catId].value += val;
-      agg[catId].sources[source] = (agg[catId].sources[source] || 0) + val;
-    };
-    (joint || []).forEach(j => add(j.cat || "other", "joint", j.amt));
-    (ashtonP || []).forEach(e => add(e.cat || "other", "a_pers", e.amt));
-    (mariaP || []).forEach(e => add(e.cat || "other", "m_pers", e.amt));
-    add("savings", "a_save", aLeftover);
-    add("savings", "m_save", mLeftover);
-    const rows = Object.entries(agg)
-      .map(([id, v]) => ({ id: `cat_${id}`, rawId: id, ...v }))
-      .sort((a, b) => b.value - a.value);
-    cats = stack(rows.map(r => {
-      const meta = CATEGORIES[r.rawId] || { label: r.rawId, color: "#888" };
-      return { id: r.id, label: meta.label, value: r.value, color: meta.color || "#888", sources: r.sources };
-    }), catX, destStart);
-  }
+  const cats: FlowNode[] = byCategory
+    ? stack(
+        getOrder("cats", catDefaultOrder).map(id => catItemDefs[id]).filter(Boolean),
+        catX, destStart,
+      )
+    : [];
 
   // Compute final canvas height after all nodes are placed
   const catColumnH = cats.length ? (cats[cats.length - 1].y + cats[cats.length - 1].h - topY) : 0;
@@ -324,8 +364,14 @@ function FullFlow(props: FullFlowProps) {
   const byId: Record<string, FlowNode> = {};
   allNodes.forEach(n => { if (!byId[n.id]) byId[n.id] = n; });
 
-  // Map column key → current node array (for drag midpoint computation)
-  const colNodeMap: Record<string, FlowNode[]> = { t1, t2, t3, t4, dests };
+  // Map column key → nodes in top-to-bottom Y order (used by drag midpoint detection).
+  // src/spend span both streams so both slot nodes are included, topY node first.
+  const colNodeMap: Record<string, FlowNode[]> = {
+    src:   [...t0, ...b0],   // t0 is at topY, b0 at botY
+    t1, b1, t2, t3, t4,
+    spend: [...t5, ...b5],   // t5 is at topY, b5 at botY
+    dests,
+  };
   if (cats.length) colNodeMap.cats = cats;
 
   function getSvgY(clientY: number): number {
@@ -459,7 +505,8 @@ function FullFlow(props: FullFlowProps) {
     };
   }).filter((x): x is NonNullable<typeof x> => Boolean(x));
 
-  // Find which draggable column (if any) contains this node
+  // Find which draggable column (if any) contains this node.
+  // For cats, check catDefaultOrder since those IDs are dynamic.
   const nodeColKey = (nodeId: string) =>
     Object.entries(draggableCols).find(([, def]) => def.defaults.includes(nodeId))?.[0] ?? null;
 
@@ -526,11 +573,11 @@ function FullFlow(props: FullFlowProps) {
         stroke="var(--rule-soft)" strokeDasharray="3 3" />
       <text x={pad + 4} y={botY - 14}
         style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.14em", fill: "var(--ink-3)" }}>
-        ASHTON&apos;S OY STREAM
+        {srcOrder[0] === "biz_rev" ? "ASHTON\u2019S OY STREAM" : "MARIA SALARY STREAM"}
       </text>
       <text x={pad + 4} y={botY + 12}
         style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.14em", fill: "var(--ink-3)" }}>
-        MARIA SALARY STREAM
+        {srcOrder[1] === "m_gross" ? "MARIA SALARY STREAM" : "ASHTON\u2019S OY STREAM"}
       </text>
 
       {ribbons.map((r, i) => (

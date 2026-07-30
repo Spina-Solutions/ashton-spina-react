@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { Folio, Panel, Segmented, Smallcaps, Stat, Who } from "../primitives.js";
 import { AreaChart, Donut } from "../charts.js";
-import { BUSINESS, CATEGORIES, NET_WORTH_HISTORY, deriveBiz, fmt, fx } from "../data.js";
+import { CATEGORIES, NET_WORTH_HISTORY, deriveBiz, fmt, fx } from "../data.js";
 import type { Asset } from "../data.js";
 import type { Derived, LedgerState } from "../state.js";
 
@@ -25,7 +25,7 @@ export function Dashboard({ state, d }: { state: LedgerState; d: Derived }) {
       saving: d.hhSaving * mult,
       savingLabel: "Household saving",
       savingSub: `${Math.round(d.hhSaving / d.hhIncome * 100)}% of €${Math.round(d.hhIncome * mult).toLocaleString()}${periodLabel} combined income`,
-      runwayPot: d.liquidAssets + d.brokerageAssets + d.businessAssets,
+      runwayPot: d.totalAssets,
       runwayBurn: d.hhBurn,
     },
     ashton: {
@@ -112,8 +112,12 @@ export function Dashboard({ state, d }: { state: LedgerState; d: Derived }) {
 }
 
 function JointTable({ d, state, mult, periodLabel }: { d: Derived; state: LedgerState; mult: number; periodLabel: string }) {
+  // Derive gross salary from live income state so it matches the main derived calc.
+  const grossSalary = state.tax.salaryTaxRate < 1
+    ? state.income.ashton.salary / (1 - state.tax.salaryTaxRate)
+    : state.income.ashton.salary;
   const b = deriveBiz(
-    { monthlyRevenue: state.bizRevenue, costs: state.bizCosts, grossSalary: BUSINESS.grossSalary, dividendMonthly: state.income.ashton.dividend },
+    { monthlyRevenue: state.bizRevenue, costs: state.bizCosts, grossSalary, dividendMonthly: state.income.ashton.dividend },
     state.tax,
   );
   const m = (n: number) => `€${Math.round(n * mult).toLocaleString()}`;
@@ -123,7 +127,13 @@ function JointTable({ d, state, mult, periodLabel }: { d: Derived; state: Ledger
         <tr className="subtotal"><td colSpan={2} style={{ paddingBottom: 2 }}>Business (Ashton's Oy) · {periodLabel.replace("/", "per ")}</td></tr>
         <tr><td className="italic" style={{ paddingLeft: 14 }}>Revenue</td><td className="num">{m(state.bizRevenue)}</td></tr>
         <tr><td className="italic" style={{ paddingLeft: 14 }}>Operating costs</td><td className="num neg">−{m(d.bizCostTotal)}</td></tr>
-        <tr><td className="italic" style={{ paddingLeft: 14 }}>→ Salary + dividend to Ashton</td><td className="num">{m(b.netSalary + b.dividendNet)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 14 }}>Gross salary (Ashton)</td><td className="num neg">−{m(grossSalary)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 24, color: "var(--ink-3)" }}>→ Salary tax ({(state.tax.salaryTaxRate * 100).toFixed(1)}%) to state</td><td className="num neg" style={{ color: "var(--ink-3)" }}>−{m(b.salaryTax)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 24, color: "var(--ink-3)" }}>→ Net salary to Ashton</td><td className="num" style={{ color: "var(--ink-3)" }}>{m(b.netSalary)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 14 }}>Pre-tax profit</td><td className="num">{m(b.preTaxProfit)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 24, color: "var(--ink-3)" }}>→ Corp tax ({(state.tax.corpTaxRate * 100).toFixed(0)}%) to state</td><td className="num neg" style={{ color: "var(--ink-3)" }}>−{m(b.corpTax)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 24, color: "var(--ink-3)" }}>→ Dividend tax ({(state.tax.dividendTaxRate * 100).toFixed(1)}%) to state</td><td className="num neg" style={{ color: "var(--ink-3)" }}>−{m(b.dividendTax)}</td></tr>
+        <tr><td className="italic" style={{ paddingLeft: 24, color: "var(--ink-3)" }}>→ Net dividend to Ashton</td><td className="num" style={{ color: "var(--ink-3)" }}>{m(b.dividendNet)}</td></tr>
         <tr><td className="italic" style={{ paddingLeft: 14 }}>→ Retained in Oy</td><td className="num">{m(b.retained)}</td></tr>
         <tr className="subtotal"><td colSpan={2} style={{ paddingBottom: 2, paddingTop: 8 }}>Household cashflow</td></tr>
         <tr><td><Who who="ashton" label="Ashton income" /></td><td className="num">{m(d.aIncome)}</td></tr>
@@ -184,13 +194,11 @@ function AssetsPanel({ dashView, d, state }: { dashView: "joint" | "ashton" | "p
     ? [
       { value: d.liquidA, color: "var(--ink)", label: "Liquid (Ashton)" },
       { value: d.brokerageAssets, color: "var(--rust)", label: "Brokerage" },
-      { value: d.pensionAssets - 14000, color: "var(--moss)", label: "Swiss pension" },
     ]
     : [
       { value: d.liquidAssets, color: "var(--ink)", label: "Liquid" },
       { value: d.brokerageAssets, color: "var(--rust)", label: "Brokerage" },
       { value: d.businessAssets - d.brokerageAssets, color: "var(--ochre)", label: "Business (excl. brokerage)" },
-      { value: d.pensionAssets, color: "var(--moss)", label: "Pension" },
     ];
   return (
     <div className="flex gap-md" style={{ alignItems: "center" }}>

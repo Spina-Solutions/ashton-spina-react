@@ -167,7 +167,7 @@ export const MARIA_PERSONAL: Expense[] = [
   { label: "Union fee",             amt:  25.00, cat: "other" },
 ];
 
-export type AssetType = "cash" | "hysa" | "brokerage" | "receivable" | "pension";
+export type AssetType = "cash" | "hysa" | "brokerage" | "receivable";
 export type AssetScope = "personal" | "business";
 export type AssetOwner = "ashton" | "partner";
 
@@ -187,13 +187,11 @@ export const ASSETS: Asset[] = [
   { id: "op_personal",   label: "OP Personal",          type: "cash",      scope: "personal", owner: "ashton",  cur: "EUR", bal:  2500.00, apy: 0.000 },
   { id: "lightyear_p",   label: "Lightyear — Personal", type: "brokerage", scope: "personal", owner: "ashton",  cur: "EUR", bal:     0.03, apy: null },
   { id: "wise",          label: "Wise",                 type: "cash",      scope: "personal", owner: "ashton",  cur: "EUR", bal:   651.00, apy: 0.000 },
-  { id: "swiss_pension", label: "Swiss pension",        type: "pension",   scope: "personal", owner: "ashton",  cur: "EUR", bal: 30000.00, apy: null },
   { id: "op_biz",        label: "OP Business",          type: "cash",      scope: "business", owner: "ashton",  cur: "EUR", bal: 10195.00, apy: 0.000 },
   { id: "op_biz_invest", label: "OP Business — Invest", type: "brokerage", scope: "business", owner: "ashton",  cur: "EUR", bal:     0.00, apy: null },
   { id: "lightyear_b",   label: "Lightyear — Business", type: "brokerage", scope: "business", owner: "ashton",  cur: "EUR", bal: 96034.00, apy: null },
   { id: "op_maria",      label: "OP (Maria)",           type: "cash",      scope: "personal", owner: "partner", cur: "EUR", bal:  3200.00, apy: 0.000 },
   { id: "nordea_maria",  label: "Nordea savings",       type: "hysa",      scope: "personal", owner: "partner", cur: "EUR", bal:  8400.00, apy: 0.025 },
-  { id: "varma_pension", label: "TyEL pension (est.)",  type: "pension",   scope: "personal", owner: "partner", cur: "EUR", bal: 14000.00, apy: null },
 ];
 
 export type DebtCounterparty = "external" | "ashton" | "partner";
@@ -312,14 +310,24 @@ export interface Scenario {
   partnerWorking: boolean;
   includeInvest: boolean;
   includeBusiness: boolean;
-  // Per-scenario snapshots of expenses — edit independently of live inputs
+  // Per-scenario snapshots of personal/joint expenses — edit independently of live inputs
   joint: ScenarioExpense[];
   ashtonP: ScenarioExpense[];
   mariaP: ScenarioExpense[];
+  // Business inputs for this scenario (Ashton turndown model)
+  bizRevenue: number;
+  bizCosts: ScenarioExpense[];
+  // Per-scenario joint cost split
+  scenarioSplitMode: SplitMode;
+  scenarioSplitCustom: number;
 }
 
 function snap(expenses: Expense[]): ScenarioExpense[] {
   return expenses.map(e => ({ id: e.id, label: e.label, amt: e.amt, cat: e.cat }));
+}
+
+function snapBizCosts(costs: BizCost[]): ScenarioExpense[] {
+  return costs.map(c => ({ label: c.label, amt: c.amt }));
 }
 
 export const SCENARIOS: Scenario[] = [
@@ -327,26 +335,36 @@ export const SCENARIOS: Scenario[] = [
     id: "current", name: "Current spend", note: "Status quo — mirrors live inputs",
     partnerWorking: true, includeInvest: false, includeBusiness: false,
     joint: snap(JOINT_EXPENSES), ashtonP: snap(ASHTON_PERSONAL), mariaP: snap(MARIA_PERSONAL),
+    bizRevenue: BUSINESS.monthlyRevenue, bizCosts: snapBizCosts(BUSINESS.costs),
+    scenarioSplitMode: "net", scenarioSplitCustom: 0.60,
   },
   {
     id: "lean", name: "Lean mode", note: "Cut discretionary, keep essentials",
     partnerWorking: true, includeInvest: false, includeBusiness: false,
     joint: snap(JOINT_EXPENSES), ashtonP: snap(ASHTON_PERSONAL), mariaP: snap(MARIA_PERSONAL),
+    bizRevenue: BUSINESS.monthlyRevenue, bizCosts: snapBizCosts(BUSINESS.costs),
+    scenarioSplitMode: "net", scenarioSplitCustom: 0.60,
   },
   {
-    id: "solo_lean", name: "Solo lean", note: "No partner income, draw on investments",
-    partnerWorking: false, includeInvest: true, includeBusiness: true,
+    id: "solo_lean", name: "Ashton turndown (lean)", note: "No business income, draw on reserves. Maria covers her costs + her share of joint.",
+    partnerWorking: true, includeInvest: true, includeBusiness: true,
     joint: snap(JOINT_EXPENSES), ashtonP: snap(ASHTON_PERSONAL), mariaP: snap(MARIA_PERSONAL),
+    bizRevenue: 0, bizCosts: snapBizCosts(BUSINESS.costs),
+    scenarioSplitMode: "fifty", scenarioSplitCustom: 0.50,
   },
   {
     id: "baby", name: "Baby year", note: "Lower income, higher costs",
     partnerWorking: false, includeInvest: false, includeBusiness: false,
     joint: snap(JOINT_EXPENSES), ashtonP: snap(ASHTON_PERSONAL), mariaP: snap(MARIA_PERSONAL),
+    bizRevenue: 0, bizCosts: snapBizCosts(BUSINESS.costs),
+    scenarioSplitMode: "net", scenarioSplitCustom: 0.60,
   },
   {
-    id: "sabbatical", name: "Sabbatical", note: "Stop working, live off pot",
+    id: "sabbatical", name: "Sabbatical", note: "Stop working, live off reserves. Trim biz costs down to just maintenance.",
     partnerWorking: false, includeInvest: true, includeBusiness: true,
     joint: snap(JOINT_EXPENSES), ashtonP: snap(ASHTON_PERSONAL), mariaP: snap(MARIA_PERSONAL),
+    bizRevenue: 0, bizCosts: snapBizCosts(BUSINESS.costs),
+    scenarioSplitMode: "fifty", scenarioSplitCustom: 0.50,
   },
 ];
 

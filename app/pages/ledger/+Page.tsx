@@ -2,8 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ComponentType, Dispatch, SetStateAction } from "react";
 import {
   ASHTON_PERSONAL, ASSETS, BUSINESS, DEBTS, INCOME, IOUS, JOINT_EXPENSES,
-  MARIA_PERSONAL, PENSIONS, SCENARIOS, SETTINGS, TAX, fx,
+  MARIA_PERSONAL, PENSIONS, SCENARIOS, SETTINGS, TAX, deriveBiz, fx,
 } from "./data.js";
+import { computeAshtonShare } from "./utils/computeAshtonShare.js";
 import type {
   Asset, BizCost, Debt, Expense, Income, Iou, PensionAccount, Scenario, SplitMode, TaxRates,
 } from "./data.js";
@@ -116,7 +117,16 @@ export default function LedgerPage() {
     setSplitMode(s.splitMode as SplitMode);
     if (typeof (s as Record<string, unknown>).customSplit === "number") setCustomSplit((s as Record<string, unknown>).customSplit as number);
     setTax(s.tax as TaxRates);
-    setScenarios(s.scenarios as Scenario[]);
+    setScenarios((s.scenarios as Scenario[]).map(sc => {
+      const raw = sc as unknown as Partial<Scenario>;
+      return {
+        ...sc,
+        bizRevenue: raw.bizRevenue ?? BUSINESS.monthlyRevenue,
+        bizCosts: raw.bizCosts ?? BUSINESS.costs.map(c => ({ label: c.label, amt: c.amt })),
+        scenarioSplitMode: raw.scenarioSplitMode ?? "fifty" as Scenario["scenarioSplitMode"],
+        scenarioSplitCustom: raw.scenarioSplitCustom ?? 0.5,
+      };
+    }));
     if (s.pensions) setPensions(s.pensions as PensionAccount[]);
   }, []);
 
@@ -145,8 +155,16 @@ export default function LedgerPage() {
     const jointTotal = joint.reduce((s, x) => s + x.amt, 0);
     const aPersonal = ashtonP.reduce((s, x) => s + x.amt, 0);
     const mPersonal = mariaP.reduce((s, x) => s + x.amt, 0);
-    const aDividendNet = income.ashton.dividend * (1 - tax.dividendTaxRate);
-    const aIncome = income.ashton.salary + aDividendNet;
+    // Derive Ashton's income through the business model so business is the source of truth.
+    // grossSalary is back-derived from the net salary input so Inputs edits flow through correctly.
+    const grossSalaryForDerived = tax.salaryTaxRate < 1
+      ? income.ashton.salary / (1 - tax.salaryTaxRate)
+      : income.ashton.salary;
+    const bLive = deriveBiz(
+      { monthlyRevenue: bizRevenue, costs: bizCosts, grossSalary: grossSalaryForDerived, dividendMonthly: income.ashton.dividend },
+      tax,
+    );
+    const aIncome = bLive.netSalary + bLive.dividendNet;
     // partner.salary is the source of truth for Maria's net take-home — editable in both
     // net and gross modes in the Income section. Gross is derived from it + tax rate so
     // Dashboard and Flow always reflect the latest salary edit.
@@ -155,15 +173,17 @@ export default function LedgerPage() {
     const aGross = tax.salaryTaxRate < 1 ? (income.ashton.salary / (1 - tax.salaryTaxRate)) + income.ashton.dividend : aIncome;
     const mGross = mGrossSalary;
     const bizNetLocal = bizRevenue - bizCosts.reduce((s, c) => s + c.amt, 0);
-    let aShare: number;
-    if (splitMode === "fifty") aShare = 0.5;
-    else if (splitMode === "gross") aShare = aGross / (aGross + mGross);
-    else if (splitMode === "bizNet") {
-      const aBizContribution = aIncome + Math.max(0, bizNetLocal);
-      aShare = aBizContribution / (aBizContribution + mIncome);
-    }
-    else if (splitMode === "custom") aShare = customSplit;
-    else aShare = aIncome / (aIncome + mIncome);
+    const aShare = computeAshtonShare({
+      splitMode,
+      customSplit,
+      aIncome,
+      mIncome,
+      aGross,
+      mGross,
+      retainedBizProfit: bLive.retained,
+      dividendTaxRate: tax.dividendTaxRate,
+      bizNetLocal,
+    });
     const mShare = 1 - aShare;
     const aBurn = aPersonal + jointTotal * aShare;
     const mBurn = mPersonal + jointTotal * mShare;
@@ -175,11 +195,13 @@ export default function LedgerPage() {
     const personalAssetsA = assets.filter(a => a.scope === "personal" && a.owner === "ashton").reduce((s, a) => s + a.bal * fx[a.cur], 0);
     const personalAssetsM = assets.filter(a => a.scope === "personal" && a.owner === "partner").reduce((s, a) => s + a.bal * fx[a.cur], 0);
     const businessAssets = assets.filter(a => a.scope === "business").reduce((s, a) => s + a.bal * fx[a.cur], 0);
-    const liquidAssets = assets.filter(a => a.type === "cash" || a.type === "hysa" || a.type === "receivable").reduce((s, a) => s + a.bal * fx[a.cur], 0);
-    const liquidA = assets.filter(a => (a.type === "cash" || a.type === "hysa") && a.owner === "ashton").reduce((s, a) => s + a.bal * fx[a.cur], 0);
-    const liquidM = assets.filter(a => (a.type === "cash" || a.type === "hysa") && a.owner === "partner").reduce((s, a) => s + a.bal * fx[a.cur], 0);
+    const liquidAssets = assets.filter(a => (a.type === "cash" || a.type === "hysa" || a.type === "receivable") && a.scope === "personal").reduce((s, a) => s + a.bal * fx[a.cur], 0);
+    const liquidA = assets.filter(a => (a.type === "cash" || a.type === "hysa") && a.owner === "ashton" && a.scope === "personal").reduce((s, a) => s + a.bal * fx[a.cur], 0);
+    const liquidM = assets.filter(a => (a.type === "cash" || a.type === "hysa") && a.owner === "partner" && a.scope === "personal").reduce((s, a) => s + a.bal * fx[a.cur], 0);
+    // All brokerage (personal + business) for general display; personal-only for Ashton's runway pot.
     const brokerageAssets = assets.filter(a => a.type === "brokerage").reduce((s, a) => s + a.bal * fx[a.cur], 0);
-    const pensionAssets = assets.filter(a => a.type === "pension").reduce((s, a) => s + a.bal * fx[a.cur], 0);
+    const personalBrokerageA = assets.filter(a => a.type === "brokerage" && a.scope === "personal" && a.owner === "ashton").reduce((s, a) => s + a.bal * fx[a.cur], 0);
+    const pensionAssets = 0; // pension is tracked separately in PENSIONS, not in assets
     const totalAssets = personalAssets + businessAssets;
     // Debts can be owed to an outside party ("external") or to the other partner.
     // Internal debts cancel at the household level but still shift each person's net worth.
@@ -207,7 +229,7 @@ export default function LedgerPage() {
       jointTotal, aPersonal, mPersonal, aIncome, mIncome, aGross, mGross, aShare, mShare, aBurn, mBurn,
       hhBurn, hhIncome, hhSaving,
       personalAssets, personalAssetsA, personalAssetsM, businessAssets,
-      liquidAssets, liquidA, liquidM, brokerageAssets, pensionAssets,
+      liquidAssets, liquidA, liquidM, brokerageAssets, personalBrokerageA, pensionAssets,
       totalAssets, totalDebt, externalDebt,
       debtA, debtM, debtAClaim, debtMClaim,
       netWorth, netWorthA, netWorthM,
