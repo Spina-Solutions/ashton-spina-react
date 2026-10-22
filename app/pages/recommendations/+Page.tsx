@@ -1,60 +1,45 @@
-import { recommendations, type Recommendation, type RecommendationCategory } from "../../content/recommendations.js";
-import { Tile, TileLabel } from "../../components/bento/Tile.js";
+import { placeRecommendations, type PlaceRecommendation } from "../../content/recommendations.js";
+import { countryToGroupId } from "../../content/travel.js";
+import { generatePhotoGroups, type PhotoGroup } from "../../utils/photography.js";
+import { Tile, TileLabel, ArrowIcon } from "../../components/bento/Tile.js";
 import { PageHeader } from "../../components/bento/SectionHeader.js";
-import type { TileTone } from "../../types/bento.js";
-
-const CATEGORIES: Array<{ id: RecommendationCategory; label: string; tone: TileTone; wide?: boolean }> = [
-  { id: "travel", label: "Places", tone: "coral" },
-  { id: "film-tv", label: "Film and TV", tone: "plain" },
-  { id: "books", label: "Books", tone: "sun" },
-  { id: "restaurants", label: "Restaurants", tone: "plain" },
-  { id: "albums", label: "Albums", tone: "sage", wide: true },
-];
 
 export default function RecommendationsPage() {
+  const albums = generatePhotoGroups();
+
   return (
     <div className={"space-y-3"}>
-      <PageHeader title="Recommendations" intro="Places, stories, food and music I keep telling people about." />
-      <div className={"stagger grid gap-3 md:grid-cols-2"}>
-        {CATEGORIES.map((category) => (
-          <Tile key={category.id} tone={category.tone} className={category.wide ? "md:col-span-2" : ""}>
-            <TileLabel className={"mb-4"}>{category.label}</TileLabel>
-            <ul className={`grid gap-1 ${category.wide ? "sm:grid-cols-2 gap-x-6" : ""}`}>
-              {recommendations
-                .filter((rec) => rec.category === category.id)
-                .map((rec) => (
-                  <RecommendationRow key={rec.title} rec={rec} />
-                ))}
-            </ul>
-          </Tile>
+      <PageHeader title="Worth the trip" intro="Places I keep telling people to visit. Only ones I've been to myself." />
+      <div className={`stagger grid gap-3 ${placeRecommendations.length % 3 === 0 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+        {placeRecommendations.map((place) => (
+          <PlaceTile key={place.title} place={place} album={albums.find((a) => a.id === countryToGroupId(place.country))} />
         ))}
       </div>
     </div>
   );
 }
 
-function RecommendationRow({ rec }: { rec: Recommendation }) {
-  const body = (
-    <>
-      <div className={"flex items-baseline justify-between gap-3"}>
-        <span className={"text-lg font-medium leading-snug"}>{rec.title}</span>
-        <span className={"shrink-0 text-xs tabular-nums opacity-60"}>
-          {rec.link ? `${rec.linkText ?? "Link"} ↗` : rec.year}
-        </span>
-      </div>
-      {rec.description ? <p className={"mt-1 text-sm opacity-75"}>{rec.description}</p> : null}
-    </>
-  );
-
+function PlaceTile({ place, album }: { place: PlaceRecommendation; album?: PhotoGroup }) {
+  const cover = album?.thumbnail;
   return (
-    <li className={"border-t border-current/10 first:border-t-0"}>
-      {rec.link ? (
-        <a href={rec.link} target="_blank" rel="noreferrer" className={"block -mx-3 rounded-2xl px-3 py-3 hover:bg-black/5 dark:hover:bg-white/10 transition-colors"}>
-          {body}
-        </a>
-      ) : (
-        <div className={"py-3"}>{body}</div>
-      )}
-    </li>
+    <Tile href={album ? `/?album=${album.id}#photos` : undefined} ariaLabel={album ? `${place.title}: see photos from ${place.country}` : undefined} className={"!p-0 flex flex-col"}>
+      {cover ? (
+        <div className={"relative aspect-[4/3] overflow-hidden"}>
+          <img src={cover} alt={`From my ${place.country} album`} loading="lazy" className={"h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"} />
+          {/* The cover is the country album's photo, not necessarily this exact place */}
+          <span className={"absolute left-3 bottom-3 rounded-full bg-ink/70 px-3 py-1 text-xs text-paper backdrop-blur"}>
+            From my {place.country} album
+          </span>
+        </div>
+      ) : null}
+      <div className={"flex flex-1 flex-col gap-2 p-5 sm:p-6"}>
+        <div className={"flex items-center justify-between"}>
+          <TileLabel>{place.country}</TileLabel>
+          {cover ? <ArrowIcon /> : null}
+        </div>
+        <h2 className={"text-2xl font-medium tracking-tight"}>{place.title}</h2>
+        <p className={"text-sm opacity-75"}>{place.description}</p>
+      </div>
+    </Tile>
   );
 }

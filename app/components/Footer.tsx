@@ -7,7 +7,7 @@ const SITE_LINKS: ExternalLink[] = [
   { label: "Photography", href: "/#photos" },
   { label: "Writing", href: "/media" },
   { label: "Archive", href: "/archive" },
-  { label: "Recommendations", href: "/recommendations" },
+  { label: "Places", href: "/recommendations" },
 ];
 
 export function Footer() {

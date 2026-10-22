@@ -7,6 +7,7 @@ import { formatHelsinkiTime } from "../hooks/useHelsinkiTime.js";
 import { hasCountryPhotos, type PhotoGroup } from "../utils/photography.js";
 import { cefrStepsReached } from "../utils/cefr.js";
 import { primaryLanguageFor } from "../content/spokenLanguages.js";
+import { unvisitedRecommendations } from "../content/recommendations.js";
 
 describe("computeTimelineLayout", () => {
   it("returns an empty layout for no spans", () => {
@@ -148,5 +149,15 @@ describe("primaryLanguageFor", () => {
 
   it("returns null for countries with none of my languages", () => {
     expect(primaryLanguageFor("Japan")).toBeNull();
+  });
+});
+
+describe("placeRecommendations", () => {
+  it("only recommends places in countries I've visited", () => {
+    expect(unvisitedRecommendations()).toEqual([]);
+  });
+
+  it("flags a place in an unvisited country", () => {
+    expect(unvisitedRecommendations([{ title: "Kyoto", country: "Japan", description: "" }])).toEqual(["Kyoto"]);
   });
 });

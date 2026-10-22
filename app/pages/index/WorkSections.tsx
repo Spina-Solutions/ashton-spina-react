@@ -7,7 +7,10 @@ import { mediaItems } from "../../content/media.js";
 export function ExperienceSection() {
   return (
     <section id="experience" className={"pt-12"}>
-      <SectionHeader title="Experience" />
+      <SectionHeader
+        title="Track record"
+        action={<a href="/archive" className={"text-sm opacity-70 hover:opacity-100 underline-offset-4 hover:underline"}>Project archive</a>}
+      />
       <Experience items={experienceItems} />
     </section>
   );
@@ -31,7 +34,7 @@ export function WritingSection() {
               tone={index === 0 ? "sun" : "plain"}
               href={external ? item.url : `/media/${item.id}`}
               external={Boolean(external)}
-              className={"flex flex-col gap-4"}
+              className={`flex flex-col gap-4 ${items.length === 1 ? "md:col-span-2" : ""}`}
             >
               <div className={"flex justify-between"}>
                 <TileLabel>{item.category === "podcast" ? "Podcast" : "Article"} · {item.readTime}</TileLabel>

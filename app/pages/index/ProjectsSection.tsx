@@ -2,12 +2,12 @@ import { Tile, ArrowIcon } from "../../components/bento/Tile.js";
 import { SectionHeader } from "../../components/bento/SectionHeader.js";
 import { featuredProjects, type FeaturedProject } from "../../content/projects.js";
 
-export function ProjectsSection() {
+export function ProjectsSection({ title }: { title: string }) {
   const [featured, ...rest] = featuredProjects;
 
   return (
     <section id="projects" className={"pt-12"}>
-      <SectionHeader title="Projects" />
+      <SectionHeader title={title} />
       <div className={"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"}>
         <ProjectTile project={featured} featured />
         {rest.map((project) => (

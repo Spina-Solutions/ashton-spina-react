@@ -11,15 +11,15 @@ const PERSONAL_NAV: ExternalLink[] = [
   { label: "Photos", href: "/#photos" },
   { label: "Travel", href: "/#travel" },
   { label: "Languages", href: "/#languages" },
-  { label: "Recommendations", href: "/recommendations" },
+  { label: "Places", href: "/recommendations" },
 ];
 
 const WORK_NAV: ExternalLink[] = [
-  { label: "Projects", href: "/?mode=work#projects" },
-  { label: "Experience", href: "/?mode=work#experience" },
+  { label: "Services", href: "/?mode=work#services" },
+  { label: "Track record", href: "/?mode=work#experience" },
+  { label: "Products", href: "/?mode=work#projects" },
   { label: "Writing", href: "/media" },
-  { label: "Languages", href: "/?mode=work#languages" },
-  { label: "Archive", href: "/archive" },
+  { label: "Contact", href: "/?mode=work#contact" },
 ];
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {

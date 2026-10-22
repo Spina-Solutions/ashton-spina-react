@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { generatePhotoGroups, type PhotoGroup } from "../utils/photography.js";
 
 export function stepAlbum(groups: PhotoGroup[], currentId: string, delta: 1 | -1): string {
@@ -12,6 +12,12 @@ export function usePhotoAlbums() {
   const groups = useMemo(() => generatePhotoGroups(), []);
   const [selectedId, setSelectedId] = useState<string>(groups[0]?.id ?? "");
   const selected = groups.find((g) => g.id === selectedId);
+
+  // Deep links like /?album=italy#photos open that album
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("album");
+    if (requested && groups.some((g) => g.id === requested)) setSelectedId(requested);
+  }, [groups]);
 
   return {
     groups,

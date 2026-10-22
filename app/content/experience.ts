@@ -1,3 +1,4 @@
+import techTacticsLogo from "../assets/logos/techtactics_mark.svg";
 import smgLogo from "../assets/logos/smg_logo.png";
 import smgCover from "../assets/covers/smg_cover.jpg";
 import belsimpelLogo from "../assets/logos/belsimpel_logo.png";
@@ -19,10 +20,24 @@ export type ExperienceItem = {
 
 export const experienceItems: ExperienceItem[] = [
   {
+    company: "TechTactics Oy",
+    role: "Founder · Marketplace engineering consulting",
+    start: "2026",
+    end: "Present",
+    logo: techTacticsLogo,
+    brandColor: "#FFFFFF",
+    highlights: [
+      "Full-time since 2026; before that it ran alongside SMG as the company behind JobCrawls.",
+      "Fractional engineering leadership, platform integration and B2B product work for marketplaces.",
+      "Builds and runs JobCrawls, an aggregator of Finland's job market.",
+    ],
+    link: "https://www.jobcrawls.com/en/about",
+  },
+  {
     company: "SMG Swiss Marketplace Group",
     role: "Head of Engineering · Real Estate (B2B)",
     start: "May 2022",
-    end: "Present",
+    end: "2026",
     logo: smgLogo,
     brandColor: "#000000",
     cover: smgCover,

@@ -1,17 +1,16 @@
 import ashtonProfileVideo from "../../assets/ashton_profile.MOV";
-import logoTechTacticsOy from "../../assets/logos/logoTechTacticsOy.png";
+import logoTechTacticsOy from "../../assets/logos/techtactics_mark.svg";
 import { Tile, TileLabel, ArrowIcon } from "../../components/bento/Tile.js";
 import { ModeToggle } from "../../components/bento/ModeToggle.js";
 import { contactLinks, socialLinks } from "../../content/links.js";
+import { CONSULTING_ENQUIRY_HREF } from "../../content/consulting.js";
 import { VISITED_COUNTRIES } from "../../content/travel.js";
-import { experienceItems } from "../../content/experience.js";
-import { mediaItems } from "../../content/media.js";
 import { useHelsinkiTime } from "../../hooks/useHelsinkiTime.js";
 import { spokenLanguages } from "../../content/spokenLanguages.js";
 
 const TAGLINES = {
   personal: "Building thoughtful products. Exploring the world through code and photography.",
-  work: "Engineering leader and product builder. I scale teams and ship software people rely on.",
+  work: "Marketplace engineering leader. I help marketplaces scale their teams, merge their platforms and grow B2B revenue.",
 };
 
 export function HeroBento({ isWorkMode }: { isWorkMode: boolean }) {
@@ -38,6 +37,14 @@ function NameTile({ isWorkMode }: { isWorkMode: boolean }) {
         </h1>
         <p className={"mt-5 max-w-md text-base sm:text-lg opacity-75"}>{isWorkMode ? TAGLINES.work : TAGLINES.personal}</p>
         <div className={"mt-6 flex flex-wrap gap-2"}>
+          {isWorkMode ? (
+            <a
+              href={CONSULTING_ENQUIRY_HREF}
+              className={"inline-flex items-center gap-2 rounded-full bg-coral px-5 py-2 text-sm font-medium text-white hover:bg-coral-dark transition-colors"}
+            >
+              Work with me <span aria-hidden>→</span>
+            </a>
+          ) : null}
           {contactLinks.map((link) => (
             <a
               key={link.label}
@@ -112,10 +119,10 @@ function PersonalTiles() {
       </Tile>
       <Tile tone="sage" href="/recommendations" className={"flex flex-col justify-between min-h-[150px]"}>
         <div className={"flex justify-between"}>
-          <TileLabel>Worth your time</TileLabel>
+          <TileLabel>Been there</TileLabel>
           <ArrowIcon />
         </div>
-        <div className={"text-2xl font-medium leading-tight"}>Recommendations</div>
+        <div className={"text-2xl font-medium leading-tight"}>Places worth the trip</div>
       </Tile>
       <TimeTile />
     </>
@@ -123,48 +130,47 @@ function PersonalTiles() {
 }
 
 function WorkTiles() {
-  const current = experienceItems[0];
-  const latestArticle = [...mediaItems]
-    .filter((m) => m.category === "article")
-    .sort((a, b) => b.date.localeCompare(a.date))[0];
-
   return (
     <>
-      <Tile tone="coral" className={"flex flex-col justify-between gap-4 min-h-[150px]"}>
-        <TileLabel>Company</TileLabel>
+      <Tile tone="coral" href="#services" className={"flex flex-col justify-between gap-4 min-h-[150px]"}>
+        <div className={"flex justify-between"}>
+          <TileLabel>Consulting</TileLabel>
+          <ArrowIcon />
+        </div>
         <div className={"flex items-center gap-3"}>
-          <img src={logoTechTacticsOy} alt="" className={"h-10 w-10 rounded-xl bg-white object-contain p-1"} />
+          <img src={logoTechTacticsOy} alt="" className={"h-10 w-10 rounded-xl"} />
           <div>
             <div className={"text-lg font-medium leading-tight"}>TechTactics Oy</div>
-            <div className={"text-xs opacity-80"}>Consulting and development</div>
+            <div className={"text-xs opacity-85"}>Four ways I can help</div>
           </div>
         </div>
       </Tile>
       <Tile tone="sun" href="#experience" className={"flex flex-col justify-between gap-4 min-h-[150px]"}>
         <div className={"flex justify-between"}>
-          <TileLabel>Currently</TileLabel>
+          <TileLabel>SMG Real Estate B2B</TileLabel>
           <ArrowIcon />
         </div>
         <div>
-          <div className={"text-lg font-medium leading-tight"}>{current.role.split("·")[0].trim()}</div>
-          <div className={"text-xs opacity-75"}>{current.company}</div>
+          <div className={"text-5xl font-medium tracking-tight"}>~40%</div>
+          <div className={"text-xs opacity-75"}>of group revenue, from the line I led engineering for</div>
         </div>
       </Tile>
-      {latestArticle ? (
-        <Tile tone="sage" href={`/media/${latestArticle.id}`} className={"col-span-2 flex flex-col justify-between gap-6"}>
-          <div className={"flex justify-between"}>
-            <TileLabel>Latest writing</TileLabel>
-            <ArrowIcon />
-          </div>
-          <div className={"text-2xl font-medium leading-tight"}>{latestArticle.title}</div>
-        </Tile>
-      ) : null}
-      <Tile href="/archive" className={"flex flex-col justify-between min-h-[150px]"}>
+      <Tile tone="sage" href="#experience" className={"col-span-2 flex flex-col justify-between gap-6"}>
         <div className={"flex justify-between"}>
-          <TileLabel>Since 2015</TileLabel>
+          <TileLabel>Platform merger</TileLabel>
           <ArrowIcon />
         </div>
-        <div className={"text-2xl font-medium leading-tight"}>Project archive</div>
+        <div>
+          <div className={"text-2xl sm:text-3xl font-medium leading-tight tracking-tight"}>immoscout24.ch + homegate.ch</div>
+          <div className={"mt-1 text-sm opacity-85"}>Drove the integration of two Swiss property marketplaces and their teams</div>
+        </div>
+      </Tile>
+      <Tile href="/archive" className={"flex flex-col justify-between min-h-[150px]"}>
+        <div className={"flex justify-between"}>
+          <TileLabel>Since 2019</TileLabel>
+          <ArrowIcon />
+        </div>
+        <div className={"text-2xl font-medium leading-tight"}>Building marketplaces</div>
       </Tile>
       <TimeTile />
     </>

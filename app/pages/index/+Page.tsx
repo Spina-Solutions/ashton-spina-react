@@ -6,6 +6,7 @@ import { JourneySection } from "./JourneySection.js";
 import { PhotographySection, TravelSection } from "./PhotoSections.js";
 import { ExperienceSection, WritingSection } from "./WorkSections.js";
 import { LanguagesSection } from "./LanguagesSection.js";
+import { ServicesSection, ContactSection } from "./ConsultingSections.js";
 
 export default function Page() {
   const { isWorkMode } = useSiteMode();
@@ -14,20 +15,23 @@ export default function Page() {
   return (
     <div>
       <HeroBento isWorkMode={isWorkMode} />
-      <ProjectsSection />
       {isWorkMode ? (
         <>
+          <ServicesSection />
           <ExperienceSection />
+          <ProjectsSection title="Products I build and run" />
           <WritingSection />
+          <ContactSection />
         </>
       ) : (
         <>
+          <ProjectsSection title="Projects" />
           <PhotographySection albums={albums} />
           <TravelSection albums={albums} />
           <JourneySection />
+          <LanguagesSection />
         </>
       )}
-      <LanguagesSection />
     </div>
   );
 }

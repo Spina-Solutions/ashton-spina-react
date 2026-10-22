@@ -5,7 +5,7 @@ import { PageHeader } from "../../components/bento/SectionHeader.js";
 export default function ArchivePage() {
   return (
     <div className={"space-y-3"}>
-      <PageHeader title="Archive" intro="Everything I've built or led, from university research apps to marketplace platforms." />
+      <PageHeader title="Archive" intro="What I've built and led, from a university research app to Switzerland's biggest property marketplaces." />
       <Tile className={"!p-2 sm:!p-4"}>
         <ul>
           {archiveProjects.map((project) => (
@@ -26,14 +26,16 @@ function ArchiveRow({ project }: { project: ArchiveProject }) {
           {project.name}
           {project.link ? <span aria-hidden className={"text-sm opacity-40 transition group-hover:opacity-100 group-hover:text-coral"}>↗</span> : null}
         </div>
-        {project.description ? <p className={"mt-1 text-sm opacity-70"}>{project.description}</p> : null}
-        <div className={"mt-3 flex flex-wrap gap-1.5"}>
-          {project.builtWith.map((tech) => (
-            <span key={tech} className={"rounded-full bg-black/5 dark:bg-white/10 px-2.5 py-1 text-xs"}>
-              {tech}
-            </span>
-          ))}
-        </div>
+        <p className={"mt-1 text-sm opacity-70"}>{project.description}</p>
+        {project.builtWith?.length ? (
+          <div className={"mt-3 flex flex-wrap gap-1.5"}>
+            {project.builtWith.map((tech) => (
+              <span key={tech} className={"rounded-full bg-black/5 dark:bg-white/10 px-2.5 py-1 text-xs"}>
+                {tech}
+              </span>
+            ))}
+          </div>
+        ) : null}
       </div>
       <div className={"text-sm opacity-70 md:pt-1 md:text-right"}>{project.madeAt}</div>
     </div>
