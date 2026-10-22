@@ -1,4 +1,5 @@
 import techTacticsLogo from "../assets/logos/techtactics_mark.svg";
+import techTacticsCover from "../assets/covers/techtactics_cover.svg";
 import smgLogo from "../assets/logos/smg_logo.png";
 import smgCover from "../assets/covers/smg_cover.jpg";
 import belsimpelLogo from "../assets/logos/belsimpel_logo.png";
@@ -16,6 +17,8 @@ export type ExperienceItem = {
   highlights?: string[];
   link?: string;
   cover?: string;
+  // Which edge of the cover to keep when it is cropped; defaults to centre
+  coverPosition?: "left" | "center" | "right";
 };
 
 export const experienceItems: ExperienceItem[] = [
@@ -25,7 +28,8 @@ export const experienceItems: ExperienceItem[] = [
     start: "2026",
     end: "Present",
     logo: techTacticsLogo,
-    brandColor: "#FFFFFF",
+    cover: techTacticsCover,
+    coverPosition: "right",
     highlights: [
       "Full-time since 2026; before that it ran alongside SMG as the company behind JobCrawls.",
       "Fractional engineering leadership, platform integration and B2B product work for marketplaces.",
@@ -43,7 +47,8 @@ export const experienceItems: ExperienceItem[] = [
     cover: smgCover,
     highlights: [
       "Lead engineering for Real Estate B2B, contributing ~40% of SMG revenue.",
-      "Drove merger of immoscout24.ch and homegate.ch; org/process integration.",
+      "Part of the homegate.ch and immoscout24.ch merger; org/process integration.",
+      "Part of SMG's acquisition of flatfox.",
       "Coach Engineering Managers; establish feedback, ownership and delivery practices.",
       "Partner cross-functionally (Sales, Product, Monetization, Marketing) for value delivery.",
     ],

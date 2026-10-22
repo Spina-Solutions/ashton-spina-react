@@ -42,8 +42,8 @@ export const archiveProjects: ArchiveProject[] = [
   },
   {
     year: "2022",
-    name: "immoscout24.ch and homegate.ch integration",
-    description: "Drove the merger of two of Switzerland's largest property marketplaces, integrating organisations and processes.",
+    name: "homegate.ch and immoscout24.ch merger, flatfox acquisition",
+    description: "Part of merging two of Switzerland's largest property marketplaces, integrating their organisations and processes, and of SMG's acquisition of flatfox.",
     madeAt: "SMG Swiss Marketplace Group",
     link: "https://www.linkedin.com/company/smg-marketplace/",
   },

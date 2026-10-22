@@ -4,7 +4,8 @@ import type { ExternalLink } from "../content/links.js";
 
 const SITE_LINKS: ExternalLink[] = [
   { label: "Projects", href: "/#projects" },
-  { label: "Photography", href: "/#photos" },
+  { label: "Travel and photos", href: "/travel" },
+  { label: "Languages", href: "/languages" },
   { label: "Writing", href: "/media" },
   { label: "Archive", href: "/archive" },
   { label: "Places", href: "/recommendations" },

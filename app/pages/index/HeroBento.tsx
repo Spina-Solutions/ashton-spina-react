@@ -84,14 +84,14 @@ function PersonalTiles() {
 
   return (
     <>
-      <Tile tone="coral" href="#travel" className={"flex flex-col justify-between min-h-[150px]"}>
+      <Tile tone="coral" href="/travel" className={"flex flex-col justify-between min-h-[150px]"}>
         <div className={"flex justify-between"}>
           <TileLabel>Countries</TileLabel>
           <ArrowIcon />
         </div>
         <div className={"text-6xl font-medium tracking-tight"}>{VISITED_COUNTRIES.length}</div>
       </Tile>
-      <Tile tone="sun" href="#languages" className={"flex flex-col justify-between min-h-[150px]"}>
+      <Tile tone="sun" href="/languages" className={"flex flex-col justify-between min-h-[150px]"}>
         <div className={"flex justify-between"}>
           <TileLabel>Learning</TileLabel>
           <ArrowIcon />
@@ -155,14 +155,14 @@ function WorkTiles() {
           <div className={"text-xs opacity-75"}>of group revenue, from the line I led engineering for</div>
         </div>
       </Tile>
-      <Tile tone="sage" href="#experience" className={"col-span-2 flex flex-col justify-between gap-6"}>
+      <Tile tone="sage" href="#case-study" className={"col-span-2 flex flex-col justify-between gap-6"}>
         <div className={"flex justify-between"}>
-          <TileLabel>Platform merger</TileLabel>
+          <TileLabel>Merger and acquisition</TileLabel>
           <ArrowIcon />
         </div>
         <div>
-          <div className={"text-2xl sm:text-3xl font-medium leading-tight tracking-tight"}>immoscout24.ch + homegate.ch</div>
-          <div className={"mt-1 text-sm opacity-85"}>Drove the integration of two Swiss property marketplaces and their teams</div>
+          <div className={"text-2xl sm:text-3xl font-medium leading-tight tracking-tight"}>homegate.ch + immoscout24.ch</div>
+          <div className={"mt-1 text-sm opacity-85"}>Part of merging two Swiss property marketplaces, and of the flatfox acquisition</div>
         </div>
       </Tile>
       <Tile href="/archive" className={"flex flex-col justify-between min-h-[150px]"}>

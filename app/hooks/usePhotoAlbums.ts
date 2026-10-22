@@ -13,7 +13,7 @@ export function usePhotoAlbums() {
   const [selectedId, setSelectedId] = useState<string>(groups[0]?.id ?? "");
   const selected = groups.find((g) => g.id === selectedId);
 
-  // Deep links like /?album=italy#photos open that album
+  // Deep links like /travel?album=italy#photos open that album
   useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get("album");
     if (requested && groups.some((g) => g.id === requested)) setSelectedId(requested);

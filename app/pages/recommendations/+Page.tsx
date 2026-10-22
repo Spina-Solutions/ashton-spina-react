@@ -22,7 +22,7 @@ export default function RecommendationsPage() {
 function PlaceTile({ place, album }: { place: PlaceRecommendation; album?: PhotoGroup }) {
   const cover = album?.thumbnail;
   return (
-    <Tile href={album ? `/?album=${album.id}#photos` : undefined} ariaLabel={album ? `${place.title}: see photos from ${place.country}` : undefined} className={"!p-0 flex flex-col"}>
+    <Tile href={album ? `/travel?album=${album.id}#photos` : undefined} ariaLabel={album ? `${place.title}: see photos from ${place.country}` : undefined} className={"!p-0 flex flex-col"}>
       {cover ? (
         <div className={"relative aspect-[4/3] overflow-hidden"}>
           <img src={cover} alt={`From my ${place.country} album`} loading="lazy" className={"h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"} />

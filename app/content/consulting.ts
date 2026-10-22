@@ -22,7 +22,7 @@ export const consultingServices: ConsultingService[] = [
     title: "Marketplace mergers and integration",
     summary: "Bringing two platforms, and the teams behind them, together without losing momentum.",
     includes: ["Platform and codebase integration plans", "Aligning orgs, processes and ownership", "Retiring duplicate legacy systems"],
-    proof: "Drove the integration of immoscout24.ch and homegate.ch at SMG.",
+    proof: "Part of the homegate.ch and immoscout24.ch merger and the flatfox acquisition at SMG.",
     tone: "coral",
   },
   {

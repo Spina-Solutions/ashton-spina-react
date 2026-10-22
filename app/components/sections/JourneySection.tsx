@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { Tile, TileLabel } from "../../components/bento/Tile.js";
-import { SectionHeader } from "../../components/bento/SectionHeader.js";
+import { Tile, TileLabel } from "../bento/Tile.js";
+import { SectionHeader } from "../bento/SectionHeader.js";
 import { journey, type JourneyStop } from "../../content/journey.js";
 import { computeTimelineLayout, timelineTicks, type TimelineBar } from "../../utils/timeline.js";
 

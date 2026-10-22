@@ -1,16 +1,5 @@
 import React, { useMemo } from "react";
-
-type ExperienceItem = {
-  company: string;
-  role: string;
-  start: string;
-  end: string;
-  logo?: string;
-  brandColor?: string;
-  highlights?: string[];
-  link?: string;
-  cover?: string;
-};
+import type { ExperienceItem } from "../content/experience.js";
 
 type Group = {
   company: string;
@@ -18,6 +7,7 @@ type Group = {
   brandColor?: string;
   link?: string;
   cover?: string;
+  coverPosition?: ExperienceItem["coverPosition"];
   roles: ExperienceItem[];
 };
 
@@ -63,6 +53,8 @@ function normalizeCompanyName(name: string): string {
   return name;
 }
 
+const COVER_POSITION = { left: "object-left", center: "object-center", right: "object-right" } as const;
+
 export function Experience({ items }: { items: ExperienceItem[] }) {
   const groups = useMemo<Group[]>(() => {
     const byCompany = new Map<string, Group>();
@@ -76,6 +68,7 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
           brandColor: item.brandColor,
           link: item.link,
           cover: item.cover,
+          coverPosition: item.coverPosition,
           roles: [item],
         });
       } else {
@@ -83,6 +76,7 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
         existing.logo = item.logo || existing.logo;
         existing.brandColor = item.brandColor || existing.brandColor;
         existing.cover = item.cover || existing.cover;
+        existing.coverPosition = item.coverPosition || existing.coverPosition;
         existing.link = item.link || existing.link;
       }
     }
@@ -107,18 +101,17 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
         <section key={g.company} className={"rounded-[28px] overflow-hidden bg-white ring-1 ring-black/5 dark:bg-tile-dark dark:ring-white/5"}>
           {g.cover ? (
             <div className={"h-28 sm:h-36 w-full overflow-hidden"} aria-hidden>
-              <img src={g.cover} alt="" className={"w-full h-full object-cover"} />
+              <img src={g.cover} alt="" className={`w-full h-full object-cover ${COVER_POSITION[g.coverPosition ?? "center"]}`} />
             </div>
           ) : null}
           <div className={"p-5 sm:p-6"}>
             <div className={"flex items-center gap-3 mb-4"}>
               <div
                 className={"shrink-0 w-11 h-11 rounded-xl overflow-hidden bg-white ring-1 ring-black/5 flex items-center justify-center"}
-                style={{ backgroundColor: g.brandColor || undefined }}
                 aria-hidden
               >
                 {g.logo ? (
-                  <img src={g.logo} alt="" className={"w-full h-full object-contain p-1"} />
+                  <img src={g.logo} alt="" className={"w-full h-full object-contain"} />
                 ) : (
                   <span className={"text-xs font-semibold text-gray-700 dark:text-gray-200"}>
                     {g.company.substring(0, 3).toUpperCase()}

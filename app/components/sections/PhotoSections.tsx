@@ -1,8 +1,8 @@
-import { StackedCarousel } from "../../components/StackedCarousel.js";
-import { PhotoGroupSelector } from "../../components/PhotoGroupSelector.js";
-import { TravelWorldMap } from "../../components/TravelWorldMap.js";
-import { Tile, TileLabel } from "../../components/bento/Tile.js";
-import { SectionHeader } from "../../components/bento/SectionHeader.js";
+import { StackedCarousel } from "../StackedCarousel.js";
+import { PhotoGroupSelector } from "../PhotoGroupSelector.js";
+import { TravelWorldMap } from "../TravelWorldMap.js";
+import { Tile, TileLabel } from "../bento/Tile.js";
+import { SectionHeader } from "../bento/SectionHeader.js";
 import { VISITED_COUNTRIES } from "../../content/travel.js";
 import type { usePhotoAlbums } from "../../hooks/usePhotoAlbums.js";
 

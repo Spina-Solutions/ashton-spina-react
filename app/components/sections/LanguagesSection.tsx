@@ -1,8 +1,8 @@
 import { useState } from "react";
 import conjugr8Logo from "../../assets/logos/conjugr8_logo.svg";
-import { Tile, TileLabel, ArrowIcon } from "../../components/bento/Tile.js";
-import { SectionHeader } from "../../components/bento/SectionHeader.js";
-import { LanguageWorldMap } from "../../components/LanguageWorldMap.js";
+import { Tile, TileLabel, ArrowIcon } from "../bento/Tile.js";
+import { SectionHeader } from "../bento/SectionHeader.js";
+import { LanguageWorldMap } from "../LanguageWorldMap.js";
 import { spokenLanguages, type SpokenLanguage } from "../../content/spokenLanguages.js";
 import { CEFR_STEPS, cefrLabel, cefrStepsReached } from "../../utils/cefr.js";
 

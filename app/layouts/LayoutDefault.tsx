@@ -8,10 +8,10 @@ import type { ExternalLink } from "../content/links.js";
 
 const PERSONAL_NAV: ExternalLink[] = [
   { label: "Projects", href: "/#projects" },
-  { label: "Photos", href: "/#photos" },
-  { label: "Travel", href: "/#travel" },
-  { label: "Languages", href: "/#languages" },
+  { label: "Travel", href: "/travel" },
+  { label: "Languages", href: "/languages" },
   { label: "Places", href: "/recommendations" },
+  { label: "Writing", href: "/media" },
 ];
 
 const WORK_NAV: ExternalLink[] = [
