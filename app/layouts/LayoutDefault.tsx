@@ -2,6 +2,7 @@ import "./tailwind.css";
 import { ThemeToggle } from "../components/ThemeToggle.js";
 import { Footer } from "../components/Footer.js";
 import { ModeToggle } from "../components/bento/ModeToggle.js";
+import { BrandMark } from "../components/bento/BrandMark.js";
 import { useSiteMode } from "../hooks/useSiteMode.js";
 import { useScrolledPast } from "../hooks/useScrolledPast.js";
 import type { ExternalLink } from "../content/links.js";
@@ -49,8 +50,8 @@ function TopNav() {
         className={"mx-auto max-w-6xl rounded-full bg-white/80 dark:bg-tile-dark/80 backdrop-blur-md ring-1 ring-black/5 dark:ring-white/10 shadow-sm"}
       >
         <div className={"flex items-center justify-between gap-3 pl-2 pr-2 py-2"}>
-          <a href={isWorkMode ? "/?mode=work" : "/"} className={"flex items-center gap-2 shrink-0 rounded-full"} aria-label="Ashton Spina, home">
-            <span className={"grid h-9 w-9 place-items-center rounded-full bg-ink text-paper dark:bg-paper dark:text-ink text-sm font-medium"}>AS</span>
+          <a href={isWorkMode ? "/?mode=work" : "/"} className={"group flex items-center gap-2 shrink-0 rounded-full"} aria-label="Ashton Spina, home">
+            <BrandMark className={"transition-transform group-hover:-rotate-6"} />
             <span className={"hidden sm:inline text-sm font-medium"}>Ashton Spina</span>
           </a>
           <ul className={"flex min-w-0 items-center gap-1 overflow-x-auto text-sm [scrollbar-width:none]"}>

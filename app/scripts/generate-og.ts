@@ -43,14 +43,15 @@ body{background:${C.paper};font-family:"Space Grotesk",sans-serif;color:${C.ink}
 .big{font-weight:500;letter-spacing:-.035em;line-height:.9}
 .img{background-size:cover;background-position:center;padding:0}
 .brand{position:absolute;display:flex;align-items:center;gap:12px;font-size:20px;font-weight:500}
-.mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:16px;background:${C.ink};color:${C.paper}}
-.ink .mark{background:${C.paper};color:${C.ink}}
+.mark{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:18px;letter-spacing:-.06em;background:${C.ink};color:${C.paper}}
+.mark b{font-weight:500;color:${C.coral}}
+.ink .mark{box-shadow:0 0 0 1.5px rgba(242,240,234,.18)}
 .pill{display:inline-block;border-radius:99px;padding:8px 16px;font-size:18px;margin:0 8px 8px 0}
 </style></head><body>${body}</body></html>`;
 }
 
 const brand = (pos = "left:34px;bottom:30px") =>
-  `<div class="brand" style="${pos}"><div class="mark">AS</div>ashtonspina.com</div>`;
+  `<div class="brand" style="${pos}"><div class="mark"><span>A<b>S</b></span></div>ashtonspina.com</div>`;
 
 const cards: Record<string, string> = {
   home: page(`
@@ -71,7 +72,7 @@ const cards: Record<string, string> = {
   <div class="t ink" style="grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between">
     <div class="lbl">Marketplace engineering consulting</div>
     <div class="big" style="font-size:66px;line-height:.98">Scale the team.<br>Merge the platform.<br><span style="color:${C.coral}">Grow B2B revenue.</span></div>
-    <div style="display:flex;align-items:center;gap:12px;font-size:20px;font-weight:500"><div class="mark">AS</div><span>Ashton Spina <span style="opacity:.6">· Fractional Head of Engineering</span></span></div>
+    <div style="display:flex;align-items:center;gap:12px;font-size:20px;font-weight:500"><div class="mark"><span>A<b>S</b></span></div><span>Ashton Spina <span style="opacity:.6">· Fractional Head of Engineering</span></span></div>
   </div>
   <div class="t img" style="background-image:url('${file(PORTRAIT)}')"></div>
   <div class="t sun" style="display:flex;flex-direction:column;justify-content:space-between"><div class="lbl">SMG Real Estate B2B</div><div><div class="big" style="font-size:88px">~40%</div><div style="font-size:17px;margin-top:8px">of group revenue, from the line I led engineering for</div></div></div>
