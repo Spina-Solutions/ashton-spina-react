@@ -6,7 +6,7 @@
 
 - [Consulting and track record](https://www.ashtonspina.com/?mode=work): services, case study and experience.
 - Fractional Head of Engineering: interim or part-time engineering leadership for marketplace teams.
-- Marketplace mergers and integration: part of the homegate.ch and immoscout24.ch merger and the flatfox acquisition that formed SMG Real Estate.
+- Marketplace mergers and integration: part of the homegate.ch and immoscout24.ch merger that formed SMG Real Estate, and of its later acquisition of flatfox.
 - B2B monetisation and product: led engineering for SMG's Real Estate B2B line, around 40% of group revenue.
 - Build and modernise platforms: built Homegate's AWS Cognito authentication; builds and runs JobCrawls.
 

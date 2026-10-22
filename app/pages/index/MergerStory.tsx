@@ -1,9 +1,15 @@
 import type { ReactNode } from "react";
+import homegateLogo from "../../assets/logos/homegate_logo.svg";
 import flatfoxLogo from "../../assets/logos/flatfox_logo.svg";
 import smgLogo from "../../assets/logos/smg_logo.png";
 import { Tile, TileLabel } from "../../components/bento/Tile.js";
 
-// Visual case study: two marketplaces merge, flatfox is acquired, all of it becomes SMG Real Estate.
+// Drop the official logo in as assets/logos/immoscout24_logo.(svg|png|webp) and it is picked up here.
+const immoscoutLogo = Object.values(
+  import.meta.glob<string>("../../assets/logos/immoscout24_logo.{svg,png,webp}", { eager: true, import: "default" }),
+)[0];
+
+// Visual case study: homegate.ch and immoscout24.ch merge into SMG Real Estate, which then acquires flatfox.
 export function MergerStory() {
   return (
     <section id="case-study" className={"pt-12"}>
@@ -13,29 +19,38 @@ export function MergerStory() {
             <TileLabel>Case study</TileLabel>
             <h2 className={"mt-2 text-3xl sm:text-5xl font-medium leading-[1] tracking-tight"}>Building SMG Real Estate</h2>
           </div>
-          <p className={"max-w-sm text-sm opacity-70"}>I was part of the merger and the acquisition that brought these marketplaces together.</p>
+          <p className={"max-w-sm text-sm opacity-70"}>I was part of the merger that formed SMG Real Estate, and of its acquisition of flatfox.</p>
         </div>
 
         <ol className={"stagger mt-8 grid items-center gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr]"}>
           <li className={"grid gap-2"}>
             <StageLabel step={1}>Two marketplaces</StageLabel>
-            <Brand name="homegate.ch" />
-            <Brand name="immoscout24.ch" />
+            <BrandChip>
+              <img src={homegateLogo} alt="homegate.ch" className={"h-7 w-auto"} />
+            </BrandChip>
+            <BrandChip>
+              {immoscoutLogo ? (
+                <img src={immoscoutLogo} alt="immoscout24.ch" className={"h-10 w-auto"} />
+              ) : (
+                <>
+                  <span className={"grid h-7 w-7 place-items-center rounded-md bg-ink text-xs font-medium text-paper"} aria-hidden>
+                    i
+                  </span>
+                  <span className={"font-medium"}>immoscout24.ch</span>
+                </>
+              )}
+            </BrandChip>
           </li>
 
           <Connector label="Merger" />
 
           <li className={"grid gap-2"}>
-            <StageLabel step={2}>One platform, one team</StageLabel>
-            <div className={"rounded-2xl bg-white/10 px-4 py-4 ring-1 ring-white/15"}>
-              <div className={"text-lg font-medium"}>homegate.ch <span className={"text-coral"}>+</span> immoscout24.ch</div>
-              <div className={"text-xs opacity-60"}>Organisations and processes integrated</div>
-            </div>
-            <div className={"flex items-center gap-3 rounded-2xl border border-dashed border-white/25 px-4 py-3"}>
-              <img src={flatfoxLogo} alt="" className={"h-8 w-8 rounded-lg bg-white p-1"} />
+            <StageLabel step={2}>One company</StageLabel>
+            <div className={"flex items-center gap-4 rounded-2xl bg-white/10 px-5 py-5 ring-1 ring-white/15"}>
+              <img src={smgLogo} alt="" className={"h-12 w-12 rounded-xl bg-white object-contain"} />
               <div>
-                <div className={"font-medium"}>flatfox</div>
-                <div className={"text-xs opacity-60"}>Joins through acquisition</div>
+                <div className={"text-xl font-medium leading-tight"}>SMG Real Estate</div>
+                <div className={"text-xs opacity-60"}>homegate.ch and immoscout24.ch, one organisation</div>
               </div>
             </div>
           </li>
@@ -43,12 +58,12 @@ export function MergerStory() {
           <Connector label="Acquisition" />
 
           <li className={"grid gap-2"}>
-            <StageLabel step={3}>Today</StageLabel>
-            <div className={"flex items-center gap-4 rounded-2xl bg-coral px-5 py-6 text-white"}>
-              <img src={smgLogo} alt="" className={"h-14 w-14 rounded-xl bg-white object-contain"} />
+            <StageLabel step={3}>Growing it</StageLabel>
+            <div className={"flex items-center gap-4 rounded-2xl bg-coral px-5 py-5 text-white"}>
+              <img src={flatfoxLogo} alt="" className={"h-12 w-12 rounded-xl bg-white p-1.5"} />
               <div>
-                <div className={"text-2xl font-medium leading-tight"}>SMG Real Estate</div>
-                <div className={"text-sm opacity-85"}>Part of SMG Swiss Marketplace Group</div>
+                <div className={"text-xl font-medium leading-tight"}>flatfox joins</div>
+                <div className={"text-sm opacity-85"}>Acquired by SMG and brought into SMG Real Estate</div>
               </div>
             </div>
           </li>
@@ -67,15 +82,8 @@ function StageLabel({ step, children }: { step: number; children: ReactNode }) {
   );
 }
 
-function Brand({ name }: { name: string }) {
-  return (
-    <div className={"flex items-center gap-3 rounded-2xl bg-paper px-4 py-3 text-ink"}>
-      <span className={"grid h-8 w-8 place-items-center rounded-lg bg-ink text-sm font-medium text-paper"} aria-hidden>
-        {name[0].toUpperCase()}
-      </span>
-      <span className={"font-medium"}>{name}</span>
-    </div>
-  );
+function BrandChip({ children }: { children: ReactNode }) {
+  return <div className={"flex h-14 items-center gap-3 rounded-2xl bg-white px-4 text-ink"}>{children}</div>;
 }
 
 // Horizontal arrow on wide screens, vertical on narrow ones.

@@ -75,7 +75,7 @@ const cards: Record<string, string> = {
   </div>
   <div class="t img" style="background-image:url('${file(PORTRAIT)}')"></div>
   <div class="t sun" style="display:flex;flex-direction:column;justify-content:space-between"><div class="lbl">SMG Real Estate B2B</div><div><div class="big" style="font-size:88px">~40%</div><div style="font-size:17px;margin-top:8px">of group revenue, from the line I led engineering for</div></div></div>
-  <div class="t sage" style="grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between"><div class="lbl">Merger and acquisition</div><div class="big" style="font-size:38px;line-height:1.08">homegate.ch + immoscout24.ch + flatfox<br>→ SMG Real Estate</div></div>
+  <div class="t sage" style="grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between"><div class="lbl">Merger and acquisition</div><div class="big" style="font-size:38px;line-height:1.08">homegate.ch + immoscout24.ch<br>→ SMG Real Estate + flatfox</div></div>
 </div>`),
 
   travel: page(`

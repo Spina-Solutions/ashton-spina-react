@@ -162,7 +162,7 @@ function WorkTiles() {
         </div>
         <div>
           <div className={"text-2xl sm:text-3xl font-medium leading-tight tracking-tight"}>homegate.ch + immoscout24.ch</div>
-          <div className={"mt-1 text-sm opacity-85"}>Part of merging two Swiss property marketplaces, and of the flatfox acquisition</div>
+          <div className={"mt-1 text-sm opacity-85"}>Part of merging two Swiss property marketplaces into SMG Real Estate, then acquiring flatfox</div>
         </div>
       </Tile>
       <Tile href="/archive" className={"flex flex-col justify-between min-h-[150px]"}>
