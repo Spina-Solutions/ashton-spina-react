@@ -4,9 +4,10 @@
 
 ## Work
 
-- [Consulting and track record](https://www.ashtonspina.com/?mode=work): services, case study and experience.
+- [Consulting](https://www.ashtonspina.com/consulting): services, track record and how to get in touch.
+- [Case study: building SMG Real Estate](https://www.ashtonspina.com/consulting/smg-real-estate): from engineer at homegate.ch to Head of Engineering for SMG Real Estate B2B.
 - Fractional Head of Engineering: interim or part-time engineering leadership for marketplace teams.
-- Marketplace mergers and integration: part of the homegate.ch and immoscout24.ch merger that formed SMG Real Estate, and of its later acquisition of flatfox.
+- Marketplace mergers and integration: part of the homegate.ch and immoscout24.ch merger that formed SMG Real Estate, and of its later acquisitions of flatfox and immoverkauf24.ch.
 - B2B monetisation and product: led engineering for SMG's Real Estate B2B line, around 40% of group revenue.
 - Build and modernise platforms: built Homegate's AWS Cognito authentication; builds and runs JobCrawls.
 

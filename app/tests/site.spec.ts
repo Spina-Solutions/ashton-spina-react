@@ -4,9 +4,9 @@ import { countryToGroupId } from "../content/travel.js";
 import { readModeFromSearch } from "../hooks/useSiteMode.js";
 import { stepAlbum } from "../hooks/usePhotoAlbums.js";
 import { formatHelsinkiTime } from "../hooks/useHelsinkiTime.js";
-import { hasCountryPhotos, photoAlt, type PhotoGroup } from "../utils/photography.js";
+import { hasCountryPhotos, photoAlt, webpVariant, photoSrcSet, generatePhotoGroups, type PhotoGroup } from "../utils/photography.js";
 import { canonicalUrl } from "../content/site.js";
-import { buildStructuredData, serializeJsonLd } from "../utils/structuredData.js";
+import { buildStructuredData, serializeJsonLd, breadcrumbTrail } from "../utils/structuredData.js";
 import { cefrStepsReached } from "../utils/cefr.js";
 import { primaryLanguageFor } from "../content/spokenLanguages.js";
 import { unvisitedRecommendations } from "../content/recommendations.js";
@@ -171,8 +171,8 @@ describe("photoAlt", () => {
 });
 
 describe("canonicalUrl", () => {
-  it("keeps work mode on the home page and drops other params", () => {
-    expect(canonicalUrl("/", { mode: "work", utm_source: "x" })).toBe("https://www.ashtonspina.com/?mode=work");
+  it("points work mode at /consulting and drops other params", () => {
+    expect(canonicalUrl("/", { mode: "work", utm_source: "x" })).toBe("https://www.ashtonspina.com/consulting");
     expect(canonicalUrl("/", { album: "italy" })).toBe("https://www.ashtonspina.com/");
     expect(canonicalUrl("/travel", { album: "italy", mode: "work" })).toBe("https://www.ashtonspina.com/travel");
   });
@@ -200,5 +200,40 @@ describe("buildStructuredData", () => {
 
   it("serialises without allowing a script tag to close early", () => {
     expect(serializeJsonLd({ x: "</script><script>alert(1)" })).not.toContain("</script>");
+  });
+});
+
+describe("breadcrumbTrail", () => {
+  it("names each level from PAGE_NAMES and the current page from its title", () => {
+    expect(breadcrumbTrail("/consulting/smg-real-estate", "Building SMG Real Estate")).toEqual([
+      { name: "Home", path: "/" },
+      { name: "Consulting", path: "/consulting" },
+      { name: "Building SMG Real Estate", path: "/consulting/smg-real-estate" },
+    ]);
+  });
+
+  it("falls back to the raw segment for unnamed parents", () => {
+    expect(breadcrumbTrail("/media/ontario-city-problem", "Ontario's City Problem")[1]).toEqual({ name: "Writing", path: "/media" });
+    expect(breadcrumbTrail("/x/y", "Y")[1]).toEqual({ name: "x", path: "/x" });
+  });
+});
+
+describe("webpVariant and photoSrcSet", () => {
+  it("swaps the extension for a sized WebP", () => {
+    expect(webpVariant("/photography/italy/DSC_0086.JPG", 800)).toBe("/photography/italy/DSC_0086-800.webp");
+    expect(webpVariant("/photography/croatia/20220916_144415~2.jpg", 1600)).toBe("/photography/croatia/20220916_144415~2-1600.webp");
+  });
+
+  it("builds an encoded srcset with both widths", () => {
+    expect(photoSrcSet("/photography/san marino/a.jpg")).toBe(
+      "/photography/san%20marino/a-800.webp 800w, /photography/san%20marino/a-1600.webp 1600w",
+    );
+  });
+
+  it("points every album at WebP files", () => {
+    for (const group of generatePhotoGroups()) {
+      expect(group.thumbnail.endsWith("-800.webp")).toBe(true);
+      for (const photo of group.photos) expect(photo.src.endsWith("-1600.webp")).toBe(true);
+    }
   });
 });

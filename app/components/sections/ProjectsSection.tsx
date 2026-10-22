@@ -1,5 +1,5 @@
-import { Tile, ArrowIcon } from "../../components/bento/Tile.js";
-import { SectionHeader } from "../../components/bento/SectionHeader.js";
+import { Tile, ArrowIcon } from "../bento/Tile.js";
+import { SectionHeader } from "../bento/SectionHeader.js";
 import { featuredProjects, type FeaturedProject } from "../../content/projects.js";
 
 export function ProjectsSection({ title }: { title: string }) {

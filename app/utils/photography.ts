@@ -5,6 +5,8 @@ export interface Photo {
   alt: string;
   w: number;
   h: number;
+  // Responsive WebP candidates, set by generatePhotoGroups
+  srcSet?: string;
 }
 
 export interface PhotoGroup {
@@ -139,10 +141,24 @@ export function generatePhotoGroups(): PhotoGroup[] {
     return {
       id: country,
       title: displayName,
-      thumbnail: photoData.thumbnail,
-      photos: photoData.photos.map((photo, i) => ({ ...photo, alt: photoAlt(displayName, i, photoData.photos.length) })),
+      thumbnail: webpVariant(photoData.thumbnail, 800),
+      photos: photoData.photos.map((photo, i) => ({
+        ...photo,
+        src: webpVariant(photo.src, 1600),
+        srcSet: photoSrcSet(photo.src),
+        alt: photoAlt(displayName, i, photoData.photos.length),
+      })),
     };
   });
+}
+
+// Web-ready versions made by scripts/optimize_photos.py: <name>-800.webp and <name>-1600.webp
+export function webpVariant(src: string, width: 800 | 1600): string {
+  return src.replace(/\.[^./]+$/, `-${width}.webp`);
+}
+
+export function photoSrcSet(src: string): string {
+  return `${encodeURI(webpVariant(src, 800))} 800w, ${encodeURI(webpVariant(src, 1600))} 1600w`;
 }
 
 // Descriptive alt text for an album photo, e.g. "Travel photo from Italy, 2 of 5"

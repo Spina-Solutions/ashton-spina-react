@@ -4,6 +4,7 @@ import { Tile, TileLabel, ArrowIcon } from "../../components/bento/Tile.js";
 import { ModeToggle } from "../../components/bento/ModeToggle.js";
 import { contactLinks, socialLinks } from "../../content/links.js";
 import { CONSULTING_ENQUIRY_HREF } from "../../content/consulting.js";
+import { trackEvent } from "../../utils/analytics.js";
 import { VISITED_COUNTRIES } from "../../content/travel.js";
 import { useHelsinkiTime } from "../../hooks/useHelsinkiTime.js";
 import { spokenLanguages } from "../../content/spokenLanguages.js";
@@ -40,6 +41,7 @@ function NameTile({ isWorkMode }: { isWorkMode: boolean }) {
           {isWorkMode ? (
             <a
               href={CONSULTING_ENQUIRY_HREF}
+              onClick={() => trackEvent("consulting_enquiry_click", { location: "home_hero" })}
               className={"inline-flex items-center gap-2 rounded-full bg-coral px-5 py-2 text-sm font-medium text-white hover:bg-coral-dark transition-colors"}
             >
               Work with me <span aria-hidden>→</span>
@@ -132,7 +134,7 @@ function PersonalTiles() {
 function WorkTiles() {
   return (
     <>
-      <Tile tone="coral" href="#services" className={"flex flex-col justify-between gap-4 min-h-[150px]"}>
+      <Tile tone="coral" href="/consulting" className={"flex flex-col justify-between gap-4 min-h-[150px]"}>
         <div className={"flex justify-between"}>
           <TileLabel>Consulting</TileLabel>
           <ArrowIcon />
@@ -162,7 +164,7 @@ function WorkTiles() {
         </div>
         <div>
           <div className={"text-2xl sm:text-3xl font-medium leading-tight tracking-tight"}>homegate.ch + immoscout24.ch</div>
-          <div className={"mt-1 text-sm opacity-85"}>Part of merging two Swiss property marketplaces into SMG Real Estate, then acquiring flatfox</div>
+          <div className={"mt-1 text-sm opacity-85"}>Part of merging two Swiss property marketplaces into SMG Real Estate, then acquiring flatfox and immoverkauf24.ch</div>
         </div>
       </Tile>
       <Tile href="/archive" className={"flex flex-col justify-between min-h-[150px]"}>

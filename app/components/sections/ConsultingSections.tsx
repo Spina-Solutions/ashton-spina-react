@@ -1,8 +1,9 @@
 import logoTechTacticsOy from "../../assets/logos/techtactics_mark.svg";
-import { Tile, TileLabel, ArrowIcon } from "../../components/bento/Tile.js";
-import { SectionHeader } from "../../components/bento/SectionHeader.js";
+import { Tile, TileLabel, ArrowIcon } from "../bento/Tile.js";
+import { SectionHeader } from "../bento/SectionHeader.js";
 import { consultingServices, CONSULTING_ENQUIRY_HREF, type ConsultingService } from "../../content/consulting.js";
 import { contactLinks } from "../../content/links.js";
+import { trackEvent } from "../../utils/analytics.js";
 
 export function ServicesSection() {
   return (
@@ -51,7 +52,7 @@ export function ContactSection() {
   return (
     <section id="contact" className={"pt-12"}>
       <div className={"grid grid-cols-1 md:grid-cols-3 gap-3"}>
-        <Tile tone="coral" href={CONSULTING_ENQUIRY_HREF} className={"md:col-span-2 flex flex-col justify-between gap-10 min-h-[260px] sm:!p-10"}>
+        <Tile tone="coral" href={CONSULTING_ENQUIRY_HREF} onClick={() => trackEvent("consulting_enquiry_click", { location: "contact_section" })} className={"md:col-span-2 flex flex-col justify-between gap-10 min-h-[260px] sm:!p-10"}>
           <div className={"flex justify-between"}>
             <TileLabel>Start a conversation</TileLabel>
             <ArrowIcon className={"h-7 w-7"} />
@@ -74,7 +75,7 @@ export function ContactSection() {
             </div>
           </Tile>
           {linkedIn ? (
-            <Tile tone="ink" href={linkedIn.href} external className={"flex items-center justify-between"}>
+            <Tile tone="ink" href={linkedIn.href} external onClick={() => trackEvent("linkedin_click", { location: "contact_section" })} className={"flex items-center justify-between"}>
               <span className={"text-xl font-medium"}>Full history on LinkedIn</span>
               <ArrowIcon />
             </Tile>

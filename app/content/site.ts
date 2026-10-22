@@ -6,11 +6,22 @@ export function absoluteUrl(pathOrUrl: string): string {
   return `${SITE_URL}${pathOrUrl.startsWith("/") ? "" : "/"}${pathOrUrl}`;
 }
 
-// Canonical keeps ?mode=work (a different page) and drops every other query param.
+// Query params never make a different page; the home page's work mode is a preview of /consulting.
 export function canonicalUrl(pathname: string, search: Record<string, string>): string {
-  const mode = search.mode === "work" && pathname === "/" ? "?mode=work" : "";
-  return absoluteUrl(`${pathname}${mode}`);
+  if (pathname === "/" && search.mode === "work") return absoluteUrl("/consulting");
+  return absoluteUrl(pathname);
 }
+
+// Breadcrumb names by path; the current page falls back to its own title.
+export const PAGE_NAMES: Record<string, string> = {
+  "/consulting": "Consulting",
+  "/consulting/smg-real-estate": "Building SMG Real Estate",
+  "/travel": "Travel",
+  "/languages": "Languages",
+  "/media": "Writing",
+  "/archive": "Archive",
+  "/recommendations": "Worth the trip",
+};
 
 export const SEO = {
   home: {
@@ -21,6 +32,6 @@ export const SEO = {
   work: {
     title: "Ashton Spina · Marketplace engineering consultant and fractional Head of Engineering",
     description:
-      "Fractional Head of Engineering for marketplaces. Former Head of Engineering for SMG Real Estate B2B (~40% of group revenue); part of the homegate.ch and immoscout24.ch merger and the flatfox acquisition.",
+      "Fractional Head of Engineering for marketplaces. Former Head of Engineering for SMG Real Estate B2B (~40% of group revenue); part of the homegate.ch and immoscout24.ch merger and the flatfox and immoverkauf24.ch acquisitions.",
   },
 } as const;

@@ -40,7 +40,9 @@ console.log(`📤 Syncing photography files to s3://${bucketName}/photography/`)
 
 try {
   execSync(
-    `aws s3 sync "${publicDir}/photography" "s3://${bucketName}/photography/" --cache-control "max-age=2592000,s-maxage=2592000" --delete`,
+    // Only the metadata-free WebP files from scripts/optimize_photos.py are published;
+    // the original JPEGs (which can carry GPS data) stay local.
+    `aws s3 sync "${publicDir}/photography" "s3://${bucketName}/photography/" --exclude "*" --include "*.webp" --cache-control "max-age=2592000,s-maxage=2592000" --delete`,
     { stdio: 'inherit' }
   );
   console.log('✅ Photography files synced successfully!');

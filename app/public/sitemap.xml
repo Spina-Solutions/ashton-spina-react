@@ -8,27 +8,33 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.ashtonspina.com/?mode=work</loc>
+    <loc>https://www.ashtonspina.com/consulting</loc>
     <lastmod>2026-10-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.ashtonspina.com/consulting/smg-real-estate</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ashtonspina.com/travel</loc>
     <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/italy/IDG_20250824_185102_092.jpg</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/vietnam/IMG_1896.JPG</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/malta/IMG-20170913-WA0004.jpg</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/cambodia/IMG_2320.JPG</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/croatia/20220915_132731.jpg</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/finland/20170912_115705.jpg</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/greece/DSC_0248.JPG</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/ireland/20221014_123747.jpg</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/china/PXL_20240120_113924985.MP.jpg</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/belgium/20180424_164424.jpg</image:loc></image:image>
-    <image:image><image:loc>https://www.ashtonspina.com/photography/netherlands/20180420_171546.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/italy/IDG_20250824_185102_092-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/vietnam/IMG_1896-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/malta/IMG-20170913-WA0004-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/cambodia/IMG_2320-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/croatia/20220915_132731-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/finland/20170912_115705-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/greece/DSC_0248-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/ireland/20221014_123747-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/china/PXL_20240120_113924985.MP-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/belgium/20180424_164424-800.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.ashtonspina.com/photography/netherlands/20180420_171546-800.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.ashtonspina.com/languages</loc>

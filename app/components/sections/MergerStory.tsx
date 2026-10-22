@@ -2,27 +2,29 @@ import type { ReactNode } from "react";
 import homegateLogo from "../../assets/logos/homegate_logo.svg";
 import flatfoxLogo from "../../assets/logos/flatfox_logo.svg";
 import smgLogo from "../../assets/logos/smg_logo.png";
-import { Tile, TileLabel } from "../../components/bento/Tile.js";
+import { Tile, TileLabel } from "../bento/Tile.js";
 
 // Drop the official logo in as assets/logos/immoscout24_logo.(svg|png|webp) and it is picked up here.
 const immoscoutLogo = Object.values(
   import.meta.glob<string>("../../assets/logos/immoscout24_logo.{svg,png,webp}", { eager: true, import: "default" }),
 )[0];
 
-// Visual case study: homegate.ch and immoscout24.ch merge into SMG Real Estate, which then acquires flatfox.
-export function MergerStory() {
+// Visual case study: homegate.ch and immoscout24.ch merge into SMG Real Estate, which then acquires flatfox and immoverkauf24.ch.
+export function MergerStory({ caseStudyHref, showHeading = true }: { caseStudyHref?: string; showHeading?: boolean }) {
   return (
     <section id="case-study" className={"pt-12"}>
       <Tile tone="night" className={"sm:!p-8"}>
-        <div className={"flex flex-wrap items-end justify-between gap-3"}>
-          <div>
-            <TileLabel>Case study</TileLabel>
-            <h2 className={"mt-2 text-3xl sm:text-5xl font-medium leading-[1] tracking-tight"}>Building SMG Real Estate</h2>
+        {showHeading ? (
+          <div className={"flex flex-wrap items-end justify-between gap-3"}>
+            <div>
+              <TileLabel>Case study</TileLabel>
+              <h2 className={"mt-2 text-3xl sm:text-5xl font-medium leading-[1] tracking-tight"}>Building SMG Real Estate</h2>
+            </div>
+            <p className={"max-w-sm text-sm opacity-70"}>I was part of the merger that formed SMG Real Estate, and of its acquisitions of flatfox and immoverkauf24.ch.</p>
           </div>
-          <p className={"max-w-sm text-sm opacity-70"}>I was part of the merger that formed SMG Real Estate, and of its acquisition of flatfox.</p>
-        </div>
+        ) : null}
 
-        <ol className={"stagger mt-8 grid items-center gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr]"}>
+        <ol className={`stagger ${showHeading ? "mt-8" : ""} grid items-center gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr]`}>
           <li className={"grid gap-2"}>
             <StageLabel step={1}>Two marketplaces</StageLabel>
             <BrandChip>
@@ -55,19 +57,36 @@ export function MergerStory() {
             </div>
           </li>
 
-          <Connector label="Acquisition" />
+          <Connector label="Acquisitions" />
 
           <li className={"grid gap-2"}>
             <StageLabel step={3}>Growing it</StageLabel>
-            <div className={"flex items-center gap-4 rounded-2xl bg-coral px-5 py-5 text-white"}>
-              <img src={flatfoxLogo} alt="" className={"h-12 w-12 rounded-xl bg-white p-1.5"} />
-              <div>
-                <div className={"text-xl font-medium leading-tight"}>flatfox joins</div>
-                <div className={"text-sm opacity-85"}>Acquired by SMG and brought into SMG Real Estate</div>
+            <div className={"rounded-2xl bg-coral p-4 text-white"}>
+              <div className={"mb-3 text-sm opacity-90"}>Acquired by SMG and brought into SMG Real Estate</div>
+              <div className={"grid gap-2"}>
+                <BrandChip>
+                  <img src={flatfoxLogo} alt="" className={"h-8 w-8"} />
+                  <span className={"font-medium"}>flatfox</span>
+                </BrandChip>
+                <BrandChip>
+                  <span className={"grid h-8 w-8 place-items-center rounded-md bg-ink text-xs font-medium text-paper"} aria-hidden>
+                    i
+                  </span>
+                  <span className={"font-medium"}>immoverkauf24.ch</span>
+                </BrandChip>
               </div>
             </div>
           </li>
         </ol>
+        {caseStudyHref ? (
+          <a
+            href={caseStudyHref}
+            className={"group mt-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium hover:bg-coral hover:text-white transition-colors"}
+          >
+            Read the full case study
+            <span aria-hidden className={"transition-transform group-hover:translate-x-0.5"}>→</span>
+          </a>
+        ) : null}
       </Tile>
     </section>
   );

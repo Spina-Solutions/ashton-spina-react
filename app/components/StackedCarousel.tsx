@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-type Photo = { src: string; alt: string; w?: number; h?: number };
+type Photo = { src: string; alt: string; w?: number; h?: number; srcSet?: string };
 
 export function StackedCarousel({ 
   photos, 
@@ -144,6 +144,8 @@ export function StackedCarousel({
             <img
               key={key}
               src={photo.src}
+              srcSet={photo.srcSet}
+              sizes="(min-width: 1024px) 900px, 90vw"
               alt={photo.alt}
               className={"absolute top-1/2 left-1/2 max-w-[88%] max-h-full object-contain select-none rounded-[20px] ring-1 ring-black/10 shadow-xl"}
               style={{
@@ -163,6 +165,8 @@ export function StackedCarousel({
           <img
             key={visible.active.key}
             src={visible.active.photo.src}
+            srcSet={visible.active.photo.srcSet}
+            sizes="(min-width: 1024px) 900px, 90vw"
             alt={visible.active.photo.alt}
             className={"absolute top-1/2 left-1/2 max-w-[88%] max-h-full object-contain select-none rounded-[20px] ring-1 ring-black/10 shadow-2xl"}
             style={{ 
@@ -187,6 +191,8 @@ export function StackedCarousel({
             <img
               key={key}
               src={photo.src}
+              srcSet={photo.srcSet}
+              sizes="(min-width: 1024px) 900px, 90vw"
               alt={photo.alt}
               className={"absolute top-1/2 left-1/2 max-w-[88%] max-h-full object-contain select-none rounded-[20px] ring-1 ring-black/10 shadow-xl"}
               style={{

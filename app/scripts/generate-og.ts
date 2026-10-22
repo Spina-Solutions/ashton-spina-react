@@ -76,7 +76,7 @@ const cards: Record<string, string> = {
   </div>
   <div class="t img" style="background-image:url('${file(PORTRAIT)}')"></div>
   <div class="t sun" style="display:flex;flex-direction:column;justify-content:space-between"><div class="lbl">SMG Real Estate B2B</div><div><div class="big" style="font-size:88px">~40%</div><div style="font-size:17px;margin-top:8px">of group revenue, from the line I led engineering for</div></div></div>
-  <div class="t sage" style="grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between"><div class="lbl">Merger and acquisition</div><div class="big" style="font-size:38px;line-height:1.08">homegate.ch + immoscout24.ch<br>→ SMG Real Estate + flatfox</div></div>
+  <div class="t sage" style="grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between"><div class="lbl">Merger and acquisitions</div><div class="big" style="font-size:34px;line-height:1.1">homegate.ch + immoscout24.ch → SMG Real Estate<br>+ flatfox + immoverkauf24.ch</div></div>
 </div>`),
 
   travel: page(`
@@ -145,6 +145,20 @@ const cards: Record<string, string> = {
     .join("")}
 </div>`),
 };
+
+cards["case-smg-real-estate"] = page(`
+<div style="display:grid;grid-template-columns:1.25fr 1fr;gap:14px;height:574px">
+  <div class="t ink" style="display:flex;flex-direction:column;justify-content:space-between">
+    <div class="lbl">Case study · 2019–2026</div>
+    <div class="big" style="font-size:86px">Building<br>SMG Real<br><span style="color:${C.coral}">Estate.</span></div>
+    <div style="display:flex;align-items:center;gap:12px;font-size:20px;font-weight:500"><div class="mark"><span>A<b>S</b></span></div><span>Ashton Spina <span style="opacity:.6">· ashtonspina.com</span></span></div>
+  </div>
+  <div style="display:grid;grid-template-rows:1fr 1fr 1fr;gap:14px">
+    <div class="t white" style="display:flex;flex-direction:column;justify-content:center;padding:26px 30px"><div class="lbl">1 · Merger</div><div style="font-size:32px;font-weight:500;margin-top:8px;letter-spacing:-.02em">homegate.ch + immoscout24.ch</div></div>
+    <div class="t sage" style="display:flex;flex-direction:column;justify-content:center;padding:26px 30px"><div class="lbl">2 · Acquisitions</div><div style="font-size:32px;font-weight:500;margin-top:8px;letter-spacing:-.02em">flatfox + immoverkauf24.ch</div></div>
+    <div class="t sun" style="display:flex;flex-direction:column;justify-content:center;padding:26px 30px"><div class="lbl">3 · Leading B2B</div><div style="font-size:32px;font-weight:500;margin-top:8px;letter-spacing:-.02em">~40% of group revenue</div></div>
+  </div>
+</div>`);
 
 for (const article of mediaItems.filter((m) => m.category === "article")) {
   cards[`article-${article.id}`] = page(`

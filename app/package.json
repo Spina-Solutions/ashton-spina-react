@@ -9,7 +9,8 @@
     "deploy:aws": "run-s build deploy:cdk-deploy-all deploy:sync-photography",
     "cdk:app": "tsx cdk/bin/infrastructure.ts",
     "cdk": "cdk",
-    "og": "tsx scripts/generate-og.ts"
+    "og": "tsx scripts/generate-og.ts",
+    "photos": "python3 -I scripts/optimize_photos.py"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1032.0",

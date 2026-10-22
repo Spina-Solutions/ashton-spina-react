@@ -3,6 +3,7 @@ import { featuredProjects } from "../content/projects.js";
 import type { ExternalLink } from "../content/links.js";
 
 const SITE_LINKS: ExternalLink[] = [
+  { label: "Consulting", href: "/consulting" },
   { label: "Projects", href: "/#projects" },
   { label: "Travel and photos", href: "/travel" },
   { label: "Languages", href: "/languages" },

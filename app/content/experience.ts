@@ -48,7 +48,7 @@ export const experienceItems: ExperienceItem[] = [
     highlights: [
       "Lead engineering for Real Estate B2B, contributing ~40% of SMG revenue.",
       "Part of the homegate.ch and immoscout24.ch merger; org/process integration.",
-      "Part of SMG's acquisition of flatfox.",
+      "Part of SMG's acquisitions of flatfox and immoverkauf24.ch.",
       "Coach Engineering Managers; establish feedback, ownership and delivery practices.",
       "Partner cross-functionally (Sales, Product, Monetization, Marketing) for value delivery.",
     ],

@@ -1,4 +1,4 @@
-import { SITE_URL, SITE_NAME, absoluteUrl } from "../content/site.js";
+import { SITE_URL, SITE_NAME, PAGE_NAMES, absoluteUrl } from "../content/site.js";
 import { consultingServices } from "../content/consulting.js";
 import { contactLinks, socialLinks, EMAIL } from "../content/links.js";
 import type { Article } from "../content/media.js";
@@ -45,7 +45,7 @@ function organization(): JsonLd {
     "@type": "Organization",
     "@id": ORG_ID,
     name: "TechTactics Oy",
-    url: `${SITE_URL}/?mode=work`,
+    url: `${SITE_URL}/consulting`,
     founder: { "@id": PERSON_ID },
     address: { "@type": "PostalAddress", addressLocality: "Helsinki", addressCountry: "FI" },
     hasOfferCatalog: {
@@ -70,13 +70,27 @@ function website(): JsonLd {
   };
 }
 
+// Home, then one crumb per path segment: /consulting/smg-real-estate -> Home › Consulting › Building SMG Real Estate
+export function breadcrumbTrail(pathname: string, pageTitle: string): Array<{ name: string; path: string }> {
+  const segments = pathname.split("/").filter(Boolean);
+  const trail = [{ name: "Home", path: "/" }];
+  segments.forEach((_, i) => {
+    const path = `/${segments.slice(0, i + 1).join("/")}`;
+    const isLast = i === segments.length - 1;
+    trail.push({ name: isLast ? pageTitle : (PAGE_NAMES[path] ?? segments[i]), path });
+  });
+  return trail;
+}
+
 function breadcrumbs(pathname: string, pageTitle: string): JsonLd {
   return {
     "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: pageTitle, item: absoluteUrl(pathname) },
-    ],
+    itemListElement: breadcrumbTrail(pathname, pageTitle).map((crumb, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: crumb.name,
+      item: absoluteUrl(crumb.path),
+    })),
   };
 }
 

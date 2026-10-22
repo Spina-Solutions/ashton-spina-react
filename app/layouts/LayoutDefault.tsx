@@ -8,6 +8,7 @@ import { useScrolledPast } from "../hooks/useScrolledPast.js";
 import type { ExternalLink } from "../content/links.js";
 
 const PERSONAL_NAV: ExternalLink[] = [
+  { label: "Consulting", href: "/consulting" },
   { label: "Projects", href: "/#projects" },
   { label: "Travel", href: "/travel" },
   { label: "Languages", href: "/languages" },
@@ -16,11 +17,11 @@ const PERSONAL_NAV: ExternalLink[] = [
 ];
 
 const WORK_NAV: ExternalLink[] = [
-  { label: "Services", href: "/?mode=work#services" },
-  { label: "Track record", href: "/?mode=work#experience" },
-  { label: "Products", href: "/?mode=work#projects" },
+  { label: "Services", href: "/consulting#services" },
+  { label: "Case study", href: "/consulting/smg-real-estate" },
+  { label: "Track record", href: "/consulting#experience" },
   { label: "Writing", href: "/media" },
-  { label: "Contact", href: "/?mode=work#contact" },
+  { label: "Contact", href: "/consulting#contact" },
 ];
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {

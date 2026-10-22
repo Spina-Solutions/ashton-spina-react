@@ -4,19 +4,12 @@ import { usePageContext } from "vike-react/usePageContext";
 import faviconUrl from "../assets/icons/favicon-48.png";
 import appleTouchIconUrl from "../assets/icons/apple-touch-icon.png";
 import portraitUrl from "../assets/ashton_profile_still.jpg";
-import { SITE_NAME, canonicalUrl } from "../content/site.js";
+import { SITE_NAME, PAGE_NAMES, canonicalUrl } from "../content/site.js";
 import { buildStructuredData, serializeJsonLd } from "../utils/structuredData.js";
 import { ogImage } from "../content/ogImages.js";
 import type { Article } from "../content/media.js";
 
-// Breadcrumb names for top-level pages; articles use their own title.
-const PAGE_NAMES: Record<string, string> = {
-  "/travel": "Travel",
-  "/languages": "Languages",
-  "/media": "Writing",
-  "/archive": "Archive",
-  "/recommendations": "Worth the trip",
-};
+
 
 export default function HeadDefault() {
   const pageContext = usePageContext();

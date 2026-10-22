@@ -1,6 +1,6 @@
-import { Experience } from "../../components/Experience.js";
-import { Tile, TileLabel, ArrowIcon } from "../../components/bento/Tile.js";
-import { SectionHeader } from "../../components/bento/SectionHeader.js";
+import { Experience } from "../Experience.js";
+import { Tile, TileLabel, ArrowIcon } from "../bento/Tile.js";
+import { SectionHeader } from "../bento/SectionHeader.js";
 import { experienceItems } from "../../content/experience.js";
 import { mediaItems } from "../../content/media.js";
 

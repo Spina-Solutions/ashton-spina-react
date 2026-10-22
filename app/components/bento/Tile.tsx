@@ -19,9 +19,10 @@ type TileProps = {
   external?: boolean;
   id?: string;
   ariaLabel?: string;
+  onClick?: () => void;
 };
 
-export function Tile({ tone = "plain", className, children, href, external, id, ariaLabel }: TileProps) {
+export function Tile({ tone = "plain", className, children, href, external, id, ariaLabel, onClick }: TileProps) {
   const classes = ["relative rounded-[28px] p-5 sm:p-6 overflow-hidden", TONE_CLASSES[tone], className]
     .filter(Boolean)
     .join(" ");
@@ -32,6 +33,7 @@ export function Tile({ tone = "plain", className, children, href, external, id, 
         id={id}
         href={href}
         aria-label={ariaLabel}
+        onClick={onClick}
         target={external ? "_blank" : undefined}
         rel={external ? "noreferrer" : undefined}
         className={`group block transition duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-coral ${classes}`}
