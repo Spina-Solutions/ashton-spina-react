@@ -37,6 +37,7 @@ export default function HeadDefault() {
 
   return (
     <>
+      <link rel="icon" href="/favicon.ico" sizes="any" />
       <link rel="icon" href={faviconUrl} type="image/png" sizes="48x48" />
       <link rel="apple-touch-icon" href={appleTouchIconUrl} sizes="180x180" />
       {/* Apply Tailwind dark mode early: default to system, override with cookie when set */}
