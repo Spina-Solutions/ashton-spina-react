@@ -112,7 +112,7 @@ export class VikeStack extends cdk.Stack {
       memorySize: 256,
       timeout: cdk.Duration.seconds(10),
       logRetention: logs.RetentionDays.THREE_DAYS,
-      tracing: lambda.Tracing.ACTIVE,
+      tracing: lambda.Tracing.DISABLED,
     });
 
     ledgerTable.grantReadWriteData(fn);
