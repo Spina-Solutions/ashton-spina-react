@@ -1,154 +1,75 @@
-// Removed custom CSS in favor of Tailwind utility classes
-
 import "./tailwind.css";
-import { Link } from "../components/Link.js";
 import { ThemeToggle } from "../components/ThemeToggle.js";
 import { Footer } from "../components/Footer.js";
-import { useEffect, useState } from "react";
-import ashtonProfileVideo from "../assets/ashton_profile.MOV";
+import { ModeToggle } from "../components/bento/ModeToggle.js";
+import { useSiteMode } from "../hooks/useSiteMode.js";
+import { useScrolledPast } from "../hooks/useScrolledPast.js";
+import type { ExternalLink } from "../content/links.js";
+
+const PERSONAL_NAV: ExternalLink[] = [
+  { label: "Projects", href: "/#projects" },
+  { label: "Photos", href: "/#photos" },
+  { label: "Travel", href: "/#travel" },
+  { label: "Languages", href: "/#languages" },
+  { label: "Recommendations", href: "/recommendations" },
+];
+
+const WORK_NAV: ExternalLink[] = [
+  { label: "Projects", href: "/?mode=work#projects" },
+  { label: "Experience", href: "/?mode=work#experience" },
+  { label: "Writing", href: "/media" },
+  { label: "Languages", href: "/?mode=work#languages" },
+  { label: "Archive", href: "/archive" },
+];
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
   return (
-    <div className={"min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col"}>
+    <div className={"font-display min-h-screen flex flex-col bg-paper text-ink dark:bg-paper-dark dark:text-gray-100 antialiased"}>
       <TopNav />
-      <Content>{children}</Content>
+      <main id="page-container" className={"flex-1"}>
+        <div id="page-content" className={"mx-auto w-full max-w-6xl px-3 sm:px-6 pt-4 pb-12"}>
+          {children}
+        </div>
+      </main>
       <Footer />
     </div>
   );
 }
 
 function TopNav() {
-  const [showMini, setShowMini] = useState(false);
-  const [isWorkMode, setIsWorkMode] = useState(false);
-
-  useEffect(() => {
-    function onScroll() {
-      try {
-        const hero = document.querySelector("header");
-        const threshold = 120;
-        const y = window.scrollY || 0;
-        setShowMini(y > threshold && !!hero);
-      } catch {}
-    }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const getCurrentMode = () => {
-      if (typeof window !== 'undefined') {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('mode') === 'work';
-      }
-      return false;
-    };
-    
-    const updateMode = () => {
-      setIsWorkMode(getCurrentMode());
-    };
-    
-    // Initial check
-    updateMode();
-    
-    // Listen for URL changes (including back/forward navigation)
-    window.addEventListener('popstate', updateMode);
-    
-    // Listen for custom mode change events
-    window.addEventListener('modeChanged', updateMode);
-    
-    return () => {
-      window.removeEventListener('popstate', updateMode);
-      window.removeEventListener('modeChanged', updateMode);
-    };
-  }, []);
+  const { isWorkMode } = useSiteMode();
+  const links = isWorkMode ? WORK_NAV : PERSONAL_NAV;
+  // The home hero has its own toggle; only show this one once the hero is out of view.
+  const pastHero = useScrolledPast(360);
 
   return (
-    <div
-      className={
-        "sticky top-0 z-[110] backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60 border-b border-gray-200/70 dark:border-gray-800/70"
-      }
-      style={{ paddingTop: "env(safe-area-inset-top)" }}
-    >
-      <div className={"mx-auto max-w-3xl px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between gap-4"}>
-        <div className={"flex items-center gap-3 min-w-0"}>
-          {showMini ? (
-            <a href="/" className={"flex items-center gap-2 shrink-0"} aria-label="Home">
-              <div className={"h-7 w-7 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800 ring-1 ring-gray-300/60 dark:ring-gray-700/60"}>
-                <video
-                  src={ashtonProfileVideo}
-                  className={"h-full w-full object-cover"}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  aria-hidden
-                />
-              </div>
-              <span className={"text-sm font-medium truncate max-w-[10rem]"}>Ashton Spina</span>
-            </a>
-          ) : (
-            <div className={"flex items-center gap-2 shrink-0 opacity-0 pointer-events-none"}>
-              <div className={"h-7 w-7"} aria-hidden />
-              <span className={"text-sm font-medium truncate max-w-[10rem]"} aria-hidden>Ashton Spina</span>
-            </div>
-          )}
-        </div>
-        <nav className={"hidden sm:block"} aria-label="Primary">
-          <ul className={"flex items-center gap-2 text-xs font-medium"}>
-            <li>
-              <a href="/#projects" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Projects</a>
-            </li>
-            {isWorkMode ? (
-              <>
-                <li>
-                  <a href="/#experience" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Experience</a>
-                </li>
-                <li>
-                  <a href="/#content" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Content</a>
-                </li>
-                <li>
-                  <a href="/#languages" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Languages</a>
-                </li>
-                <li>
-                  <a href="/media" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Media</a>
-                </li>
-                <li>
-                  <a href="/archive" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Archive</a>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  <a href="/#photos" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Photos</a>
-                </li>
-                <li>
-                  <a href="/#travel" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Travel</a>
-                </li>
-                <li>
-                  <a href="/#languages" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Languages</a>
-                </li>
-                <li>
-                  <a href="/recommendations" className={"inline-flex items-center h-9 px-2 rounded-lg text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5"}>Recommendations</a>
-                </li>
-              </>
-            )}
+    <div className={"sticky top-0 z-[110] px-3 sm:px-6 pt-3"} style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }}>
+      <nav
+        aria-label="Primary"
+        className={"mx-auto max-w-6xl rounded-full bg-white/80 dark:bg-tile-dark/80 backdrop-blur-md ring-1 ring-black/5 dark:ring-white/10 shadow-sm"}
+      >
+        <div className={"flex items-center justify-between gap-3 pl-2 pr-2 py-2"}>
+          <a href={isWorkMode ? "/?mode=work" : "/"} className={"flex items-center gap-2 shrink-0 rounded-full"} aria-label="Ashton Spina, home">
+            <span className={"grid h-9 w-9 place-items-center rounded-full bg-ink text-paper dark:bg-paper dark:text-ink text-sm font-medium"}>AS</span>
+            <span className={"hidden sm:inline text-sm font-medium"}>Ashton Spina</span>
+          </a>
+          <ul className={"flex min-w-0 items-center gap-1 overflow-x-auto text-sm [scrollbar-width:none]"}>
+            {links.map((link) => (
+              <li key={link.label} className={"shrink-0"}>
+                <a href={link.href} className={"inline-flex h-9 items-center rounded-full px-3 opacity-75 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition"}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
           </ul>
-        </nav>
-        <div className={"justify-self-end"}>
-          <ThemeToggle />
+          <div className={"flex items-center gap-2 shrink-0"}>
+            <div className={`hidden md:block transition-opacity duration-300 ${pastHero ? "opacity-100" : "opacity-0 pointer-events-none"}`} aria-hidden={!pastHero}>
+              <ModeToggle />
+            </div>
+            <ThemeToggle />
+          </div>
         </div>
-      </div>
+      </nav>
     </div>
-  );
-}
-
-function Content({ children }: { children: React.ReactNode }) {
-  return (
-    <main id="page-container" className={"flex-1"}>
-      <div id="page-content" className={"mx-auto max-w-3xl px-4 py-6 pb-10"}>
-        {children}
-      </div>
-    </main>
   );
 }

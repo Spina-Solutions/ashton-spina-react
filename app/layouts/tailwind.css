@@ -1,2 +1,70 @@
 @config "../tailwind.config.js";
 @import "tailwindcss";
+
+/* Bento design tokens */
+@theme {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #f2f0ea;
+  --color-paper-dark: #0f0f0e;
+  --color-tile-dark: #1b1b19;
+  --color-ink: #121212;
+  --color-coral: #e9573f;
+  --color-coral-dark: #c8452f;
+  --color-sun: #f5c542;
+  --color-sage: #7d8b74;
+  --color-sage-dark: #5d6a56;
+  --color-sky: #6f9fd8;
+
+  --animate-pulse-ring: pulse-ring 1.8s ease-out infinite;
+  --animate-fade-up: fade-up 0.35s ease-out both;
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 5rem;
+  }
+}
+
+/* Tailwind 4 resets buttons to cursor: default; restore the pointer for anything clickable */
+@layer base {
+  button:not(:disabled),
+  [role="button"],
+  [role="radio"],
+  [role="tab"],
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes fade-up {
+  from { transform: translateY(6px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Children rise in one after another; used on above-the-fold grids */
+@utility stagger {
+  & > * {
+    animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  & > :nth-child(2) { animation-delay: 50ms; }
+  & > :nth-child(3) { animation-delay: 100ms; }
+  & > :nth-child(4) { animation-delay: 150ms; }
+  & > :nth-child(5) { animation-delay: 200ms; }
+  & > :nth-child(6) { animation-delay: 250ms; }
+  & > :nth-child(n + 7) { animation-delay: 300ms; }
+}

@@ -1,17 +1,12 @@
-import type { Data } from "vike/types";
-import { mediaItems } from "../../../content/media.js";
+import type { PageContextServer } from "vike/types";
+import { render } from "vike/abort";
+import { mediaItems, type Article } from "../../../content/media.js";
 
-export default function data(pageContext: { routeParams: { id: string } }): Data {
+export type Data = { article: Article };
+
+export default function data(pageContext: PageContextServer): Data {
   const { id } = pageContext.routeParams;
-  const article = mediaItems.find(item => item.id === id && item.category === 'article');
-  
-  if (!article) {
-    throw new Error(`Article with id "${id}" not found`);
-  }
-  
-  return {
-    article
-  };
+  const article = mediaItems.find((item) => item.id === id && item.category === "article");
+  if (!article) throw render(404, `Article "${id}" not found`);
+  return { article };
 }
-
-

@@ -1,109 +1,69 @@
+import { EMAIL, contactLinks } from "../content/links.js";
+import { featuredProjects } from "../content/projects.js";
+import type { ExternalLink } from "../content/links.js";
+
+const SITE_LINKS: ExternalLink[] = [
+  { label: "Projects", href: "/#projects" },
+  { label: "Photography", href: "/#photos" },
+  { label: "Writing", href: "/media" },
+  { label: "Archive", href: "/archive" },
+  { label: "Recommendations", href: "/recommendations" },
+];
+
 export function Footer() {
+  const liveProjects = featuredProjects.filter((p) => p.status === "live");
+
   return (
-    <footer className="border-t border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-900/60 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-gray-900/80">
-      <div className="mx-auto max-w-3xl px-3 sm:px-4 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Quick Links */}
+    <footer className="px-3 sm:px-6 pb-6">
+      <div className="mx-auto max-w-6xl rounded-[28px] bg-ink text-paper dark:bg-tile-dark dark:text-gray-100 p-6 sm:p-10">
+        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr]">
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="/#projects" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  Projects
-                </a>
-              </li>
-              <li>
-                <a href="/#experience" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  Experience
-                </a>
-              </li>
-              <li>
-                <a href="/#photos" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  Photography
-                </a>
-              </li>
-              <li>
-                <a href="/media" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  Media
-                </a>
-              </li>
-              <li>
-                <a href="/archive" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  Archive
-                </a>
-              </li>
-              <li>
-                <a href="/recommendations" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  Recommendations
-                </a>
-              </li>
-            </ul>
+            <p className="text-sm opacity-60">Got an idea, a role, or a travel tip?</p>
+            <a
+              href={`mailto:${EMAIL}`}
+              className="mt-2 inline-block text-3xl sm:text-5xl font-medium tracking-tight underline decoration-coral decoration-4 underline-offset-8 hover:text-coral transition-colors break-all"
+            >
+              Say hello
+            </a>
           </div>
-
-          {/* Projects */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Projects</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="https://jobcrawls.com" target="_blank" rel="noreferrer" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  JobCrawls
-                </a>
-              </li>
-              <li>
-                <a href="https://conjugr8.com" target="_blank" rel="noreferrer" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  Conjugr8
-                </a>
-              </li>
-              <li>
-                <a href="https://travel-atlas.com" target="_blank" rel="noreferrer" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  Travel Atlas
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Connect */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Connect</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="mailto:hello@ashtonspina.com" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  Email
-                </a>
-              </li>
-              <li>
-                <a href="https://www.linkedin.com/in/ashtonspina" target="_blank" rel="noreferrer" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  LinkedIn
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com/ashtonspina" target="_blank" rel="noreferrer" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                  GitHub
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* About */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">About</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-              Building thoughtful products. Exploring the world through code and photography.
-            </p>
+          <div className="grid grid-cols-2 gap-6 text-sm">
+            <FooterColumn title="Site" links={SITE_LINKS} />
+            <FooterColumn
+              title="Elsewhere"
+              links={[...contactLinks, ...liveProjects.map((p) => ({ label: p.name, href: p.href }))]}
+            />
           </div>
         </div>
-
-        <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              © {new Date().getFullYear()} Ashton Spina. All rights reserved.
-            </p>
-            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-              <span>Built with React, Vite & Vike</span>
-            </div>
-          </div>
+        <div className="mt-10 flex flex-col sm:flex-row justify-between gap-2 text-xs opacity-50">
+          <span>© {new Date().getFullYear()} Ashton Spina</span>
+          <span>Helsinki · Built with React, Vike and Tailwind</span>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterColumn({ title, links }: { title: string; links: ExternalLink[] }) {
+  return (
+    <div>
+      <h3 className="mb-3 text-xs uppercase tracking-[0.14em] opacity-50">{title}</h3>
+      <ul className="space-y-2">
+        {links.map((link) => {
+          const external = link.href.startsWith("http");
+          return (
+            <li key={link.label}>
+              <a
+                href={link.href}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noreferrer" : undefined}
+                className="opacity-80 hover:opacity-100 hover:text-coral transition"
+              >
+                {link.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 86 92" width="86" height="92" fill="none" role="img" aria-label="JobCrawls">
+  <line x1="69" y1="70" x2="88" y2="89" stroke="#3A2E1F" stroke-width="9" stroke-linecap="round"></line>
+  <circle cx="46" cy="54" r="26" fill="#FCF8EF"></circle>
+  <rect x="33" y="47" width="11" height="11" rx="3" fill="#C8952F"></rect>
+  <rect x="47" y="48" width="15" height="3.4" rx="1.7" fill="#CDB89A"></rect>
+  <rect x="47" y="54" width="9" height="3" rx="1.5" fill="#DDD0BB"></rect>
+  <rect x="33" y="63" width="23" height="7.5" rx="3.75" fill="#5C7A3A"></rect>
+  <rect x="36" y="65.4" width="13" height="2.6" rx="1.3" fill="#FCF8EF"></rect>
+  <circle cx="46" cy="54" r="26" stroke="#3A2E1F" stroke-width="6.5"></circle>
+  <circle cx="14" cy="36" r="7.5" fill="#6F9142"></circle>
+  <circle cx="23" cy="27" r="8.5" fill="#79994F"></circle>
+  <circle cx="35" cy="21" r="9" fill="#79994F"></circle>
+  <circle cx="48" cy="20" r="9.2" fill="#83A557"></circle>
+  <circle cx="64" cy="26" r="12" fill="#8DB05F"></circle>
+  <ellipse cx="65" cy="17" rx="14" ry="3.6" fill="#C8952F"></ellipse>
+  <path d="M53 17 C53 7 58 3 65 3 C72 3 77 7 77 17 Z" fill="#C8952F"></path>
+  <rect x="62.5" y="3" width="5" height="14" rx="2.5" fill="#B07F24"></rect>
+  <circle cx="61" cy="27" r="3.2" fill="#2C2317"></circle>
+  <circle cx="70" cy="26" r="3.2" fill="#2C2317"></circle>
+  <circle cx="59.8" cy="25.9" r="1.1" fill="#fff"></circle>
+  <circle cx="68.8" cy="24.9" r="1.1" fill="#fff"></circle>
+  <path d="M61 32 Q65.5 36 70 31" stroke="#2C2317" stroke-width="2.1" stroke-linecap="round"></path>
+</svg>

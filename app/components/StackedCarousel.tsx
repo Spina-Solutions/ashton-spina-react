@@ -36,32 +36,15 @@ export function StackedCarousel({
     }
     if (index > total - 1) setIndex(total - 1);
   }, [total]);
+  // Album callbacks update parent state, so they must run outside the setIndex updater.
   const goNext = useCallback(() => {
-    setIndex((i) => {
-      if (i < total - 1) {
-        return i + 1;
-      } else {
-        // At the end of current album, trigger album progression
-        if (onAlbumEnd) {
-          onAlbumEnd();
-        }
-        return i; // Stay at current index
-      }
-    });
-  }, [total, onAlbumEnd]);
+    if (index < total - 1) setIndex(index + 1);
+    else onAlbumEnd?.();
+  }, [index, total, onAlbumEnd]);
   const goPrev = useCallback(() => {
-    setIndex((i) => {
-      if (i > 0) {
-        return i - 1;
-      } else {
-        // At the start of current album, trigger previous album
-        if (onAlbumStart) {
-          onAlbumStart();
-        }
-        return i; // Stay at current index
-      }
-    });
-  }, [onAlbumStart]);
+    if (index > 0) setIndex(index - 1);
+    else onAlbumStart?.();
+  }, [index, onAlbumStart]);
 
   // Detect orientation when index changes
   useEffect(() => {
@@ -139,14 +122,14 @@ export function StackedCarousel({
     <div className={["relative", className].filter(Boolean).join(" ")}>
       <div
         ref={containerRef}
-        className="relative transition-all duration-500 h-[500px] sm:h-[600px]"
+        className="relative transition-all duration-500 h-[340px] sm:h-[480px] lg:h-[540px]"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
         {total === 0 ? (
-          <div className={"absolute inset-0 flex items-center justify-center rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"}>
-            <span className={"text-sm text-gray-500 dark:text-gray-400"}>No photos yet</span>
+          <div className={"absolute inset-0 flex items-center justify-center rounded-[20px] border border-dashed border-black/15 dark:border-white/15"}>
+            <span className={"text-sm opacity-60"}>No photos yet</span>
           </div>
         ) : null}
         {/* Left stack (previous images) */}
@@ -162,7 +145,7 @@ export function StackedCarousel({
               key={key}
               src={photo.src}
               alt={photo.alt}
-              className={"absolute top-1/2 left-1/2 max-w-3xl max-h-full object-contain select-none rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl"}
+              className={"absolute top-1/2 left-1/2 max-w-[88%] max-h-full object-contain select-none rounded-[20px] ring-1 ring-black/10 shadow-xl"}
               style={{
                 zIndex: z,
                 transform: `translate(calc(-50% + ${translateX}px), calc(-50% + ${translateY}px)) scale(${scale}) rotate(${rotate}deg)`,
@@ -181,7 +164,7 @@ export function StackedCarousel({
             key={visible.active.key}
             src={visible.active.photo.src}
             alt={visible.active.photo.alt}
-            className={"absolute top-1/2 left-1/2 max-w-3xl max-h-full object-contain select-none rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl"}
+            className={"absolute top-1/2 left-1/2 max-w-[88%] max-h-full object-contain select-none rounded-[20px] ring-1 ring-black/10 shadow-2xl"}
             style={{ 
               zIndex: 100,
               transform: "translate(-50%, -50%)"
@@ -205,7 +188,7 @@ export function StackedCarousel({
               key={key}
               src={photo.src}
               alt={photo.alt}
-              className={"absolute top-1/2 left-1/2 max-w-3xl max-h-full object-contain select-none rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl"}
+              className={"absolute top-1/2 left-1/2 max-w-[88%] max-h-full object-contain select-none rounded-[20px] ring-1 ring-black/10 shadow-xl"}
               style={{
                 zIndex: z,
                 transform: `translate(calc(-50% + ${translateX}px), calc(-50% + ${translateY}px)) scale(${scale}) rotate(${rotate}deg)`,
@@ -219,35 +202,33 @@ export function StackedCarousel({
         })}
       </div>
 
-      <div className={"mt-3 flex items-center justify-between"}>
-        <button
-          type="button"
-          onClick={goPrev}
-          className={"inline-flex items-center justify-center h-9 w-9 rounded-full border border-gray-300 dark:border-gray-700 hover:bg-black/5 dark:hover:bg-white/5"}
-          aria-label={index === 0 ? "Previous album" : "Previous photo"}
-        >
-          ‹
-        </button>
-        <div className={"text-xs text-gray-600 dark:text-gray-400"}>
-          {index + 1} / {total}
-          {index === 0 && total > 0 && (
-            <span className={"ml-1 text-blue-600 dark:text-blue-400"}>• Previous album</span>
-          )}
-          {index === total - 1 && total > 0 && (
-            <span className={"ml-1 text-blue-600 dark:text-blue-400"}>• Next album</span>
-          )}
+      <div className={"mt-4 flex items-center justify-between"}>
+        <CarouselButton onClick={goPrev} label={index === 0 ? "Previous album" : "Previous photo"} direction="left" />
+        <div className={"text-sm tabular-nums opacity-70"}>
+          {total > 0 ? `${index + 1} / ${total}` : null}
+          {total > 0 && index === total - 1 ? <span className={"ml-2 text-coral"}>Next album →</span> : null}
+          {total > 0 && index === 0 ? <span className={"ml-2 text-coral"}>← Previous album</span> : null}
         </div>
-        <button
-          type="button"
-          onClick={goNext}
-          className={"inline-flex items-center justify-center h-9 w-9 rounded-full border border-gray-300 dark:border-gray-700 hover:bg-black/5 dark:hover:bg-white/5"}
-          aria-label={index === total - 1 ? "Next album" : "Next photo"}
-        >
-          ›
-        </button>
+        <CarouselButton onClick={goNext} label={index === total - 1 ? "Next album" : "Next photo"} direction="right" />
       </div>
     </div>
   );
 }
 
 
+
+function CarouselButton({ onClick, label, direction }: { onClick: () => void; label: string; direction: "left" | "right" }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className={"grid h-11 w-11 place-items-center rounded-full bg-black/5 dark:bg-white/10 hover:bg-coral hover:text-white active:scale-95 transition"}
+    >
+      <svg viewBox="0 0 24 24" className={"h-5 w-5"} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d={direction === "left" ? "M15 18l-6-6 6-6" : "M9 6l6 6-6 6"} />
+      </svg>
+    </button>
+  );
+}

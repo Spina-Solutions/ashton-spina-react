@@ -13,21 +13,18 @@ export default function HeadDefault() {
             "(function(){try{var c=document.cookie||'';var m=/(?:^|; )theme=([^;]+)/.exec(c);var v=m? decodeURIComponent(m[1]) : '';var d=v==='dark' ? true : v==='light' ? false : (window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark', d);}catch(e){}})();",
         }}
       />
-      <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
-      <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+      <meta name="theme-color" content="#0f0f0e" media="(prefers-color-scheme: dark)" />
+      <meta name="theme-color" content="#f2f0ea" media="(prefers-color-scheme: light)" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap"
+      />
       <meta property="og:site_name" content="Ashton Spina" />
-      <meta property="og:title" content="Ashton Spina — Living for the world's experiences" />
-      <meta
-        property="og:description"
-        content="Building thoughtful products. Exploring the world through code and photography. Full-stack developer with a passion for creating meaningful digital experiences."
-      />
+      {/* title/description (and their og: twins) come from each page's config via vike-react */}
       <meta property="og:type" content="website" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Ashton Spina — Living for the world's experiences" />
-      <meta
-        name="twitter:description"
-        content="Building thoughtful products. Exploring the world through code and photography. Full-stack developer with a passion for creating meaningful digital experiences."
-      />
+      <meta name="twitter:card" content="summary" />
 
       <script
         async

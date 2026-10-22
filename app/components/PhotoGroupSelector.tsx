@@ -21,7 +21,7 @@ export function PhotoGroupSelector({
   const handleSelect = useCallback((id: string) => onSelect(id), [onSelect]);
 
   return (
-    <div className={["flex gap-4 overflow-x-auto py-2 px-1", className].filter(Boolean).join(" ")}>
+    <div className={["flex gap-3 overflow-x-auto px-1 pt-1 pb-2 [scrollbar-width:thin]", className].filter(Boolean).join(" ")}>
       {groups.map((group) => {
         const isSelected = group.id === selectedId;
         return (
@@ -29,47 +29,26 @@ export function PhotoGroupSelector({
             key={group.id}
             type="button"
             onClick={() => handleSelect(group.id)}
-            className={[
-              "group relative shrink-0 w-24 h-32 rounded-lg overflow-hidden transition-all duration-200",
-              "bg-white dark:bg-gray-800 border-2 shadow-lg p-1",
-              isSelected
-                ? "border-blue-500 scale-105 shadow-xl"
-                : "border-gray-200 dark:border-gray-700 hover:scale-102 hover:shadow-md",
-            ].join(" ")}
+            className={"group shrink-0 w-24 text-left"}
             aria-pressed={isSelected}
-            aria-label={`Select ${group.title} photos`}
+            aria-label={`Show ${group.title} photos`}
           >
-            {/* Polaroid photo area */}
-            <div className={"absolute inset-x-2 top-2 bottom-8 rounded-sm overflow-hidden"}>
+            <div
+              className={[
+                "h-24 w-24 overflow-hidden rounded-2xl transition duration-200",
+                isSelected ? "ring-3 ring-coral ring-offset-2 ring-offset-white dark:ring-offset-tile-dark" : "opacity-80 group-hover:opacity-100",
+              ].join(" ")}
+            >
               <img
                 src={group.thumbnail}
-                alt={group.title}
-                className={"w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"}
+                alt=""
+                className={"h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"}
                 loading="lazy"
               />
             </div>
-
-            {/* Polaroid white space with handwritten title */}
-            <div className={"absolute inset-x-2 bottom-2 h-6 flex items-center justify-center"}>
-              <span
-                className={[
-                  "text-xs font-medium text-gray-800 dark:text-gray-200",
-                  "transform -rotate-1 font-handwriting",
-                  isSelected ? "text-blue-600 dark:text-blue-400" : "",
-                ].join(" ")}
-                style={{
-                  fontFamily: "'Kalam', 'Bradley Hand', 'Brush Script MT', cursive",
-                  textShadow: "0 1px 2px rgba(0,0,0,0.1)",
-                }}
-              >
-                {group.title}
-              </span>
+            <div className={`mt-2 truncate text-sm ${isSelected ? "font-medium text-coral" : "opacity-70 group-hover:opacity-100"}`}>
+              {group.title}
             </div>
-
-            {/* Selection indicator */}
-            {isSelected && (
-              <div className={"absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full border-2 border-white dark:border-gray-900"} />
-            )}
           </button>
         );
       })}

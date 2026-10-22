@@ -102,18 +102,18 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
   }, [items]);
 
   return (
-    <div className={"grid grid-cols-1 gap-4"}>
+    <div className={"grid grid-cols-1 gap-3"}>
       {groups.map((g) => (
-        <section key={g.company} className={"rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden"}>
+        <section key={g.company} className={"rounded-[28px] overflow-hidden bg-white ring-1 ring-black/5 dark:bg-tile-dark dark:ring-white/5"}>
           {g.cover ? (
-            <div className={"h-24 w-full overflow-hidden"} aria-hidden>
+            <div className={"h-28 sm:h-36 w-full overflow-hidden"} aria-hidden>
               <img src={g.cover} alt="" className={"w-full h-full object-cover"} />
             </div>
           ) : null}
-          <div className={"p-3 bg-white/80 dark:bg-gray-900/50"}>
-            <div className={"flex items-center gap-3 mb-2"}>
+          <div className={"p-5 sm:p-6"}>
+            <div className={"flex items-center gap-3 mb-4"}>
               <div
-                className={"shrink-0 w-10 h-10 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-800 flex items-center justify-center"}
+                className={"shrink-0 w-11 h-11 rounded-xl overflow-hidden bg-white ring-1 ring-black/5 flex items-center justify-center"}
                 style={{ backgroundColor: g.brandColor || undefined }}
                 aria-hidden
               >
@@ -126,24 +126,24 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
                 )}
               </div>
               <div className={"flex-1 min-w-0"}>
-                <a href={g.link} target="_blank" rel="noreferrer" className={"font-medium text-gray-900 dark:text-gray-100"}>
+                <a href={g.link} target="_blank" rel="noreferrer" className={"text-xl font-medium hover:text-coral transition-colors"}>
                   {g.company}
                 </a>
               </div>
             </div>
 
             {/* Roles */}
-            <ul className={"space-y-3"}>
+            <ul className={"space-y-4"}>
               {g.roles.map((r) => (
                 <li key={`${r.role}-${r.start}`}>
                   <div className={"flex items-center justify-between gap-3"}>
                     <div>
-                      <div className={"font-medium text-gray-900 dark:text-gray-100"}>{r.role}</div>
-                      <div className={"text-xs text-gray-500"}>{r.start} — {r.end}</div>
+                      <div className={"font-medium"}>{r.role}</div>
+                      <div className={"text-xs tabular-nums opacity-60"}>{r.start} – {r.end}</div>
                     </div>
                   </div>
                   {r.highlights && r.highlights.length > 0 ? (
-                    <ul className={"mt-2 list-disc pl-5 text-sm text-gray-700 dark:text-gray-300 space-y-1"}>
+                    <ul className={"mt-2 list-disc pl-5 text-sm opacity-80 space-y-1 marker:text-coral"}>
                       {r.highlights.map((h, i) => (
                         <li key={i}>{h}</li>
                       ))}
