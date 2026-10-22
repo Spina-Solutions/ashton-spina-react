@@ -231,6 +231,10 @@ export class VikeStack extends cdk.Stack {
       ...assetBehaviorOptions,
       cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
     });
+    distribution.addBehavior("/llms.txt", assetOrigin, {
+      ...assetBehaviorOptions,
+      cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+    });
 
     // Deploy static assets to the S3 bucket and invalidate the CloudFront cache
     new s3deploy.BucketDeployment(this, "DeployStaticAssets", {
@@ -253,14 +257,14 @@ export class VikeStack extends cdk.Stack {
       ],
     });
     
-    // Deploy SEO files (sitemap.xml, robots.txt) to S3 root
+    // Deploy SEO files (sitemap.xml, robots.txt, llms.txt) to S3 root
     new s3deploy.BucketDeployment(this, "DeploySEOFiles", {
       sources: [s3deploy.Source.asset(join(__dirname, "../../dist/client"), {
         exclude: ["assets/**", "photography/**", "**/*.js", "**/*.css", "**/*.map"],
       })],
       destinationBucket: bucket,
       distribution,
-      distributionPaths: ["/sitemap.xml", "/robots.txt"],
+      distributionPaths: ["/sitemap.xml", "/robots.txt", "/llms.txt"],
       prune: false,
       outputObjectKeys: false,
       cacheControl: [

@@ -1,0 +1,36 @@
+# Ashton Spina
+
+> Marketplace engineering leader and consultant based in Helsinki, Finland. Founder of TechTactics Oy, through which he offers fractional engineering leadership, marketplace merger and integration work, B2B monetisation and platform builds.
+
+## Work
+
+- [Consulting and track record](https://www.ashtonspina.com/?mode=work): services, case study and experience.
+- Fractional Head of Engineering: interim or part-time engineering leadership for marketplace teams.
+- Marketplace mergers and integration: part of the homegate.ch and immoscout24.ch merger and the flatfox acquisition that formed SMG Real Estate.
+- B2B monetisation and product: led engineering for SMG's Real Estate B2B line, around 40% of group revenue.
+- Build and modernise platforms: built Homegate's AWS Cognito authentication; builds and runs JobCrawls.
+
+## Experience
+
+- TechTactics Oy, Founder (full-time since 2026; previously alongside SMG as the company behind JobCrawls)
+- SMG Swiss Marketplace Group, Head of Engineering, Real Estate B2B (2022–2026)
+- Homegate AG, Engineering Manager (2020–2022) and Full-Stack Software Engineer (2019–2020)
+- Belsimpel (Gomibo), Technical Lead and developer (2018–2019)
+- University of Groningen, Teaching Assistant (2017–2018)
+
+## Products
+
+- [JobCrawls](https://jobcrawls.com): Finland's job market aggregated from company career pages, with AI-extracted structured data.
+- [Conjugr8](https://conjugr8.com): a verb and grammar trainer for Romance languages, built for fast repetition.
+
+## Pages
+
+- [Project archive](https://www.ashtonspina.com/archive)
+- [Writing](https://www.ashtonspina.com/media)
+- [Travel and photography](https://www.ashtonspina.com/travel): 31 countries visited; lived in Canada, the Netherlands, Malta, Switzerland and Finland.
+- [Languages](https://www.ashtonspina.com/languages): English (native), Spanish (A2), Italian, French and German (A1).
+
+## Contact
+
+- Email: hello@ashtonspina.com
+- LinkedIn: https://www.linkedin.com/in/ashtonspina

@@ -2,7 +2,14 @@
 
 User-agent: *
 Allow: /
+Disallow: /ledger
 
-# Sitemaps
+# AI assistants and answer engines are welcome; see /llms.txt for a summary
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: PerplexityBot
+User-agent: Google-Extended
+Allow: /
+Disallow: /ledger
+
 Sitemap: https://www.ashtonspina.com/sitemap.xml
-

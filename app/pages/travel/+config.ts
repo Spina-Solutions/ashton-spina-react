@@ -1,6 +1,6 @@
 import type { Config } from "vike/types";
 
 export default {
-  title: "Travel · Ashton Spina",
-  description: "Photos, a map of the countries Ashton Spina has visited, and the places he has lived.",
+  title: "Travel and photography · Ashton Spina",
+  description: "Travel photography from 31 countries, an interactive map of every trip, and a timeline of the five countries Ashton Spina has called home.",
 } satisfies Config;

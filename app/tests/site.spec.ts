@@ -4,7 +4,9 @@ import { countryToGroupId } from "../content/travel.js";
 import { readModeFromSearch } from "../hooks/useSiteMode.js";
 import { stepAlbum } from "../hooks/usePhotoAlbums.js";
 import { formatHelsinkiTime } from "../hooks/useHelsinkiTime.js";
-import { hasCountryPhotos, type PhotoGroup } from "../utils/photography.js";
+import { hasCountryPhotos, photoAlt, type PhotoGroup } from "../utils/photography.js";
+import { canonicalUrl } from "../content/site.js";
+import { buildStructuredData, serializeJsonLd } from "../utils/structuredData.js";
 import { cefrStepsReached } from "../utils/cefr.js";
 import { primaryLanguageFor } from "../content/spokenLanguages.js";
 import { unvisitedRecommendations } from "../content/recommendations.js";
@@ -159,5 +161,44 @@ describe("placeRecommendations", () => {
 
   it("flags a place in an unvisited country", () => {
     expect(unvisitedRecommendations([{ title: "Kyoto", country: "Japan", description: "" }])).toEqual(["Kyoto"]);
+  });
+});
+
+describe("photoAlt", () => {
+  it("describes the country and position", () => {
+    expect(photoAlt("Italy", 1, 5)).toBe("Travel photo from Italy, 2 of 5");
+  });
+});
+
+describe("canonicalUrl", () => {
+  it("keeps work mode on the home page and drops other params", () => {
+    expect(canonicalUrl("/", { mode: "work", utm_source: "x" })).toBe("https://www.ashtonspina.com/?mode=work");
+    expect(canonicalUrl("/", { album: "italy" })).toBe("https://www.ashtonspina.com/");
+    expect(canonicalUrl("/travel", { album: "italy", mode: "work" })).toBe("https://www.ashtonspina.com/travel");
+  });
+});
+
+describe("buildStructuredData", () => {
+  const types = (data: Record<string, unknown>) => (data["@graph"] as Array<Record<string, unknown>>).map((n) => n["@type"]);
+
+  it("always describes the site, the person and TechTactics", () => {
+    expect(types(buildStructuredData({ pathname: "/" }))).toEqual(["WebSite", "Person", "Organization"]);
+  });
+
+  it("adds breadcrumbs on sub-pages and an Article on articles", () => {
+    const article = { id: "a", title: "T", excerpt: "E", date: "2024-01-15", readTime: "1 min", category: "article" as const };
+    expect(types(buildStructuredData({ pathname: "/media/a", pageTitle: "T", article }))).toEqual([
+      "WebSite", "Person", "Organization", "BreadcrumbList", "Article",
+    ]);
+  });
+
+  it("lists every consulting service as an offer", () => {
+    const graph = buildStructuredData({ pathname: "/" })["@graph"] as Array<Record<string, any>>;
+    const org = graph.find((n) => n["@type"] === "Organization");
+    expect(org?.hasOfferCatalog.itemListElement).toHaveLength(4);
+  });
+
+  it("serialises without allowing a script tag to close early", () => {
+    expect(serializeJsonLd({ x: "</script><script>alert(1)" })).not.toContain("</script>");
   });
 });

@@ -140,9 +140,14 @@ export function generatePhotoGroups(): PhotoGroup[] {
       id: country,
       title: displayName,
       thumbnail: photoData.thumbnail,
-      photos: photoData.photos
+      photos: photoData.photos.map((photo, i) => ({ ...photo, alt: photoAlt(displayName, i, photoData.photos.length) })),
     };
   });
+}
+
+// Descriptive alt text for an album photo, e.g. "Travel photo from Italy, 2 of 5"
+export function photoAlt(country: string, index: number, total: number): string {
+  return `Travel photo from ${country}, ${index + 1} of ${total}`;
 }
 
 // Check if a country has photos

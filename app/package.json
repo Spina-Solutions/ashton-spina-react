@@ -8,7 +8,8 @@
     "deploy:sync-photography": "node scripts/sync-photography.js",
     "deploy:aws": "run-s build deploy:cdk-deploy-all deploy:sync-photography",
     "cdk:app": "tsx cdk/bin/infrastructure.ts",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "og": "tsx scripts/generate-og.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1032.0",

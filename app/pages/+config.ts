@@ -10,9 +10,11 @@ export default {
   Layout,
 
   // https://vike.dev/head-tags
-  title: "Ashton Spina — Living for the world's experiences",
+  // Fallbacks; pages set their own via +config, +title and +description
+  title: "Ashton Spina · Marketplace engineering leader and builder",
   description:
-    "Building thoughtful products. Exploring the world through code and photography. Full-stack developer with a passion for creating meaningful digital experiences.",
+    "Ashton Spina builds and leads marketplace engineering from Helsinki: consulting through TechTactics Oy, products like JobCrawls, and travel photography from 31 countries.",
+  lang: "en",
 
   passToClient: ["user"],
   extends: vikeReact,
